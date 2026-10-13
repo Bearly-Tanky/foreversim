@@ -1,0 +1,381 @@
+package sim
+
+// Master's half of tools/parity. run.sh copies this into a master checkout as
+// sim/zz_parity_test.go, runs it, and deletes it again; it is not built on forever-next.
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"testing"
+
+	"github.com/wowsims/classic/sim/core"
+	"github.com/wowsims/classic/sim/core/proto"
+	"github.com/wowsims/classic/sim/core/stats"
+)
+
+type paritySpec struct {
+	Name      string  `json:"name"`
+	Race      string  `json:"race"`
+	Profile   string  `json:"profile"`
+	Talents   string  `json:"talents"`
+	MasterApl string  `json:"masterApl"`
+	MH        int32   `json:"mh"`
+	OH        int32   `json:"oh"`
+	Ranged    int32   `json:"ranged"`
+	Distance  float64 `json:"distance"`
+	Tank      bool    `json:"tank"`
+	Gear      string  `json:"gear"`
+}
+
+type parityResult struct {
+	Dps     float64            `json:"dps"`
+	Stats   map[string]float64 `json:"stats"`
+	Actions map[string]float64 `json:"actions"`
+	Casts   map[string]float64 `json:"casts"`
+	Auras   map[string]float64 `json:"auras"`
+	Oom     float64            `json:"oom"`
+	Dtps    float64            `json:"dtps"`
+	Boss    map[string]float64 `json:"boss"`
+	Error   string             `json:"error,omitempty"`
+}
+
+func paritySpecOptions(name string) (proto.Class, interface{}, *proto.Consumes) {
+	none := &proto.Consumes{}
+	switch name {
+	case "balance_druid":
+		return proto.Class_ClassDruid, &proto.Player_BalanceDruid{BalanceDruid: &proto.BalanceDruid{Options: &proto.BalanceDruid_Options{}}}, none
+	case "feral_druid":
+		return proto.Class_ClassDruid, &proto.Player_FeralDruid{FeralDruid: &proto.FeralDruid{Options: &proto.FeralDruid_Options{
+			InnervateTarget: &proto.UnitReference{}, LatencyMs: 100, AssumeBleedActive: true}}}, none
+	case "feral_tank_druid":
+		return proto.Class_ClassDruid, &proto.Player_FeralTankDruid{FeralTankDruid: &proto.FeralTankDruid{Options: &proto.FeralTankDruid_Options{
+			InnervateTarget: &proto.UnitReference{}, StartingRage: 20}}}, none
+	case "hunter":
+		return proto.Class_ClassHunter, &proto.Player_Hunter{Hunter: &proto.Hunter{Options: &proto.Hunter_Options{
+			Ammo: proto.Hunter_Options_ThoriumHeadedArrow, PetType: proto.Hunter_Options_Cat, PetUptime: 1,
+			PetAttackSpeed: proto.Hunter_Options_OneTwo}}}, none
+	case "mage":
+		return proto.Class_ClassMage, &proto.Player_Mage{Mage: &proto.Mage{Options: &proto.Mage_Options{Armor: proto.Mage_Options_MageArmor}}}, none
+	case "protection_paladin":
+		return proto.Class_ClassPaladin, &proto.Player_ProtectionPaladin{ProtectionPaladin: &proto.ProtectionPaladin{Options: &proto.PaladinOptions{
+			PrimarySeal: proto.PaladinSeal_Righteousness, RighteousFury: true}}}, none
+	case "retribution_paladin":
+		return proto.Class_ClassPaladin, &proto.Player_RetributionPaladin{RetributionPaladin: &proto.RetributionPaladin{Options: &proto.PaladinOptions{
+			PrimarySeal: proto.PaladinSeal_Righteousness}}}, none
+	case "shadow_priest":
+		return proto.Class_ClassPriest, &proto.Player_ShadowPriest{ShadowPriest: &proto.ShadowPriest{Options: &proto.ShadowPriest_Options{
+			Armor: proto.ShadowPriest_Options_InnerFire}}}, none
+	case "smite_priest":
+		return proto.Class_ClassPriest, &proto.Player_SmitePriest{SmitePriest: &proto.SmitePriest{Options: &proto.SmitePriest_Options{
+			Armor: proto.SmitePriest_Options_InnerFire}}}, none
+	case "rogue":
+		return proto.Class_ClassRogue, &proto.Player_Rogue{Rogue: &proto.Rogue{Options: &proto.RogueOptions{}}},
+			&proto.Consumes{MainHandImbue: proto.WeaponImbue_InstantPoison, OffHandImbue: proto.WeaponImbue_DeadlyPoison}
+	case "elemental_shaman":
+		return proto.Class_ClassShaman, &proto.Player_ElementalShaman{ElementalShaman: &proto.ElementalShaman{Options: &proto.ElementalShaman_Options{}}}, none
+	case "enhancement_shaman":
+		return proto.Class_ClassShaman, &proto.Player_EnhancementShaman{EnhancementShaman: &proto.EnhancementShaman{Options: &proto.EnhancementShaman_Options{
+				SyncType: proto.ShamanSyncType_Auto}}},
+			&proto.Consumes{MainHandImbue: proto.WeaponImbue_WindfuryWeapon, OffHandImbue: proto.WeaponImbue_WindfuryWeapon}
+	case "warlock":
+		return proto.Class_ClassWarlock, &proto.Player_Warlock{Warlock: &proto.Warlock{Options: &proto.WarlockOptions{
+			Armor: proto.WarlockOptions_DemonArmor, Summon: proto.WarlockOptions_Succubus}}}, none
+	case "warrior":
+		return proto.Class_ClassWarrior, &proto.Player_Warrior{Warrior: &proto.Warrior{Options: &proto.Warrior_Options{
+			StartingRage: 0, Shout: proto.WarriorShout_WarriorShoutBattle}}}, none
+	case "tank_warrior":
+		return proto.Class_ClassWarrior, &proto.Player_TankWarrior{TankWarrior: &proto.TankWarrior{Options: &proto.TankWarrior_Options{
+			StartingRage: 0, Shout: proto.WarriorShout_WarriorShoutBattle}}}, none
+	}
+	return proto.Class_ClassUnknown, nil, none
+}
+
+func parityStats(p map[string]float64) stats.Stats {
+	return stats.Stats{
+		stats.Strength:          p["str"],
+		stats.Agility:           p["agi"],
+		stats.Stamina:           p["sta"],
+		stats.Intellect:         p["int"],
+		stats.Spirit:            p["spi"],
+		stats.AttackPower:       p["ap"],
+		stats.RangedAttackPower: p["rap"],
+		stats.SpellDamage:       p["sd"],
+		// Master's Forever ruleset pays equipped hit and crit (bonus stats included) into
+		// both pools, so each is given once.
+		stats.MeleeCrit: p["crit"],
+		stats.MeleeHit:  p["hit"],
+	}
+}
+
+func TestParity(t *testing.T) {
+	out := os.Getenv("PARITY_OUT")
+	if out == "" {
+		t.Skip("run through tools/parity/run.sh on forever-next")
+	}
+	RegisterAll()
+	var file struct {
+		Profiles map[string]map[string]float64 `json:"profiles"`
+		Specs    []paritySpec                  `json:"specs"`
+	}
+	raw, err := os.ReadFile(os.Getenv("PARITY_SPECS"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(raw, &file); err != nil {
+		t.Fatal(err)
+	}
+	iterations, _ := strconv.Atoi(os.Getenv("PARITY_ITERATIONS"))
+	results := map[string]parityResult{}
+	for _, spec := range file.Specs {
+		if only := os.Getenv("PARITY_ONLY"); only != "" && !strings.Contains(","+only+",", ","+spec.Name+",") {
+			continue
+		}
+		results[spec.Name] = runParitySpec(spec, file.Profiles[spec.Profile], int32(iterations))
+	}
+	raw, _ = json.MarshalIndent(results, "", "  ")
+	if err := os.WriteFile(out, raw, 0644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func runParitySpec(spec paritySpec, profile map[string]float64, iterations int32) (res parityResult) {
+	defer func() {
+		if r := recover(); r != nil {
+			res.Error = "panic: " + firstLine(r)
+		}
+	}()
+	class, options, consumes := paritySpecOptions(spec.Name)
+	aplPath := filepath.Join("..", spec.MasterApl)
+	if _, err := os.Stat(aplPath + ".apl.json"); err != nil {
+		return parityResult{Error: "no APL " + spec.MasterApl}
+	}
+	items := make([]*proto.ItemSpec, len(proto.ItemSlot_name))
+	for i := range items {
+		items[i] = &proto.ItemSpec{}
+	}
+	items[proto.ItemSlot_ItemSlotMainHand].Id = spec.MH
+	items[proto.ItemSlot_ItemSlotOffHand].Id = spec.OH
+	items[proto.ItemSlot_ItemSlotRanged].Id = spec.Ranged
+	equipment := &proto.EquipmentSpec{Items: items}
+	if os.Getenv("PARITY_GEAR") != "" {
+		// Real gear: forever-next's default preset for the spec, no bonus stats.
+		root := filepath.Dir(filepath.Dir(filepath.Dir(os.Getenv("PARITY_SPECS"))))
+		equipment = core.GetGearSet(filepath.Join(root, filepath.Dir(spec.Gear)), filepath.Base(spec.Gear)).GearSet
+		profile = nil
+	}
+
+	distance := spec.Distance
+	if distance == 0 {
+		distance = 5
+	}
+	player := core.WithSpec(&proto.Player{
+		Class:              class,
+		Race:               proto.Race(proto.Race_value[spec.Race]),
+		Equipment:          equipment,
+		Consumes:           consumes,
+		BonusStats:         &proto.UnitStats{Stats: parityStats(profile).ToFloatArray()},
+		TalentsString:      spec.Talents,
+		Rotation:           core.GetAplRotation(filepath.Dir(aplPath), filepath.Base(aplPath)).Rotation,
+		DistanceFromTarget: distance,
+		ReactionTimeMs:     150,
+		ChannelClipDelayMs: 50,
+	}, options)
+	raid := core.SinglePlayerRaidProto(player, &proto.PartyBuffs{}, &proto.RaidBuffs{}, &proto.Debuffs{})
+	if spec.Tank {
+		raid.Tanks = []*proto.UnitReference{{Type: proto.UnitReference_Player, Index: 0}}
+	}
+	encounter := &proto.Encounter{
+		Duration:             180,
+		ExecuteProportion_20: 0.2,
+		ExecuteProportion_25: 0.25,
+		ExecuteProportion_35: 0.35,
+		Targets: []*proto.Target{{
+			Level:         63,
+			MobType:       proto.MobType_MobTypeUnknown,
+			Stats:         stats.Stats{stats.Armor: 3731, stats.AttackPower: 805}.ToFloatArray(),
+			SwingSpeed:    2,
+			MinBaseDamage: 3000,
+			DamageSpread:  0.3333,
+			ParryHaste:    true,
+		}},
+	}
+
+	final := core.ComputeStats(&proto.ComputeStatsRequest{Raid: raid, Encounter: encounter, Ruleset: proto.Ruleset_RulesetForever})
+	if final.ErrorResult != "" {
+		return parityResult{Error: firstLine(final.ErrorResult)}
+	}
+	s := stats.FromFloatArray(final.RaidStats.Parties[0].Players[0].FinalStats.Stats)
+	if os.Getenv("PARITY_STAGES") != "" {
+		ps := final.RaidStats.Parties[0].Players[0]
+		for _, st := range []struct {
+			n string
+			u *proto.UnitStats
+		}{{"base", ps.BaseStats}, {"gear", ps.GearStats}, {"talents", ps.TalentsStats}, {"buffs", ps.BuffsStats}, {"consumes", ps.ConsumesStats}, {"final", ps.FinalStats}} {
+			x := stats.FromFloatArray(st.u.Stats)
+			fmt.Printf("STAGE master %s %-8s str %.1f agi %.1f ap %.1f rap %.1f hit %.2f crit %.2f scrit %.2f armor %.0f def %.1f dodge %.2f blockv %.1f\n", spec.Name, st.n, x[stats.Strength], x[stats.Agility], x[stats.AttackPower], x[stats.RangedAttackPower], x[stats.MeleeHit], x[stats.MeleeCrit], x[stats.SpellCrit], x[stats.Armor]+x[stats.BonusArmor], x[stats.Defense], x[stats.Dodge], x[stats.BlockValue])
+		}
+		fmt.Printf("STAGE master %s sets %v\n", spec.Name, ps.Sets)
+	}
+
+	result := core.RunRaidSim(&proto.RaidSimRequest{
+		Raid:      raid,
+		Encounter: encounter,
+		SimOptions: &proto.SimOptions{
+			Iterations: iterations,
+			IsTest:     true,
+			RandomSeed: int64(envInt("PARITY_SEED", 101)),
+			Debug:      os.Getenv("PARITY_LOG") != "",
+			Ruleset:    proto.Ruleset_RulesetForever,
+		},
+	})
+	if result.Error != nil {
+		return parityResult{Error: firstLine(result.Error.Message)}
+	}
+	if dir := os.Getenv("PARITY_LOG"); dir != "" {
+		os.WriteFile(filepath.Join(dir, spec.Name+".master.log"), []byte(result.Logs), 0o644)
+	}
+	actions, casts := actionDps(result.RaidMetrics.Parties[0].Players[0], result.RaidMetrics.Dps.Avg, iterations)
+	return parityResult{
+		Dps:     result.RaidMetrics.Dps.Avg,
+		Actions: actions,
+		Casts:   casts,
+		Auras:   auraUptimes(result.RaidMetrics.Parties[0].Players[0]),
+		Oom:     result.RaidMetrics.Parties[0].Players[0].SecondsOomAvg,
+		Boss:    bossOutcomes(result.EncounterMetrics, iterations),
+		Dtps:    result.RaidMetrics.Parties[0].Players[0].Dtps.Avg,
+		Stats: map[string]float64{
+			"ap": s[stats.AttackPower], "rap": s[stats.RangedAttackPower], "sd": s[stats.SpellDamage],
+			"mcrit": s[stats.MeleeCrit], "scrit": s[stats.SpellCrit], "mhit": s[stats.MeleeHit], "shit": s[stats.SpellHit],
+			"int": s[stats.Intellect], "agi": s[stats.Agility], "str": s[stats.Strength], "spi": s[stats.Spirit],
+		},
+	}
+}
+
+func firstLine(v interface{}) string {
+	s := ""
+	switch x := v.(type) {
+	case string:
+		s = x
+	case error:
+		s = x.Error()
+	default:
+		b, _ := json.Marshal(x)
+		s = string(b)
+	}
+	for i, c := range s {
+		if c == '\n' {
+			return s[:i]
+		}
+	}
+	if len(s) > 160 {
+		s = s[:160]
+	}
+	return s
+}
+
+// DPS and casts a fight per action, the player's and its pets', keyed so both engines
+// name them alike.
+func actionDps(unit *proto.UnitMetrics, dps float64, iterations int32) (map[string]float64, map[string]float64) {
+	out := map[string]float64{}
+	casts := map[string]float64{}
+	total := 0.0
+	units := append([]*proto.UnitMetrics{unit}, unit.Pets...)
+	for i, u := range units {
+		for _, action := range u.Actions {
+			damage := 0.0
+			for _, target := range action.Targets {
+				damage += target.Damage
+			}
+			if damage <= 0 {
+				continue
+			}
+			key := fmt.Sprintf("spell %d", action.Id.GetSpellId())
+			if action.Id.GetSpellId() == 0 {
+				key = action.Id.GetOtherId().String()
+			}
+			if action.Id.GetTag() != 0 {
+				key += fmt.Sprintf(" tag %d", action.Id.GetTag())
+			}
+			if i > 0 {
+				key = "pet " + key
+			}
+			out[key] += damage
+			total += damage
+			for _, target := range action.Targets {
+				casts[key] += float64(target.Casts) / float64(iterations)
+			}
+		}
+	}
+	for k := range out {
+		out[k] *= dps / total
+	}
+	return out, casts
+}
+
+func auraUptimes(unit *proto.UnitMetrics) map[string]float64 {
+	out := map[string]float64{}
+	for _, a := range unit.Auras {
+		key := fmt.Sprintf("aura %d", a.Id.GetSpellId())
+		if a.Id.GetTag() != 0 {
+			key += fmt.Sprintf(" tag %d", a.Id.GetTag())
+		}
+		out[key+" uptime"] = a.UptimeSecondsAvg
+		out[key+" procs"] = a.ProcsAvg
+	}
+	for _, action := range unit.Actions {
+		var crits, resisted, total, damage float64
+		for _, t := range action.Targets {
+			crits += float64(t.Crits + t.CritTicks)
+			resisted += float64(t.ResistedHits + t.ResistedCrits + t.ResistedTicks + t.ResistedCritTicks)
+			total += float64(t.Hits + t.Ticks + t.Crits + t.CritTicks)
+			damage += t.Damage
+		}
+		if total > 0 && action.Id.GetSpellId() != 0 {
+			key := fmt.Sprintf("spell %d", action.Id.GetSpellId())
+			if action.Id.GetTag() != 0 {
+				key += fmt.Sprintf(" tag %d", action.Id.GetTag())
+			}
+			out[key+" crit%"] = 100 * crits / total
+			out[key+" resist%"] = 100 * resisted / total
+			out[key+" dmg/hit"] = damage / total
+		}
+	}
+	for _, r := range unit.Resources {
+		out[fmt.Sprintf("res %v %v gain", r.Type, r.Id)] += r.ActualGain
+	}
+	return out
+}
+
+// envInt reads an integer knob (PARITY_SEED, PARITY_REACTION) with a default.
+func envInt(k string, d int) int {
+	if v, err := strconv.Atoi(os.Getenv(k)); err == nil {
+		return v
+	}
+	return d
+}
+
+// The boss's attacks on the tank per fight: each outcome's count and damage, for a DTPS gap.
+func bossOutcomes(em *proto.EncounterMetrics, iterations int32) map[string]float64 {
+	out := map[string]float64{}
+	for _, t := range em.Targets {
+		for _, a := range t.Actions {
+			key := fmt.Sprintf("spell %d", a.Id.GetSpellId())
+			if a.Id.GetSpellId() == 0 {
+				key = a.Id.GetOtherId().String()
+			}
+			for _, x := range a.Targets {
+				for k, v := range map[string]float64{"casts": float64(x.Casts), "hits": float64(x.Hits), "crits": float64(x.Crits),
+					"crushes": float64(x.Crushes), "misses": float64(x.Misses), "dodges": float64(x.Dodges), "parries": float64(x.Parries),
+					"blocks": float64(x.Blocks), "blockedCrits": float64(x.BlockedCrits), "damage": x.Damage, "blockDamage": x.BlockDamage,
+					"crushDamage": x.CrushDamage, "critDamage": x.CritDamage} {
+					out[key+" "+k] += v / float64(iterations)
+				}
+			}
+		}
+	}
+	return out
+}

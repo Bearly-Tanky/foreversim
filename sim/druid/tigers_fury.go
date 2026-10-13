@@ -1,0 +1,49 @@
+package druid
+
+import (
+	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/dbcenums"
+	"github.com/wowsims/forever/sim/core/spelldata"
+	"github.com/wowsims/forever/sim/core/stats"
+)
+
+// Build 70170 grants Tiger's Fury rather than training it (SkillLineAbility AcquireMethod 3), so the
+// generator no longer finds it a ladder; the store carries it as an extra spell.
+var tigersFuryRank = spelldata.Ranked(5217).Highest()
+
+// Forever pays a share of Physical damage rather than Classic's flat amount, so it scales with the
+// cat's weapon and attack power instead of fading as gear improves: the client states 15% on the
+// rank's dummy effect, with no Energy cost and a 30 second cooldown.
+func (druid *Druid) registerTigersFurySpell() {
+	actionID := core.ActionID{SpellID: tigersFuryRank.ID}
+	multiplier := 1 + tigersFuryRank.Effect(dbcenums.A_DUMMY, 0).BaseValue()/100
+
+	druid.TigersFuryAura = druid.RegisterAura(core.Aura{
+		Label:    "Tiger's Fury",
+		ActionID: actionID,
+		Duration: tigersFuryRank.Duration(),
+	}).AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical], multiplier)
+
+	druid.TigersFury = druid.RegisterSpell(Cat, core.SpellConfig{
+		ActionID:       actionID,
+		ClassSpellMask: DruidSpellTigersFury,
+		Flags:          core.SpellFlagAPL,
+
+		EnergyCost: core.EnergyCostOptions{
+			Cost: int32(tigersFuryRank.Cost()),
+		},
+		Cast: core.CastConfig{
+			IgnoreHaste: true,
+			CD: core.Cooldown{
+				Timer:    druid.NewTimer(),
+				Duration: max(tigersFuryRank.Cooldown(), tigersFuryRank.CategoryCooldown()),
+			},
+		},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			druid.TigersFuryAura.Activate(sim)
+		},
+
+		RelatedSelfBuff: druid.TigersFuryAura,
+	})
+}

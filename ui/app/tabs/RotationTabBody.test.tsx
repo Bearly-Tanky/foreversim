@@ -1,0 +1,59 @@
+import { APLRotation_Type as APLRotationType } from '@generated/proto/apl';
+import { SimHostProvider } from '@sim/context/SimHostContext';
+import { fakeHost } from '@sim/testing';
+import { render } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Everything the simple pane mounts besides the Cooldowns block; none of it is under test here.
+vi.mock('@features/apl/components/AplNavbar', () => ({ AplNavbar: () => null }));
+vi.mock('@features/apl/components/GroupList', () => ({ GroupList: () => null }));
+vi.mock('@features/apl/components/PrePullList', () => ({ PrePullList: () => null }));
+vi.mock('@features/apl/components/PriorityList', () => ({ PriorityList: () => null }));
+vi.mock('@features/apl/components/RotationTypePicker', () => ({ RotationTypePicker: () => null }));
+vi.mock('@features/apl/components/SavedRotation', () => ({ SavedRotation: () => null }));
+vi.mock('@features/apl/components/SimpleRotationInputs', () => ({ SimpleRotationInputs: () => null }));
+vi.mock('@features/apl/components/VariablesList', () => ({ VariablesList: () => null }));
+vi.mock('../PresetConfigurationPicker', () => ({ PresetConfigurationPicker: () => null }));
+vi.mock('@i18n/config', () => ({ default: { t: (key: string) => key } }));
+vi.mock('@features/settings', () => ({
+	CooldownsPicker: () => null,
+	useAvailableCooldowns: () => available,
+}));
+
+let available: Array<unknown> = [];
+const { RotationTabBody } = await import('./RotationTabBody');
+
+const setup = (hideSimpleCooldowns?: boolean) => {
+	const host = fakeHost({
+		player: { hasSimpleRotationGenerator: () => true },
+		individualConfig: { rotationInputs: { inputs: [] }, hideSimpleCooldowns },
+	});
+	return render(
+		<SimHostProvider host={host}>
+			<RotationTabBody rotationType={APLRotationType.TypeSimple} />
+		</SimHostProvider>,
+	);
+};
+
+const cooldownBlock = (container: HTMLElement) => container.querySelector('[data-testid="cooldown-settings"]');
+
+beforeEach(() => {
+	available = [{}, {}];
+});
+
+describe('RotationTabBody simple pane', () => {
+	it('shows the Cooldowns block when the spec has available cooldowns', () => {
+		expect(cooldownBlock(setup().container)).not.toBeNull();
+	});
+
+	// DPS warrior's `simpleRotation` generator never reads its Cooldowns argument, so the picker
+	// could not affect the APL it builds. Vanilla hid the block with a per-spec SCSS rule.
+	it('hides it for a spec that opts out, even with cooldowns available', () => {
+		expect(cooldownBlock(setup(true).container)).toBeNull();
+	});
+
+	it('hides it when the spec has no available cooldowns', () => {
+		available = [];
+		expect(cooldownBlock(setup().container)).toBeNull();
+	});
+});

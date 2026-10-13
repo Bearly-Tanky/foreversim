@@ -1,0 +1,10 @@
+{
+	"protoVersion": {
+		"17": {
+			"body": "This link or saved setup predates the rebuilt buffs and consumables, which could not be read from it. Buffs, debuffs and consumables have been reset to the defaults for this spec."
+		},
+		"18": {
+			"body": "This link or saved setup predates the renumbered buffs, which could not be read from it. Buffs and debuffs have been reset to the defaults for this spec."
+		}
+	}
+}

@@ -1,0 +1,1565 @@
+{
+  "$schema": "../schema/class.schema.json",
+  "schemaVersion": 1,
+  "class": "druid",
+  "className": "Druid",
+  "dataVersion": 1,
+  "dataSource": "video",
+  "generatedAt": "2026-09-13T16:24:12Z",
+  "rules": {
+    "pointsPerRow": 5,
+    "maxPoints": 51,
+    "firstPointLevel": 10,
+    "maxLevel": 60,
+    "rulesSource": "assumed"
+  },
+  "pages": [
+    {
+      "id": "primary",
+      "name": "Primary"
+    }
+  ],
+  "trees": [
+    {
+      "id": "balance",
+      "name": "Balance",
+      "page": "primary",
+      "order": 0,
+      "icon": "crop-balance",
+      "rows": 7,
+      "cols": 4,
+      "source": {
+        "kind": "video",
+        "video": "DxtVEhjyROU",
+        "t": 20650.0,
+        "frame": 1239000,
+        "crop": "data/review/druid/balance/_header.png",
+        "confidence": 1.0,
+        "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+        "reviewed": false
+      },
+      "talents": [
+        {
+          "id": "improved-wrath",
+          "name": "Improved Wrath",
+          "row": 0,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "crop-improved-wrath",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/balance/improved-wrath.icon.png",
+          "description": "Reduces the cast time of your Wrath spell by {0} sec and its Mana cost by {1}%.",
+          "ranks": [[0.1, 10], [0.1, 10], [0.1, 10], [0.1, 10], [0.1, 10]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: Classic match druid/balance/Improved Wrath (talent 762) has no alignable slots; ranks 2..5 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20651.1,
+            "frame": 1239066,
+            "crop": "data/review/druid/balance/improved-wrath.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "genesis",
+          "name": "Genesis",
+          "row": 0,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "crop-genesis",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/balance/genesis.icon.png",
+          "description": "Increases the periodic damage and healing done by your spells and abilities by {0}%.",
+          "ranks": [[1], [2], [3], [4], [5]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 35,
+            "classicSpellIds": [11124, 12378, 12398, 12399, 12400],
+            "match": "description",
+            "similarity": 0.95
+          },
+          "ranksNote": "Classic mage/fire/Fire Power (talent 35) (cross-class), matched on description (0.95): Classic 2/4/6/8/10 is proportional; Forever rank 1 is 1: scaled proportionally (1 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20654.533,
+            "frame": 1239272,
+            "crop": "data/review/druid/balance/genesis.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "moonglow",
+          "name": "Moonglow",
+          "row": 1,
+          "col": 0,
+          "maxRank": 3,
+          "icon": "spell_nature_sentinal",
+          "iconSource": "classic",
+          "description": "Reduces the Mana cost of your spells by {0}%.",
+          "ranks": [[3], [6], [9]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 783,
+            "classicSpellIds": [16845, 16846, 16847],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Moonglow (talent 783): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20663.0,
+            "frame": 1239780,
+            "crop": "data/review/druid/balance/moonglow.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "improved-moonfire",
+          "name": "Improved Moonfire",
+          "row": 1,
+          "col": 1,
+          "maxRank": 2,
+          "icon": "spell_nature_starfall",
+          "iconSource": "classic",
+          "description": "Increases the damage and critical strike chance of your Moonfire spell by {0}%.",
+          "ranks": [[5], [10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 763,
+            "classicSpellIds": [16821, 16822, 16823, 16824, 16825],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Improved Moonfire (talent 763): Classic 2/4/6/8/10 is proportional, Classic has 5 ranks; Forever rank 1 is 5: scaled proportionally (5 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20774.017,
+            "frame": 1246441,
+            "crop": "data/review/druid/balance/improved-moonfire.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natures-majesty",
+          "name": "Nature's Majesty",
+          "row": 1,
+          "col": 2,
+          "maxRank": 2,
+          "icon": "inv_staff_01",
+          "iconSource": "classic",
+          "description": "Increases your critical strike chance with spells and melee attacks by {0}%.",
+          "ranks": [[2], [4]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 1141,
+            "classicSpellIds": [18459, 18460],
+            "match": "description",
+            "similarity": 0.85
+          },
+          "ranksNote": "Classic mage/fire/Incinerate (talent 1141) (cross-class), matched on description (0.85): Classic 2/4 is proportional; Forever rank 1 is 2: scaled proportionally (2 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20770.0,
+            "frame": 1246200,
+            "crop": "data/review/druid/balance/natures-majesty.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natures-reach",
+          "name": "Nature's Reach",
+          "row": 1,
+          "col": 3,
+          "maxRank": 2,
+          "icon": "spell_nature_naturetouchgrow",
+          "iconSource": "classic",
+          "description": "Increases the range of your offensive Balance spells by {0}% and increases the chance for all your spells and attacks to hit by {1}%.",
+          "ranks": [[10, 2], [20, 4]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "Classic match druid/balance/Nature's Reach (talent 764) has no alignable slots; proportional x2..x2 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20776.017,
+            "frame": 1246561,
+            "crop": "data/review/druid/balance/natures-reach.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "improved-entangling-roots",
+          "name": "Improved Entangling Roots",
+          "row": 2,
+          "col": 0,
+          "maxRank": 3,
+          "icon": "spell_nature_stranglevines",
+          "iconSource": "classic",
+          "description": "Increases the damage done by your Entangling Roots spell by {0}%, and its victims can take up to {1}% more damage without interrupting the effect.",
+          "ranks": [[25, 25], [50, 50], [75, 75]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "Classic match druid/balance/Improved Entangling Roots (talent 787) has no alignable slots; proportional x2..x3 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20690.683,
+            "frame": 1241441,
+            "crop": "data/review/druid/balance/improved-entangling-roots.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        },
+        {
+          "id": "natures-splendor",
+          "name": "Nature's Splendor",
+          "row": 2,
+          "col": 2,
+          "maxRank": 1,
+          "icon": "crop-natures-splendor",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/balance/natures-splendor.icon.png",
+          "description": "Increases the duration of your Moonfire and Rejuvenation spells by {0} sec, your Regrowth spell by {1} sec, and your Insect Swarm spell by {2} sec.",
+          "ranks": [[3, 6, 2]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "requires": [
+            {
+              "talent": "natures-majesty",
+              "rank": 2
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20708.067,
+            "frame": 1242484,
+            "crop": "data/review/druid/balance/natures-splendor.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Nature's Majesty at rank 2 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites)"
+          }
+        },
+        {
+          "id": "balance-of-nature",
+          "name": "Balance of Nature",
+          "row": 2,
+          "col": 3,
+          "maxRank": 5,
+          "icon": "ability_druid_balanceofpower",
+          "iconSource": "classic",
+          "description": "Each time you cast a Nature spell, your next Arcane damage spell within {0} sec deals {1}% increased damage. Each time you cast an Arcane spell, your next Nature damage spell within {2} sec deals {3}% increased damage.",
+          "ranks": [[10, 1, 10, 1], [10, 1, 10, 1], [10, 1, 10, 1], [10, 1, 10, 1], [10, 1, 10, 1]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: duration slot (10 sec) is never extrapolated; ranks 2..5 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20696.433,
+            "frame": 1241786,
+            "crop": "data/review/druid/balance/balance-of-nature.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "insect-swarm",
+          "name": "Insect Swarm",
+          "row": 3,
+          "col": 0,
+          "maxRank": 1,
+          "icon": "spell_nature_insectswarm",
+          "iconSource": "classic",
+          "description": "The enemy target is swarmed by insects, decreasing their chance to hit by {0}% and causing {1} Nature damage over {2} sec.",
+          "ranks": [[2, 55, 12]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20722.017,
+            "frame": 1243321,
+            "crop": "data/review/druid/balance/insect-swarm.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "vengeance",
+          "name": "Vengeance",
+          "row": 3,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "spell_nature_purge",
+          "iconSource": "classic",
+          "description": "Increases the critical strike damage bonus of your Arcane and Nature spells by {0}%.",
+          "ranks": [[20], [40], [60], [80], [100]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 792,
+            "classicSpellIds": [16909, 16910, 16911, 16912, 16913],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Vengeance (talent 792): ranks copied.",
+          "requires": [
+            {
+              "talent": "improved-moonfire",
+              "rank": 2
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20716.583,
+            "frame": 1242995,
+            "crop": "data/review/druid/balance/vengeance.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Improved Moonfire at rank 2 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites)"
+          }
+        },
+        {
+          "id": "improved-starfire",
+          "name": "Improved Starfire",
+          "row": 3,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "spell_arcane_starfire",
+          "iconSource": "classic",
+          "description": "Reduces the cast time of Starfire by {0} sec and Starfire has a {1}% chance to stun its target for 3 sec.",
+          "ranks": [[0.1, 3], [0.2, 6], [0.3, 9], [0.4, 12], [0.5, 15]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 784,
+            "classicSpellIds": [16850, 16923, 16924, 16925, 16926],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Improved Starfire (talent 784): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20702.467,
+            "frame": 1242148,
+            "crop": "data/review/druid/balance/improved-starfire.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "overgrowth",
+          "name": "Overgrowth",
+          "row": 4,
+          "col": 0,
+          "maxRank": 2,
+          "icon": "inv_misc_herb_15",
+          "iconSource": "classic",
+          "description": "Increases the maximum number of targets you may have affected by Entangling Roots by {0}.",
+          "ranks": [[1], [2]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "No Classic counterpart; proportional x2..x2 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20724.617,
+            "frame": 1243477,
+            "crop": "data/review/druid/balance/overgrowth.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natures-grace",
+          "name": "Nature's Grace",
+          "row": 4,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "spell_nature_naturesblessing",
+          "iconSource": "classic",
+          "description": "All non-periodic spell criticals grace you with a blessing of nature, increasing your spellcasting speed and reducing your global cooldown by {0}% for {1} sec.",
+          "ranks": [[10, 3]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20736.0,
+            "frame": 1244160,
+            "crop": "data/review/druid/balance/natures-grace.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        },
+        {
+          "id": "eclipse",
+          "name": "Eclipse",
+          "row": 4,
+          "col": 2,
+          "maxRank": 3,
+          "icon": "ability_druid_eclipse",
+          "iconSource": "classic",
+          "description": "Your Wrath spell reduces the cast time of your next {0} Starfire spells by {1} sec. Stores up to {2} charges. Lasts {3} sec.",
+          "ranks": [[2, 0.17, 4, 15], [2, 0.17, 4, 15], [2, 0.17, 4, 15]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: duration slot (0.17 sec) is never extrapolated; ranks 2..3 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20738.7,
+            "frame": 1244322,
+            "crop": "data/review/druid/balance/eclipse.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "moonfury",
+          "name": "Moonfury",
+          "row": 5,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "spell_nature_moonglow",
+          "iconSource": "classic",
+          "description": "Increases the damage done by your Arcane and Nature spells by {0}%.",
+          "ranks": [[1], [2], [3], [4], [5]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 790,
+            "classicSpellIds": [16896, 16897, 16899, 16900, 16901],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Moonfury (talent 790): Classic 2/4/6/8/10 is proportional; Forever rank 1 is 1: scaled proportionally (1 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20746.017,
+            "frame": 1244761,
+            "crop": "data/review/druid/balance/moonfury.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "moonkin-form",
+          "name": "Moonkin Form",
+          "row": 6,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "spell_nature_forceofnature",
+          "iconSource": "classic",
+          "description": "Transforms the Druid into Moonkin Form. While in this form, the armor contribution from items is increased by {0}% and all party members within {1} yards have their critical chance increased by {2}%, exclusive with Leader of the Pack. The Moonkin cannot cast healing spells while shapeshifted. The act of shapeshifting frees the caster of Polymorph and Movement Impairing effects.",
+          "ranks": [[360, 45, 3]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20750.883,
+            "frame": 1245053,
+            "crop": "data/review/druid/balance/moonkin-form.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "feral-combat",
+      "name": "Feral Combat",
+      "page": "primary",
+      "order": 1,
+      "icon": "crop-feral-combat",
+      "rows": 7,
+      "cols": 4,
+      "source": {
+        "kind": "video",
+        "video": "DxtVEhjyROU",
+        "t": 20650.0,
+        "frame": 1239000,
+        "crop": "data/review/druid/feral-combat/_header.png",
+        "confidence": 1.0,
+        "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+        "reviewed": false
+      },
+      "talents": [
+        {
+          "id": "ferocity",
+          "name": "Ferocity",
+          "row": 0,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "ability_hunter_pet_hyena",
+          "iconSource": "classic",
+          "description": "Reduces the cost of your Maul, Mangle, Swipe, Claw, and Rake abilities by {0} Rage or Energy.",
+          "ranks": [[1], [2], [3], [4], [5]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 796,
+            "classicSpellIds": [16934, 16935, 16936, 16937, 16938],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/feral-combat/Ferocity (talent 796): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20790.017,
+            "frame": 1247401,
+            "crop": "data/review/druid/feral-combat/ferocity.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        },
+        {
+          "id": "heart-of-the-wild",
+          "name": "Heart of the Wild",
+          "row": 0,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "spell_holy_blessingofagility",
+          "iconSource": "classic",
+          "description": "Increases your Intellect by {0}%. In addition, while in Bear Form or Dire Bear Form your Stamina is increased by {1}% and while in Cat Form your Strength is increased by {2}%.",
+          "ranks": [[2, 4, 2], [4, 8, 4], [6, 12, 6], [8, 16, 8], [10, 20, 10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 808,
+            "classicSpellIds": [17003, 17004, 17005, 17006, 24894],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/feral-combat/Heart of the Wild (talent 808): Classic 4/8/12/16/20 is proportional; Forever rank 1 is 2: scaled proportionally (2 x rank); Classic 4/8/12/16/20 is proportional; Forever rank 1 is 2: scaled proportionally (2 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20792.05,
+            "frame": 1247523,
+            "crop": "data/review/druid/feral-combat/heart-of-the-wild.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "feral-swiftness",
+          "name": "Feral Swiftness",
+          "row": 1,
+          "col": 0,
+          "maxRank": 2,
+          "icon": "spell_nature_spiritwolf",
+          "iconSource": "classic",
+          "description": "Increases your movement speed while in Cat Form by {0}%, and increases your chance to Dodge by {1}%.",
+          "ranks": [[15, 2], [30, 4]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 807,
+            "classicSpellIds": [17002, 24866],
+            "match": "description",
+            "similarity": 0.94
+          },
+          "ranksNote": "Classic druid/feral-combat/Feline Swiftness (talent 807), matched on description (0.94): Classic 15/30 is proportional; Forever rank 1 is 15: scaled proportionally (15 x rank); Classic 2/4 is proportional; Forever rank 1 is 2: scaled proportionally (2 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20793.0,
+            "frame": 1247580,
+            "crop": "data/review/druid/feral-combat/feral-swiftness.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "feral-instinct",
+          "name": "Feral Instinct",
+          "row": 1,
+          "col": 1,
+          "maxRank": 3,
+          "icon": "ability_ambush",
+          "iconSource": "classic",
+          "description": "Increases damage done by your Swipe ability by {0}% and reduces the chance enemies have to detect you while Prowling as if you were {1} level{2} higher.",
+          "ranks": [[10, 1, ""], [20, 2, "s"], [30, 3, "s"]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "Classic match druid/feral-combat/Feral Instinct (talent 799) has no alignable slots; proportional x2..x3 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20794.567,
+            "frame": 1247674,
+            "crop": "data/review/druid/feral-combat/feral-instinct.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "brutal-impact",
+          "name": "Brutal Impact",
+          "row": 1,
+          "col": 2,
+          "maxRank": 2,
+          "icon": "ability_druid_bash",
+          "iconSource": "classic",
+          "description": "Increases the stun duration of your Bash and Pounce abilities by {0} sec and reduces the cooldown of Bash by {1} sec.",
+          "ranks": [[0.5, 15], [0.5, 15]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: Classic match druid/feral-combat/Brutal Impact (talent 797) has no alignable slots; rank 2 is a copy of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20795.183,
+            "frame": 1247711,
+            "crop": "data/review/druid/feral-combat/brutal-impact.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "thick-hide",
+          "name": "Thick Hide",
+          "row": 1,
+          "col": 3,
+          "maxRank": 3,
+          "icon": "inv_misc_pelt_bear_03",
+          "iconSource": "classic",
+          "description": "While in Bear Form, Cat Form, Dire Bear Form, or Moonkin Form, you gain {0} additional base{1} Armor per level and another {2} base Armor for each point of defense skill beyond five times your level. This amount can be further increased by multipliers from those forms.",
+          "ranks": [[1, "", 0.67], [2, "s", 1.34], [3, "s", 2.01]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "Classic match druid/feral-combat/Thick Hide (talent 794) has no alignable slots; proportional x2..x3 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20797.017,
+            "frame": 1247821,
+            "crop": "data/review/druid/feral-combat/thick-hide.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "savage-fury",
+          "name": "Savage Fury",
+          "row": 2,
+          "col": 1,
+          "maxRank": 2,
+          "icon": "ability_druid_ravage",
+          "iconSource": "classic",
+          "description": "Increases the damage caused by your Claw, Rake, Shred, Maul, and Swipe abilities by {0}%.",
+          "ranks": [[5], [10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 805,
+            "classicSpellIds": [16998, 16999],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/feral-combat/Savage Fury (talent 805): Classic 10/20 is proportional; Forever rank 1 is 5: scaled proportionally (5 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20798.0,
+            "frame": 1247880,
+            "crop": "data/review/druid/feral-combat/savage-fury.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "feral-charge",
+          "name": "Feral Charge",
+          "row": 2,
+          "col": 2,
+          "maxRank": 1,
+          "icon": "crop-feral-charge",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/feral-combat/feral-charge.icon.png",
+          "description": "Charge an enemy, immobilizing them and interrupting any spell they are casting for {0} sec. Feral Charge (Cat): Leap behind an enemy, Dazing them for {1} sec.",
+          "ranks": [[4, 3]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20800.0,
+            "frame": 1248000,
+            "crop": "data/review/druid/feral-combat/feral-charge.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z",
+            "note": "re-cropped from the merged mkv at stream t=20800.0 with headroom (2026-09-13): the tooltip has no name line at all in the footage, so the talent name comes from its own 'Feral Charge (Cat)' block; '5 Rage' was the Bear-form rage cost. No 'Rank x/y' line in the crop, so maxRank 1 is unverified.; unparsed requirement: Requires Bear Form, Dire Bear Form; unparsed requirement: Requires Cat Form"
+          }
+        },
+        {
+          "id": "sharpened-claws",
+          "name": "Sharpened Claws",
+          "row": 2,
+          "col": 3,
+          "maxRank": 2,
+          "icon": "inv_misc_monsterclaw_04",
+          "iconSource": "classic",
+          "description": "Increases your critical strike chance while in Bear Form, Dire Bear Form, or Cat Form by {0}%.",
+          "ranks": [[3], [6]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 798,
+            "classicSpellIds": [16942, 16943, 16944],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/feral-combat/Sharpened Claws (talent 798): Classic 2/4/6 is proportional, Classic has 3 ranks; Forever rank 1 is 3: scaled proportionally (3 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20801.6,
+            "frame": 1248096,
+            "crop": "data/review/druid/feral-combat/sharpened-claws.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "shredding-attacks",
+          "name": "Shredding Attacks",
+          "row": 3,
+          "col": 0,
+          "maxRank": 3,
+          "icon": "spell_shadow_vampiricaura",
+          "iconSource": "classic",
+          "description": "Reduces the Energy cost of your Shred ability by {0} and reduces the Rage cost of your Lacerate ability by {1}.",
+          "ranks": [[6, 1], [12, 2], [18, 3]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "No Classic counterpart; proportional x2..x3 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20820.05,
+            "frame": 1249203,
+            "crop": "data/review/druid/feral-combat/shredding-attacks.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "mangle",
+          "name": "Mangle",
+          "row": 3,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "crop-mangle",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/feral-combat/mangle.icon.png",
+          "description": "Mangle the target for {0}% normal damage plus {1}.",
+          "ranks": [[100, 26]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "requires": [
+            {
+              "talent": "savage-fury",
+              "rank": 2
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20830.35,
+            "frame": 1249821,
+            "crop": "data/review/druid/feral-combat/mangle.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "unparsed requirement: Requires Bear Form, Dire Bear Form; prerequisite from tree arrow (stage 7): Savage Fury at rank 2 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites); arrow confidence 0.70"
+          }
+        },
+        {
+          "id": "predatory-strikes",
+          "name": "Predatory Strikes",
+          "row": 3,
+          "col": 2,
+          "maxRank": 3,
+          "icon": "ability_hunter_pet_cat",
+          "iconSource": "classic",
+          "description": "Increases your melee Attack Power by {0}% of your level.",
+          "ranks": [[50], [100], [150]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 803,
+            "classicSpellIds": [16972, 16974, 16975],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/feral-combat/Predatory Strikes (talent 803): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20804.683,
+            "frame": 1248281,
+            "crop": "data/review/druid/feral-combat/predatory-strikes.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "unparsed requirement: Requires Cat Form, Bear Form, Dire Bear Form"
+          }
+        },
+        {
+          "id": "primal-fury",
+          "name": "Primal Fury",
+          "row": 3,
+          "col": 3,
+          "maxRank": 2,
+          "icon": "ability_racial_cannibalize",
+          "iconSource": "classic",
+          "description": "Gives you a {0}% chance to gain an additional {1} Rage any time you get a critical strike while in Bear Form or Dire Bear Form. In addition, your non-periodic critical strikes from Cat Form abilities that generate Combo Points have a {2}% chance to add an additional Combo Point.",
+          "ranks": [[50, 5, 50], [50, 5, 50]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: Classic match druid/feral-combat/Primal Fury (talent 801) has no alignable slots; rank 2 is a copy of rank 1.",
+          "requires": [
+            {
+              "talent": "sharpened-claws",
+              "rank": 2
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20802.3,
+            "frame": 1248138,
+            "crop": "data/review/druid/feral-combat/primal-fury.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Sharpened Claws at rank 2 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites)"
+          }
+        },
+        {
+          "id": "predatory-instincts",
+          "name": "Predatory Instincts",
+          "row": 4,
+          "col": 0,
+          "maxRank": 2,
+          "icon": "ability_druid_predatoryinstincts",
+          "iconSource": "classic",
+          "description": "Increases the critical strike damage bonus of your melee abilities by {0}%.",
+          "ranks": [[10], [20]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 662,
+            "classicSpellIds": [16493, 16494],
+            "match": "description",
+            "similarity": 0.96
+          },
+          "ranksNote": "Classic warrior/arms/Impale (talent 662) (cross-class), matched on description (0.96): Classic 10/20 is proportional; Forever rank 1 is 10: scaled proportionally (10 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20837.0,
+            "frame": 1250220,
+            "crop": "data/review/druid/feral-combat/predatory-instincts.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "leader-of-the-pack",
+          "name": "Leader of the Pack",
+          "row": 4,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "spell_nature_unyeildingstamina",
+          "iconSource": "classic",
+          "description": "While in Cat Form, Bear Form, or Dire Bear Form, the Leader of the Pack increases the critical strike chance of all party members within {0} yards by {1}%, exclusive with Moonkin Aura.",
+          "ranks": [[45, 3]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20818.0,
+            "frame": 1249080,
+            "crop": "data/review/druid/feral-combat/leader-of-the-pack.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        },
+        {
+          "id": "king-of-the-jungle",
+          "name": "King of the Jungle",
+          "row": 4,
+          "col": 3,
+          "maxRank": 3,
+          "icon": "crop-king-of-the-jungle",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/feral-combat/king-of-the-jungle.icon.png",
+          "description": "Tiger's Fury now instantly grants you {0} Energy.",
+          "ranks": [[20], [40], [60]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "No Classic counterpart; proportional x2..x3 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20840.983,
+            "frame": 1250459,
+            "crop": "data/review/druid/feral-combat/king-of-the-jungle.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natural-reaction",
+          "name": "Natural Reaction",
+          "row": 5,
+          "col": 0,
+          "maxRank": 5,
+          "icon": "ability_bullrush",
+          "iconSource": "classic",
+          "description": "Increases your dodge chance by {0}%, and gives you a {1}% chance to gain {2} Rage each time you dodge.",
+          "ranks": [[1, 20, 5], [1, 20, 5], [1, 20, 5], [1, 20, 5], [1, 20, 5]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: 3 numeric slots; ranks 2..5 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20846.467,
+            "frame": 1250788,
+            "crop": "data/review/druid/feral-combat/natural-reaction.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "unparsed requirement: Requires Bear Form, Dire Bear Form"
+          }
+        },
+        {
+          "id": "rend-and-tear",
+          "name": "Rend and Tear",
+          "row": 5,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "ability_druid_primalagression",
+          "iconSource": "classic",
+          "description": "Increases damage done by your melee abilities on Bleeding targets by {0}%.",
+          "ranks": [[2], [4], [6], [8], [10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 1396,
+            "classicSpellIds": [19616, 19617, 19618, 19619, 19620],
+            "match": "description",
+            "similarity": 0.88
+          },
+          "ranksNote": "Classic hunter/beast-mastery/Unleashed Fury (talent 1396) (cross-class), matched on description (0.88): Classic 4/8/12/16/20 is proportional; Forever rank 1 is 2: scaled proportionally (2 x rank).",
+          "requires": [
+            {
+              "talent": "predatory-strikes",
+              "rank": 3
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20844.15,
+            "frame": 1250649,
+            "crop": "data/review/druid/feral-combat/rend-and-tear.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Predatory Strikes at rank 3 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites)"
+          }
+        },
+        {
+          "id": "berserk",
+          "name": "Berserk",
+          "row": 6,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "ability_druid_berserk",
+          "iconSource": "classic",
+          "description": "Causes your Mangle ability to strike up to {0} targets, removes its cooldown, and increases the critical strike chance of your Combo Point-generating abilities by {1}%. Clears and grants immunity to Fear effects for the duration. Lasts {2} sec.",
+          "ranks": [[3, 100, 15]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "requires": [
+            {
+              "talent": "leader-of-the-pack",
+              "rank": 1
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20868.433,
+            "frame": 1252106,
+            "crop": "data/review/druid/feral-combat/berserk.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "unparsed requirement: Requires Cat Form, Bear Form, Dire Bear Form; prerequisite from tree arrow (stage 7): Leader of the Pack at rank 1 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "restoration",
+      "name": "Restoration",
+      "page": "primary",
+      "order": 2,
+      "icon": "crop-restoration",
+      "rows": 7,
+      "cols": 4,
+      "source": {
+        "kind": "video",
+        "video": "DxtVEhjyROU",
+        "t": 20650.0,
+        "frame": 1239000,
+        "crop": "data/review/druid/restoration/_header.png",
+        "confidence": 1.0,
+        "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+        "reviewed": false
+      },
+      "talents": [
+        {
+          "id": "natures-focus",
+          "name": "Nature's Focus",
+          "row": 0,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "spell_nature_healingwavegreater",
+          "iconSource": "classic",
+          "description": "Gives you a {0}% chance to avoid interruption caused by damage while casting Arcane and Nature spells.",
+          "ranks": [[14], [28], [42], [56], [70]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 823,
+            "classicSpellIds": [17063, 17065, 17066, 17067, 17068],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Nature's Focus (talent 823): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20882.033,
+            "frame": 1252922,
+            "crop": "data/review/druid/restoration/natures-focus.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "furor",
+          "name": "Furor",
+          "row": 0,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "spell_holy_blessingofstamina",
+          "iconSource": "classic",
+          "description": "Gives you a {0}% chance to gain {1} Rage when you shapeshift into Bear Form or Dire Bear Form. When you shift into Cat Form, you will regain {2}% of the Energy you had when you were last in Cat Form, plus {3} Energy for each second you spent not in Bear Form, Cat Form, or Dire Bear Form, up to a maximum of {4} Energy.",
+          "ranks": [
+            [20, 10, 20, 2, 20],
+            [20, 10, 20, 2, 20],
+            [20, 10, 20, 2, 20],
+            [20, 10, 20, 2, 20],
+            [20, 10, 20, 2, 20]
+          ],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: Classic match druid/restoration/Furor (talent 822) has no alignable slots; ranks 2..5 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20884.0,
+            "frame": 1253040,
+            "crop": "data/review/druid/restoration/furor.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "naturalist",
+          "name": "Naturalist",
+          "row": 1,
+          "col": 0,
+          "maxRank": 5,
+          "icon": "spell_nature_healingtouch",
+          "iconSource": "classic",
+          "description": "Reduces the cast time of your Healing Touch spell by {0} sec and increases all damage you deal by {1}%.",
+          "ranks": [[0.1, 1], [0.1, 1], [0.1, 1], [0.1, 1], [0.1, 1]],
+          "ranksObserved": [1],
+          "ranksSource": "manual",
+          "ranksNote": "needs manual ranks: Classic match druid/restoration/Improved Healing Touch (talent 824) has no alignable slots; ranks 2..5 are copies of rank 1.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20886.283,
+            "frame": 1253177,
+            "crop": "data/review/druid/restoration/naturalist.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "subtlety",
+          "name": "Subtlety",
+          "row": 1,
+          "col": 1,
+          "maxRank": 3,
+          "icon": "ability_eyeoftheowl",
+          "iconSource": "classic",
+          "description": "Reduces the threat generated by your Nature and Arcane spells by {0}%.",
+          "ranks": [[10], [20], [30]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 841,
+            "classicSpellIds": [17118, 17119, 17120, 17121, 17122],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Subtlety (talent 841): Classic 4/8/12/16/20 is proportional, Classic has 5 ranks; Forever rank 1 is 10: scaled proportionally (10 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20887.183,
+            "frame": 1253231,
+            "crop": "data/review/druid/restoration/subtlety.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natural-shapeshifter",
+          "name": "Natural Shapeshifter",
+          "row": 1,
+          "col": 2,
+          "maxRank": 3,
+          "icon": "spell_nature_wispsplode",
+          "iconSource": "classic",
+          "description": "Reduces the mana cost of all shapeshifting by {0}%.",
+          "ranks": [[10], [20], [30]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 781,
+            "classicSpellIds": [16833, 16834, 16835],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/balance/Natural Shapeshifter (talent 781): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20890.233,
+            "frame": 1253414,
+            "crop": "data/review/druid/restoration/natural-shapeshifter.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "reflection",
+          "name": "Reflection",
+          "row": 2,
+          "col": 1,
+          "maxRank": 3,
+          "icon": "spell_frost_windwalkon",
+          "iconSource": "classic",
+          "description": "Allows {0}% of your Mana regeneration to continue while casting.",
+          "ranks": [[17], [34], [51]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 829,
+            "classicSpellIds": [17106, 17107, 17108],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Reflection (talent 829): Classic 5/10/15 is proportional; Forever rank 1 is 17: scaled proportionally (17 x rank). Rounding: rank 2 34 may read 35, rank 3 51 may read 50 (values above are the raw scaled numbers).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20892.1,
+            "frame": 1253526,
+            "crop": "data/review/druid/restoration/reflection.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "gift-of-nature",
+          "name": "Gift of Nature",
+          "row": 2,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "spell_nature_protectionformnature",
+          "iconSource": "classic",
+          "description": "Increases the effect of all your healing spells by {0}%.",
+          "ranks": [[2], [4], [6], [8], [10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 828,
+            "classicSpellIds": [17104, 24943, 24944, 24945, 24946],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Gift of Nature (talent 828): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20894.0,
+            "frame": 1253640,
+            "crop": "data/review/druid/restoration/gift-of-nature.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "gift-of-the-earthmother",
+          "name": "Gift of the Earthmother",
+          "row": 2,
+          "col": 3,
+          "maxRank": 1,
+          "icon": "spell_nature_spiritarmor",
+          "iconSource": "classic",
+          "description": "Reduces the global cooldown by {0} seconds on your Rejuvenation, Swiftmend, and Wild Growth spells.",
+          "ranks": [[0.5]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20895.25,
+            "frame": 1253715,
+            "crop": "data/review/druid/restoration/gift-of-the-earthmother.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "tranquil-spirit",
+          "name": "Tranquil Spirit",
+          "row": 3,
+          "col": 1,
+          "maxRank": 5,
+          "icon": "spell_holy_elunesgrace",
+          "iconSource": "classic",
+          "description": "Reduces the mana cost of your Healing Touch and Tranquility spells by {0}%.",
+          "ranks": [[2], [4], [6], [8], [10]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 843,
+            "classicSpellIds": [24968, 24969, 24970, 24971, 24972],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Tranquil Spirit (talent 843): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20899.0,
+            "frame": 1253940,
+            "crop": "data/review/druid/restoration/tranquil-spirit.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z"
+          }
+        },
+        {
+          "id": "improved-rejuvenation",
+          "name": "Improved Rejuvenation",
+          "row": 3,
+          "col": 2,
+          "maxRank": 3,
+          "icon": "spell_nature_rejuvenation",
+          "iconSource": "classic",
+          "description": "Increases the effect of your Rejuvenation spell by {0}%.",
+          "ranks": [[5], [10], [15]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 830,
+            "classicSpellIds": [17111, 17112, 17113],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Improved Rejuvenation (talent 830): ranks copied.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20917.25,
+            "frame": 1255035,
+            "crop": "data/review/druid/restoration/improved-rejuvenation.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "swiftmend",
+          "name": "Swiftmend",
+          "row": 3,
+          "col": 3,
+          "maxRank": 1,
+          "icon": "inv_relics_idolofrejuvenation",
+          "iconSource": "classic",
+          "description": "Instantly heals a target with an active Rejuvenation or Regrowth effect for an amount equal to the full duration of the periodic effect of one of those spells.",
+          "ranks": [[]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20896.883,
+            "frame": 1253813,
+            "crop": "data/review/druid/restoration/swiftmend.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "natures-swiftness",
+          "name": "Nature's Swiftness",
+          "row": 4,
+          "col": 0,
+          "maxRank": 1,
+          "icon": "crop-natures-swiftness",
+          "iconSource": "crop",
+          "iconCrop": "data/review/druid/restoration/natures-swiftness.icon.png",
+          "description": "When activated, your next Nature spell becomes an instant cast spell.",
+          "ranks": [[]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "requires": [
+            {
+              "talent": "naturalist",
+              "rank": 5
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20903.0,
+            "frame": 1254180,
+            "crop": "data/review/druid/restoration/natures-swiftness.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": true,
+            "reviewedBy": "data-audit",
+            "reviewedAt": "2026-09-13T00:00:00Z",
+            "note": "prerequisite from tree arrow (stage 7): Naturalist at rank 5 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites); arrow confidence 0.70"
+          }
+        },
+        {
+          "id": "living-spirit",
+          "name": "Living Spirit",
+          "row": 4,
+          "col": 1,
+          "maxRank": 3,
+          "icon": "spell_nature_giftofthewaterspirit",
+          "iconSource": "classic",
+          "description": "Increases your Spirit by {0}%.",
+          "ranks": [[5], [10], [15]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 782,
+            "classicSpellIds": [16836, 16839, 16840],
+            "match": "description",
+            "similarity": 0.86
+          },
+          "ranksNote": "Classic druid/balance/Improved Thorns (talent 782), matched on description (0.86): Classic 25/50/75 is proportional; Forever rank 1 is 5: scaled proportionally (5 x rank).",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20902.0,
+            "frame": 1254120,
+            "crop": "data/review/druid/restoration/living-spirit.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "improved-tranquility",
+          "name": "Improved Tranquility",
+          "row": 4,
+          "col": 3,
+          "maxRank": 2,
+          "icon": "spell_nature_tranquility",
+          "iconSource": "classic",
+          "description": "Reduces threat caused by Tranquility by {0}% and its cooldown by {1}%.",
+          "ranks": [[50, 30], [100, 60]],
+          "ranksObserved": [1],
+          "ranksSource": "extrapolated",
+          "ranksNote": "Classic match druid/restoration/Improved Tranquility (talent 842) has no alignable slots; proportional x2..x2 of rank 1 assumed.",
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20901.267,
+            "frame": 1254076,
+            "crop": "data/review/druid/restoration/improved-tranquility.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false
+          }
+        },
+        {
+          "id": "improved-regrowth",
+          "name": "Improved Regrowth",
+          "row": 5,
+          "col": 2,
+          "maxRank": 5,
+          "icon": "spell_nature_resistnature",
+          "iconSource": "classic",
+          "description": "Increases the critical effect chance of your Regrowth spell by {0}%.",
+          "ranks": [[10], [20], [30], [40], [50]],
+          "ranksObserved": [1],
+          "ranksSource": "classic-prior",
+          "ranksPrior": {
+            "classicTalentId": 825,
+            "classicSpellIds": [17074, 17075, 17076, 17077, 17078],
+            "match": "exact-name",
+            "similarity": 1.0
+          },
+          "ranksNote": "Classic druid/restoration/Improved Regrowth (talent 825): ranks copied.",
+          "requires": [
+            {
+              "talent": "improved-rejuvenation",
+              "rank": 3
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20903.633,
+            "frame": 1254218,
+            "crop": "data/review/druid/restoration/improved-regrowth.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Improved Rejuvenation at rank 3 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites); arrow confidence 0.70"
+          }
+        },
+        {
+          "id": "wild-growth",
+          "name": "Wild Growth",
+          "row": 6,
+          "col": 1,
+          "maxRank": 1,
+          "icon": "ability_druid_flourish",
+          "iconSource": "classic",
+          "description": "Heals the target and their party for {0} over {1} sec. Party members must be within {2} yards of target. The amount healed is applied quickly at first, and slows down as Wild Growth reaches its full duration.",
+          "ranks": [[285, 7, 43]],
+          "ranksObserved": [1],
+          "ranksSource": "observed",
+          "requires": [
+            {
+              "talent": "living-spirit",
+              "rank": 3
+            }
+          ],
+          "source": {
+            "kind": "video",
+            "video": "DxtVEhjyROU",
+            "t": 20913.25,
+            "frame": 1254795,
+            "crop": "data/review/druid/restoration/wild-growth.png",
+            "confidence": 1.0,
+            "reader": "Qwen3VL-4B-Instruct-Q4_K_M+tooltip-v3",
+            "reviewed": false,
+            "note": "prerequisite from tree arrow (stage 7): Living Spirit at rank 3 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites); arrow confidence 0.70"
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Extracted from BlizzCon 2026 stream footage (rank-0 tooltips only); ranks 2+ are anticipated, point rules assumed from Classic."
+  ]
+}

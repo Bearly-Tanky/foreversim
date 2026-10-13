@@ -1,0 +1,270 @@
+{
+	"1242512": {
+		"ability": "Rapid Recuperation",
+		"file": "sim/hunter/talents_marksmanship.go",
+		"note": "Client 70009: the buff Rapid Recuperation grants (1242512), 15 sec at both ranks; the talent curve (1223987) is 25/50% for Serpent Sting. The Rapid Killing half needs a kill and is not modelled.",
+		"source": "forever",
+		"tooltip": "15 sec duration\n25% (50% at rank 2) of your Mana regeneration continues while casting."
+	},
+	"1242688": {
+		"ability": "Resourcefulness",
+		"file": "sim/hunter/talents_survival.go",
+		"note": "Client 70009: the buff Resourcefulness grants (1242688), 50% for 30 sec. The talent curve (440529) takes 30/60% off Trap and melee ability costs, Strider Kick excepted (#432); the sim procs the buff on 50/100% of critical strikes.",
+		"source": "forever",
+		"tooltip": "30 sec duration\n50% of your Mana regeneration continues while casting."
+	},
+	"1264455": {
+		"ability": "Thunderstomp",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Gorilla only. Classic had ranks 1-3 (levels 30/40/50); rank 4 at level 60 is new in Forever. Client 70009: rank 4 132 Nature damage +-7% (122-142) to up to 4 enemies within 8 yards, 60 Focus, 1 min cooldown; Wowhead env 16 agrees. The gorilla casts it whenever it is ready, then Bites. Magic, so it rolls spell hit and crit and has no attack power share. No beta log has a gorilla yet (rank 1 needs level 30).",
+		"source": "forever",
+		"tooltip": "60 Focus\nInstant\n1 min cooldown\nShakes the ground with thundering force, doing 122 to 142 Nature damage to all enemies within 8 yards."
+	},
+	"1264502": {
+		"ability": "Swipe",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Bear only. Client 70009: rank 5 (level 60) 21 damage +-7% (20-22) to up to 3 enemies (ChainTargets 3), 20 Focus, 5 sec cooldown; Wowhead env 16 agrees. Rank 1 (level 12) is 4. The bear swipes whenever it is ready with 3 or more enemies up, else Bites and Claws: Claw's 43-59 for 25 Focus does more on one or two targets. No beta log has a bear Swipe yet.",
+		"source": "forever",
+		"tooltip": "20 Focus\nMelee Range\nInstant\n5 sec cooldown\nSwipe 3 nearby enemies, inflicting 20 to 22 damage."
+	},
+	"1264742": {
+		"ability": "Pinch",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Crab only (client SkillLineAbility, skill line 214). Client 70009: rank 5 (level 60) 95 damage +-7%, 50 Focus, 30 sec cooldown; the pet casts it whenever it is ready, then Claws. Beta logs (foreverlogs 2674, Consumer's crab) land rank 1 (20) 17 times at about 17 a hit through level 20 mob armor, so no attack power share. The 50% snare is left out.",
+		"source": "forever",
+		"tooltip": "50 Focus\nMelee Range\nInstant\n30 sec cooldown\nPinches an enemy's legs for 88 to 102 damage and reduces movement speed by 50% for 9 sec."
+	},
+	"1264933": {
+		"ability": "Dismember",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Crocolisk only (client SkillLineAbility, skill line 212). Client 70009: rank 5 (level 60) 54 damage +-7%, 35 Focus, 6 sec cooldown; the crocolisk Bites when Bite is ready and Dismembers with the focus left over. The 50% healing reduction is left out.",
+		"source": "forever",
+		"tooltip": "35 Focus\nMelee Range\nInstant\n6 sec cooldown\nViciously bites enemy appendages for 50 to 58 damage and reduces the effectiveness of any healing by 50% for 10 sec."
+	},
+	"1265042": {
+		"ability": "Tendon Rip",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Hyena only (client SkillLineAbility, skill line 654). Client 70009: rank 5 (level 60) bleeds 20 every 3 sec for 9 sec, 25 Focus, 30 sec cooldown; the hyena casts it whenever it is ready, then Bites. Same bleed code as Savage Rend, so no attack power share (Savage Rend's beta logs show none). Rank 1 (level 12) is 4 a tick. The 50% snare is left out. No beta log has a hyena yet.",
+		"source": "forever",
+		"tooltip": "25 Focus\nMelee Range\nInstant\n30 sec cooldown\nTears at an enemy's legs for 60 damage over 9 sec and reduces movement speed by 50% for 9 sec."
+	},
+	"1265058": {
+		"ability": "Mine!",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Owl only (client SkillLineAbility, skill line 655, Bird of Prey). Client 70009: rank 5 (level 50) 44 damage +-7%, 20 Focus, 1 min cooldown; the owl casts it whenever it is ready, then Claws. Same strike code as Pinch, so no attack power share (Pinch's beta logs show none). Rank 2 (level 20) is 15. The 4 sec disarm is left out. No beta log has an owl yet.",
+		"source": "forever",
+		"tooltip": "20 Focus\nMelee Range\nInstant\n1 min cooldown\nGrabs an enemy's weapon with its talons, causing 41 to 47 damage and disarming them for 4 sec."
+	},
+	"1265069": {
+		"ability": "Savage Rend",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Raptor only (client SkillLineAbility, skill line 217). Client 70009: rank 5 (level 60) ticks 26 every 3 sec for 18 sec, 50 Focus, 1 min cooldown; ticks can crit. Beta logs (foreverlogs 2650/2669/2673/2674, two hunters' raptors) put rank 1's 5 a tick at 6.4-7.0, the pet's damage multipliers and no attack power share. The 5% more bleed damage taken is left out: nothing else of ours bleeds.",
+		"source": "forever",
+		"tooltip": "50 Focus\nMelee Range\nInstant\n1 min cooldown\nSlash an enemy with razor talons, causing the target to Bleed for 156 damage over 18 sec."
+	},
+	"1265883": {
+		"ability": "Web",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Spider only (client SkillLineAbility, skill line 203). Client 70094: rank 5 (level 60) deals 13 Nature every sec for 4 sec, 20 Focus, 40 sec cooldown, ranged defense, ticks can crit; the spider casts it whenever it is ready, then Bites. Same bleed code as Savage Rend. Beta logs (Consumer's spider, foreverlogs 2682/2683): rank 1's 3 a tick lands as 4, four ticks a cast, one crit in 28, so the pet's damage multipliers and no attack power share. The root is left out: bosses are immune. Wowhead Forever (env 16) agrees: 52 over 4 sec.",
+		"source": "forever",
+		"tooltip": "20 Focus\n20 yd range\nInstant\n40 sec cooldown\nEntangles an enemy in a corrosive web, immobilizing them and dealing 52 Nature damage over 4 sec."
+	},
+	"1265904": {
+		"ability": "Dust Cloud",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Tallstrider only (client SkillLineAbility, skill line 218). Client 70009: rank 5 (level 60) takes 505 armor off the target for 30 sec, 10 Focus, no cooldown; the tallstrider recasts it when it falls off, then Bites. Rank 1 (level 12) is 65, rank 2 (level 24) 175. Whether it stacks with Faerie Fire or Sunder Armor is unknown: the sim lets it stack with both, one Dust Cloud at a time. No beta log has a tallstrider yet.",
+		"source": "assumed",
+		"tooltip": "10 Focus\nMelee Range\nInstant\nYour tallstrider kicks up an abrasive cloud of dust, reducing the target's Armor by 505 for 30 sec."
+	},
+	"1293527": {
+		"ability": "Summon Hawk",
+		"assumptions": [
+			"The hawk is a guardian whose swings the client does not describe, so they come from beta logs (foreverlogs reports 2695 and 2701, two hunters at level 25 and 30, 534 landed swings at rank 1): a swing on arrival, then one every 2.5 sec sped up by the hunter's ranged haste (its scaling aura 1293586 passes haste, damage done and crit, no attack power), each about 0.35 of the rank's dive bomb base (11.5 vs 32, compared target by target with the dive bomb so armor cancels), crits about 1% of the time and can miss or be dodged (~10% in the logs). That the swings grow with the dive bomb's rank (85 and 108 at 48 and 60) is a guess until a level 36+ log shows rank 2.",
+			"Two hawks at once, the client's cap; a cast past it replaces the hawk closest to leaving, which the client does not specify."
+		],
+		"file": "sim/hunter/summon_hawk.go",
+		"note": "Client 70009: rank 4 (level 60), the only rank the sim casts. Dive bomb, cost, the 6 sec cooldown shared with Arcane Shot and the 18 sec hawk (1293248) come from the client.",
+		"source": "assumed",
+		"tooltip": "190 Mana\n35 yd range\nInstant\n6 sec cooldown\nCommand a hawk to dive-bomb your targeted enemy, dealing 108 plus 5% of ranged attack power Physical damage and continuing its assault for 18 sec. Only 2 hawks can be active at once. Summon Hawk shares its cooldown with Arcane Shot."
+	},
+	"1310786": {
+		"ability": "Sniper Shot",
+		"file": "sim/hunter/sniper_shot.go",
+		"note": "Client 70009: talent spell rank 3 (level 58), the only rank the sim casts. #311 dropped the 0.5 sec shot wind-up the sim added to the 4 sec cast. The 70170 hotfixes widened it to 45 yd and made it lengthen the next 3 shots' range.",
+		"source": "forever",
+		"tooltip": "365 Mana\n8-45 yd range\n4 sec cast\n15 sec cooldown\nA long-range shot that deals ranged damage plus 295 and increases the range of your next 3 Shots by 10 yards for 10 sec."
+	},
+	"1317257": {
+		"ability": "Strider Kick",
+		"file": "sim/hunter/strider_kick.go",
+		"note": "Client 70009: Survival talent spell, 100% normalized melee weapon damage. The 30% run speed for 3 sec that 70009 added is not modelled.",
+		"source": "forever",
+		"tooltip": "5.81% of base mana\nMelee Range\nInstant\n8 sec cooldown\nA powerful kick that deals 100% melee weapon damage."
+	},
+	"14266": {
+		"ability": "Raptor Strike",
+		"file": "sim/hunter/raptor_strike.go",
+		"note": "Client 70009: rank 8 140 -> 70 bonus damage, the only rank the sim casts.",
+		"source": "forever",
+		"tooltip": "100 Mana\nMelee Range\nNext melee\n6 sec cooldown\nA strong attack that deals melee weapon damage plus 70."
+	},
+	"14268": {
+		"ability": "Wing Clip",
+		"file": "sim/hunter/wing_clip.go",
+		"note": "Client 1.60.1.70009: rank 3 deals 50 damage and slows movement by 60% for 80 Mana, identical to Classic Era 1.15.9.",
+		"source": "classic"
+	},
+	"14271": {
+		"ability": "Mongoose Bite",
+		"file": "sim/hunter/mongoose_bite.go",
+		"note": "Client 70009: normalized melee weapon damage plus 57, where Classic dealt a flat 115.",
+		"source": "forever",
+		"tooltip": "65 Mana\nMelee Range\nInstant\n5 sec cooldown\nCounterattack the enemy for melee weapon damage plus 57. Can only be performed after you dodge."
+	},
+	"14287": {
+		"ability": "Arcane Shot",
+		"assumptions": [
+			"The client carries no spell power coefficient on Arcane Shot; Classic's (.204, .3, then .429) is kept.",
+			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. That they scale at all is settled by an aspect swap: Consumer (report 2673, level 20) traded Aspect of the Hawk rank 2 (14318, +35 ranged attack power in the client) for Cheetah for eight minutes on the same Wailing Caverns mobs and then went back. Arcane Shot's non-critical hits fell from 69.0 to 64.8 (0.120 +-0.011 a point) and Serpent Sting's ticks from 20.3 to 18.9 (0.041 +-0.006); against all of that run's Hawk hits, 0.100 and 0.037. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23). Rechecked on 2026-10-06 at levels 24-30 with Hunter's Mark rank 2 (14323, +59 ranged attack power in the client) as the step: Miss (report 2712, level 24, 15 Beast Mastery, agility 93 and no attack power on gear in the report's own combatant info) lands Arcane Shot at 66.8 under Aspect of the Hawk and 73.2 with the Mark as well (413 non-critical hits, 0.107 a point; 0.112 from her 249 ranged attack power), and her Serpent Sting ticks at 20.1 and 22.1 (549 ticks, 0.034; 0.033 absolute). Lokronn (2695, level 25) moves 0.12 and 0.042, Consumer (2717, level 30) 0.12 and 0.034."
+		],
+		"file": "sim/hunter/arcane_shot.go",
+		"note": "Client 70009: rank 8 deals 217, up from 183.",
+		"source": "assumed",
+		"tooltip": "190 Mana\n8-35 yd range\nInstant\n6 sec cooldown\nAn instant shot that causes 217 Arcane damage."
+	},
+	"14295": {
+		"ability": "Volley",
+		"assumptions": [
+			"The tick spell has no coefficient and the channel carries .03 on a dummy effect, the placeholder Blizzard and Rain of Fire also carry; Classic's .056 a tick is kept."
+		],
+		"file": "sim/hunter/volley.go",
+		"note": "Client 70009: each tick is a separate spell (1279715) dealing 112, up from 80, and the 1 min cooldown is gone. Client 70205: the tick spells are ranged damage (DefenseType 3) with no Cannot Crit, so each tick rolls ranged hit and crit.",
+		"source": "assumed",
+		"tooltip": "490 Mana\n35 yd range\nChanneled\nContinuously fires a volley of ammo at the target area, causing 112 Arcane damage to enemy targets within 8 yards every 1 sec for 6 sec."
+	},
+	"14305": {
+		"ability": "Immolation Trap",
+		"file": "sim/hunter/traps.go",
+		"note": "Client 70009: damage, cost and level are Classic's, and the burn ticks every 3 sec; the 30 sec cooldown (up from 15) is category 411, shared by the two fire traps only; Freezing Trap has its own (client 1.60.1.70205). Every effect rank (13797, 14298-14301) carries Periodic Can Crit (client 70205), so the burn ticks crit.",
+		"source": "forever",
+		"tooltip": "245 Mana\nInstant\n30 sec cooldown\nPlace a Fire trap that will burn the first enemy to approach for 690 Fire damage over 15 sec. Trap will exist for 1 min. Only one Fire trap can be active at a time."
+	},
+	"14317": {
+		"ability": "Explosive Trap",
+		"file": "sim/hunter/traps.go",
+		"note": "Client 70009: 208 to 265 at level 60 and 330 over 20 sec, cost and level are Classic's; the 30 sec cooldown (up from 15) is category 411, shared by the two fire traps only; Freezing Trap has its own (client 1.60.1.70205). The effect ranks (13812, 14314, 14315) carry Periodic Can Crit (client 70205), so the burn ticks crit.",
+		"source": "forever",
+		"tooltip": "520 Mana\nInstant\n30 sec cooldown\nPlace a Fire trap that explodes when an enemy approaches, causing 208 to 265 Fire damage and 330 additional Fire damage over 20 sec to all within 10 yards. Trap will exist for 1 min. Only one Fire trap can be active at a time."
+	},
+	"1499": {
+		"ability": "Freezing Trap",
+		"file": "sim/hunter/traps.go",
+		"note": "Client 70009: the trap cooldown is 30 sec, up from 15; client 1.60.1.70205 moves Freezing Trap from the shared trap category 411 to 2183 (with Frost Trap), so it no longer locks the fire traps. The sim registers it with an empty effect since a raid boss cannot be trapped.",
+		"source": "forever",
+		"tooltip": "50 Mana\nInstant\n30 sec cooldown\nPlace a Frost trap that freezes the first enemy that approaches, preventing all action for up to 10 sec. Any damage caused will break the ice. Trap will exist for 1 min. Only one Frost trap can be active at a time."
+	},
+	"17261": {
+		"ability": "Bite",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Client 1.60.1.70009: rank 8 deals 81 to 99 for 35 Focus on a 10 sec cooldown, identical to Classic Era 1.15.9.",
+		"source": "classic"
+	},
+	"19574": {
+		"ability": "Bestial Wrath",
+		"file": "sim/hunter/talents_beast_mastery.go",
+		"note": "Client 70009: 50% more pet damage for 18 sec, a 2 min cooldown and 12% of base mana, all Classic's numbers, so Wowhead's Classic tooltip is still right.",
+		"source": "classic"
+	},
+	"19577": {
+		"ability": "Intimidation",
+		"file": "sim/hunter/talents_beast_mastery.go",
+		"note": "Client 70009: 100% crit on the pet's next attack, 8% of base mana, 1 min cooldown and a 15 sec window. Only the crit half is modelled, a raid boss is immune to the stun.",
+		"source": "forever",
+		"tooltip": "8% of base mana\nInstant\n1 min cooldown\nCommand your pet to Stun the target for 3 sec on its next successful attack, which also gains 100% increased critical strike chance. Generates high threat."
+	},
+	"19615": {
+		"ability": "Frenzy",
+		"file": "sim/hunter/talents_beast_mastery.go",
+		"note": "Client 70009: the pet's buff (19615) is Classic's 30% attack speed for 8 sec after a critical strike, 20% a point (19621 curve). The sim used to tag it with the rank 5 talent id 19625, which the client does not carry.",
+		"source": "classic"
+	},
+	"20904": {
+		"ability": "Aimed Shot",
+		"file": "sim/hunter/aimed_shot.go",
+		"note": "Client 70009: 2 sec cast, down from 3, and rank 6 adds 166 where Classic added 600. #311 dropped the 0.5 sec shot wind-up the sim added to the cast.",
+		"source": "forever",
+		"tooltip": "310 Mana\n8-35 yd range\n2 sec cast\n6 sec cooldown\nAn aimed shot that increases ranged damage by 166. Aimed Shot shares its cooldown with Multi-Shot."
+	},
+	"24579": {
+		"ability": "Screech",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Client 70009: renamed Demoralizing Screech; 26-46 -> 24-42 damage and a new 10 sec cooldown, all read off rank 4 (24579, the spell the pet casts; 24582 is the learn spell). The attack power reduction is not modelled.",
+		"source": "forever",
+		"tooltip": "20 Focus\nInstant\n10 sec cooldown\nBlasts a single enemy for 24 to 42 damage and lowers the melee attack power of all enemies in melee range for 30 sec."
+	},
+	"24587": {
+		"ability": "Scorpid Poison",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Client 70009: 8 -> 5 a tick. The poison carries Periodic Can Crit (client 70205): ticks roll the pet's melee crit. It stacks to 5 (24587 MaxStack 5, client 70205): each landed cast adds a stack and restarts the 10 sec, and the ticks read the pet's current damage multipliers like every Forever dot.",
+		"source": "forever",
+		"tooltip": "30 Focus\nInstant\n4 sec cooldown\nAn attack that poisons the target for 25 Nature damage over 10 sec. Stacks up to 5 times."
+	},
+	"25012": {
+		"ability": "Lightning Breath",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Client 70009: 99-113 -> 86-98; the growth per level and the spell power coefficient are gone.",
+		"source": "forever",
+		"tooltip": "50 Focus\n20 yd range\nInstant\nBreathes lightning, instantly causing 86 to 98 Nature damage to a single target."
+	},
+	"25295": {
+		"ability": "Serpent Sting",
+		"assumptions": [
+			"The client carries no spell power coefficient on Serpent Sting; Classic's is kept.",
+			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. That they scale at all is settled by an aspect swap: Consumer (report 2673, level 20) traded Aspect of the Hawk rank 2 (14318, +35 ranged attack power in the client) for Cheetah for eight minutes on the same Wailing Caverns mobs and then went back. Arcane Shot's non-critical hits fell from 69.0 to 64.8 (0.120 +-0.011 a point) and Serpent Sting's ticks from 20.3 to 18.9 (0.041 +-0.006); against all of that run's Hawk hits, 0.100 and 0.037. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23). Rechecked on 2026-10-06 at levels 24-30 with Hunter's Mark rank 2 (14323, +59 ranged attack power in the client) as the step: Miss (report 2712, level 24, 15 Beast Mastery, agility 93 and no attack power on gear in the report's own combatant info) lands Arcane Shot at 66.8 under Aspect of the Hawk and 73.2 with the Mark as well (413 non-critical hits, 0.107 a point; 0.112 from her 249 ranged attack power), and her Serpent Sting ticks at 20.1 and 22.1 (549 ticks, 0.034; 0.033 absolute). Lokronn (2695, level 25) moves 0.12 and 0.042, Consumer (2717, level 30) 0.12 and 0.034."
+		],
+		"file": "sim/hunter/serpent_sting.go",
+		"note": "Client 70009: rank 9 deals 555 over 15 sec, as in Classic; the ticks can crit (#362).",
+		"source": "assumed",
+		"tooltip": "250 Mana\n8-35 yd range\nInstant\nStings the target, causing 555 Nature damage over 15 sec. Only one Sting per Hunter can be active on any one target."
+	},
+	"25296": {
+		"ability": "Aspect of the Hawk",
+		"file": "sim/hunter/aspects.go",
+		"note": "Client 1.60.1.70009: rank 7 adds 120 ranged attack power for 120 Mana, identical to Classic Era 1.15.9.",
+		"source": "classic"
+	},
+	"2643": {
+		"ability": "Multi-Shot",
+		"file": "sim/hunter/multi_shot.go",
+		"note": "Client 70009: a single rank with no flat bonus, 13.9% of base mana, a 0.5 sec cast and a 6 sec cooldown shared with Aimed Shot. Ranks 2-5 (14288, 14289, 14290, 25294) are gone.",
+		"source": "forever",
+		"tooltip": "13.9% of base mana\n8-35 yd range\n0.5 sec cast\n6 sec cooldown\nFires several missiles, hitting 3 targets. Multi-Shot shares its cooldown with Aimed Shot."
+	},
+	"3009": {
+		"ability": "Claw",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Client 1.60.1.70009: rank 8 deals 43 to 59 for 25 Focus, identical to Classic Era 1.15.9.",
+		"source": "classic"
+	},
+	"3045": {
+		"ability": "Rapid Fire",
+		"file": "sim/hunter/rapid_fire.go",
+		"note": "Client 70009: melee attack speed as well as ranged. Rapid Killing takes 1 min off a rank (curve 60000/120000 ms); its kill buff is not modelled because nothing dies mid fight.",
+		"source": "forever",
+		"tooltip": "100 Mana\nInstant\n5 min cooldown\nIncreases ranged and melee attack speed by 40% for 15 sec."
+	},
+	"5302": {
+		"ability": "Defensive State",
+		"assumptions": ["Forever's Expose Prey grants its own 5 sec aura (1310726); the sim reuses Classic's Defensive State id for it."],
+		"file": "sim/hunter/mongoose_bite.go",
+		"note": "A dodge opens Mongoose Bite for 5 sec: every rank (1495, 14269-14271) carries CasterAuraState 1 in client 1.60.1.70124 SpellAuraRestrictions, and Wowhead Forever's tooltip says \"Can only be performed after you dodge\". Forever's Expose Prey proc opens the same window. The sim's dodge trigger never fired before (it sat on the inactive aura itself); it now has its own permanent watch.",
+		"source": "assumed",
+		"tooltip": "5 sec duration\nYour Mongoose Bite is active."
+	},
+	"6150": {
+		"ability": "Quick Shots",
+		"file": "sim/hunter/aspects.go",
+		"note": "Client 70009: every rank of Deadly Aspects triggers this same 30% for 12 sec, unchanged from Classic; the talent curve is 2/4/6/8/10%. The Aspect of the Beast half (Quick Strikes, 1299448) is not modelled.",
+		"source": "classic"
+	}
+}

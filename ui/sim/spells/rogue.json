@@ -1,0 +1,232 @@
+{
+	"11269": {
+		"ability": "Ambush",
+		"file": "sim/rogue/ambush.go",
+		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 250% weapon damage plus 116, 60 Energy, dagger only.",
+		"source": "classic"
+	},
+	"11275": {
+		"ability": "Rupture",
+		"file": "sim/rogue/rupture.go",
+		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009: every rank ticks for less (rank 6 60 + 8 a combo point -> 35 + 4.73 a tick). Cost, tick length and duration are Classic's. The attack power share is not in the client; the sim uses TBC's 1% of attack power a tick per combo point, capped at 3. Beta logs agree (level 20, rank 1, 5 + 1.18 a combo point a tick): Salty's 1/2/3 point ticks 9/12.7/16.2 step about 3.6 each (1.18 + 1% of ~245 AP), and Ray's 3 and 5 point ticks, 17.3 and 19.5, carry the same share (uncapped, 5 points would tick about 25).",
+		"source": "forever",
+		"tooltip": "25 Energy\nMelee Range\nInstant\nFinishing move that causes damage over time, increased by your Attack Power. Lasts longer per combo point:\n1 point: 159 damage over 8 secs\n2 points: 222 damage over 10 secs\n3 points: 295 damage over 12 secs\n4 points: 377 damage over 14 secs\n5 points: 469 damage over 16 secs"
+	},
+	"11290": {
+		"ability": "Garrote",
+		"file": "sim/rogue/garrote.go",
+		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 6 ticks of 92 over 18 sec, 50 Energy. The tooltip says increased by attack power but the client carries no number; the sim adds 3% of attack power a tick. Beta logs agree (foreverlogs report 2683, a level 20 rogue with no Subtlety points, rank 1 703 at 24 a tick, 143 non-crit ticks): about 227 attack power (40 + 63 Strength + 101 Agility - 20, 18 from gear, 25 from Blessing of Might) gives 30.8 a tick against 31.2 seen on undead, and 31.5 with Battle Shout against 31.7. 2% would read 28.5, 4% 33.1. Humanoids read 0.7 to 1.2 higher; the Defias set's 15 attack power against humanoids explains about half of that.",
+		"source": "classic"
+	},
+	"11294": {
+		"ability": "Sinister Strike",
+		"file": "sim/rogue/sinister_strike.go",
+		"note": "Rank 8, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 68 over normalized weapon damage, 45 Energy.",
+		"source": "classic"
+	},
+	"11340": {
+		"ability": "Instant Poison VI",
+		"file": "sim/rogue/poisons.go",
+		"note": "Beta client 1.60.1.70009: Instant Poison VI (enchant 625, proc 11337) hits for 76-100 where Classic hit for 112-148, 20% chance, and carries 175 charges, which the sim does not model. Every lower rank is about a third weaker too.",
+		"source": "forever",
+		"tooltip": "3 sec cast\nCoats a weapon with poison that lasts for 30 minutes. Each strike has a 20% chance of poisoning the enemy which instantly inflicts 76 to 100 Nature damage. 175 charges."
+	},
+	"1241584": {
+		"ability": "Mutilate",
+		"file": "sim/rogue/talents_assassination.go",
+		"note": "Beta client 1.60.1.70009: four ranks (1310707, 399956, 1241582, 1241584) adding 23/33/48/67 to each hand's weapon damage before the 75%, and the sim casts rank 4, which strikes for 75% of weapon damage plus 50. 60 Energy, 20% against poisoned targets and a dagger in both hands are confirmed. The demo's flat 13 is gone. Only the cast rolls miss, dodge and parry: the hand strikes carry the client's No Attack Miss/Dodge/Parry attributes, and beta logs agree (foreverlogs 2701/2702, Salty, level 30: the cast was missed, dodged or parried 16 times in 162, the strikes 0 times in 280, the off-hand strike averaging 0.59 of the main hand's, as the sim's 0.60).",
+		"source": "forever",
+		"tooltip": "60 Energy\nMelee Range\nInstant\nInstantly attacks with both weapons for 75% weapon damage plus an additional 50 with each weapon. Damage increased by 20% against Poisoned targets. Awards 2 combo points.\nRequires Daggers"
+	},
+	"1310703": {
+		"ability": "Venom",
+		"assumptions": [
+			"Venom's 30% reaches a Deadly Poison already ticking from its next tick, because the sim reads the caster's current modifiers at every tick, as for every Forever dot (#668: logs show dots ticking on current spell power); the client stores a percent modifier and cannot say whether a modifier, rather than spell power, is read per tick"
+		],
+		"file": "sim/rogue/talents_assassination.go",
+		"note": "Beta client 1.60.1.70009: Venom is spell 1310703, 25 Energy plus combo points, 30% poison damage and 10% poison chance, 6 sec plus 3 sec a combo point.",
+		"source": "assumed",
+		"tooltip": "25 Energy\nInstant\nFinishing move that increases the damage of your Poisons by 30% and your chance to apply Poisons by 10%. Lasts longer per combo point:\n1 point: 9 seconds\n2 points: 12 seconds\n3 points: 15 seconds\n4 points: 18 seconds\n5 points: 21 seconds"
+	},
+	"1310710": {
+		"ability": "Puncturing Wounds",
+		"file": "sim/rogue/backstab.go",
+		"note": "Forever replaced Improved Backstab with Puncturing Wounds (beta client 1224716); the sim logs the extra combo point under 1310710, the client's own trigger for it. The client's curves are 10/20/30% Backstab crit, 5/10/15% Mutilate crit and 15/30/45% extra combo point chance.",
+		"source": "forever",
+		"tooltip": "Talent, 3 ranks\nIncreases the critical strike chance of your Backstab by 10% per rank and of your Mutilate by 5% per rank, and gives Backstab a 15% chance per rank to add an additional Combo Point."
+	},
+	"13227": {
+		"ability": "Wound Poison IV",
+		"file": "sim/rogue/poisons.go",
+		"note": "Beta client 1.60.1.70009: Wound Poison IV (enchant 706, debuff 13224) takes 165 off healing where Classic Era took 135, 30% chance, 5 stacks, 160 charges. The sim deals no damage with it and models neither the healing cut nor the charges.",
+		"source": "forever",
+		"tooltip": "3 sec cast\nCoats a weapon with poison that lasts for 30 minutes. Each strike has a 30% chance of poisoning the enemy, reducing all healing effects used on them by 165 for 15 sec. Stacks up to 5 times on a single target. 160 charges."
+	},
+	"13750": {
+		"ability": "Adrenaline Rush",
+		"file": "sim/rogue/talents_combat.go",
+		"note": "Client 13750: 100% Energy regeneration for 15 sec on a 5 min cooldown, as in Classic; the sim reads all three from it.",
+		"source": "classic"
+	},
+	"13877": {
+		"ability": "Blade Flurry",
+		"file": "sim/rogue/talents_combat.go",
+		"note": "Client 13877: 20% attack speed for 15 sec, 25 Energy, 2 min cooldown, as in Classic; the sim reads them from it and copies each melee hit to a second target (22482).",
+		"source": "classic"
+	},
+	"13960": {
+		"ability": "Hack and Slash",
+		"file": "sim/rogue/talents_combat.go",
+		"note": "Hack and Slash folds Classic's four weapon specialization talents into one. The sim reads its three curves from the beta client (13960: 1-5% extra attack, 3-15% armor ignored, 1-5% crit), and the extra attack's 200 ms internal cooldown from the same row (its proc cooldown). The extra attack is a plain main-hand swing. Two qualifying weapons get both halves, each on its own hand, as a beta log shows (foreverlogs 2710, Apoc, level 30 Combat, sword main hand and fist off hand): off-hand autos crit 30.5% (223 of 731) against the main hand's 25.1% (125 of 499), the fist's 5% on the off hand alone, and 33 of the 36 extra attacks land at the same millisecond as a main-hand hit (autos, Sinister Strike, Eviscerate, Kick); the other 3 sit next to swings of both hands. Had off-hand hits triggered it at the main hand's rate (33 from about 990 landed hits), there would be about 24 more.",
+		"source": "forever",
+		"tooltip": "Talent, 5 ranks\nGives your melee weapon attacks a benefit depending on the weapon.\nAxe/Sword: your successful melee attacks have a 1% chance per rank to trigger an extra attack on the target.\nDagger/Fist: increases your critical strike chance by 1% per rank.\nMace: your attacks ignore 3% of your target's armor per rank."
+	},
+	"13976": {
+		"ability": "Initiative",
+		"file": "sim/rogue/talents_subtlety.go",
+		"note": "Forever raised Initiative to 33/67/100% (client 13976 curve; Classic was 25/50/75%). The sim logs the proc under the talent 13976 and the combo point under 13977; Cheap Shot is not simulated, so it only fires on Ambush and Garrote.",
+		"source": "forever",
+		"tooltip": "Talent, 3 ranks\nGives you a 33/67/100% chance to add an additional combo point to your target when using your Ambush, Garrote, or Cheap Shot ability."
+	},
+	"14161": {
+		"ability": "Ruthlessness",
+		"file": "sim/rogue/rogue.go",
+		"note": "The client's talent (14156) keeps Classic's 20/40/60% chance; the sim logs the combo point under Classic's rank 3 id 14161, which the beta client no longer stores.",
+		"source": "classic"
+	},
+	"14169": {
+		"ability": "Improved Expose Armor",
+		"file": "sim/rogue/expose_armor.go",
+		"note": "The talent keeps its name but not its effect (beta client 14168): it no longer scales Expose Armor's armor reduction, it takes 5 Energy off and refunds 1 combo point per rank on a 5 point Expose Armor (70009 made the refund a proc of 1310697). The sim borrows Classic's id 14169 for the refund metric.",
+		"source": "forever",
+		"tooltip": "Talent, 2 ranks\nReduces the Energy cost of your Expose Armor ability by 5 per rank, and refunds 1 Combo Point per rank when Expose Armor is cast with 5 Combo Points."
+	},
+	"14177": {
+		"ability": "Cold Blood",
+		"file": "sim/rogue/talents_assassination.go",
+		"note": "Client 14177: +100% crit on the next Sinister Strike, Backstab, Ambush, Eviscerate or Mutilate, 3 min cooldown; its class mask adds Mutilate's two hits to Classic's list, and the sim reads the mask and the numbers from it. The hand strikes are triggered spells and the parent cast is not in the mask, so Mutilate takes the crit on both hands without spending the buff: in beta logs one rogue's Mutilates crit with both hands 191 of 192 times under Cold Blood (the other was blocked) and the buff dropped on the next Eviscerate (foreverlogs.gg reports 2701, 2702).",
+		"source": "forever",
+		"tooltip": "Instant\n3 min cooldown\nWhen activated, increases the critical strike chance of your next Sinister Strike, Backstab, Ambush, Eviscerate, or Mutilate by 100%."
+	},
+	"14179": {
+		"ability": "Relentless Strikes",
+		"file": "sim/rogue/rogue.go",
+		"note": "Client 14179 and 14181: 20% per combo point for 25 Energy, the same as Classic.",
+		"source": "classic"
+	},
+	"14183": {
+		"ability": "Premeditation",
+		"file": "sim/rogue/talents_subtlety.go",
+		"note": "Forever widened the window from Classic's 10 sec to 20 sec (client 14183); the sim grants the 2 combo points on the client's 2 min cooldown but does not model the window expiring.",
+		"source": "forever",
+		"tooltip": "20 yd range\nInstant\n2 min cooldown\nRequires Stealth\nAdds 2 Combo Points to your target. You must add to or use those combo points within 20 sec or the combo points are lost."
+	},
+	"14185": {
+		"ability": "Preparation",
+		"file": "sim/rogue/talents_subtlety.go",
+		"note": "Forever's tooltip is Classic's word for word, 10 min cooldown (client 14185); the sim resets Cold Blood, Shadowstep, Premeditation and Vanish, the cooldowns it has.",
+		"source": "classic"
+	},
+	"14195": {
+		"ability": "Seal Fate",
+		"file": "sim/rogue/talents_assassination.go",
+		"note": "The client's talent (14186) keeps Classic's 20/40/60/80/100% and the 0.5 sec internal cooldown; the sim logs the combo point under Classic's rank 5 talent id 14195, which the beta client no longer stores.",
+		"source": "classic"
+	},
+	"14251": {
+		"ability": "Riposte",
+		"file": "sim/rogue/talents_combat.go",
+		"note": "Client 14251: 150% weapon damage, a 6 sec disarm, 10 Energy and a 6 sec cooldown, the same as Classic.",
+		"source": "classic"
+	},
+	"14278": {
+		"ability": "Ghostly Strike",
+		"file": "sim/rogue/talents_subtlety.go",
+		"note": "Forever added the dagger-only 180% weapon damage to Classic's flat 125% (client 14278); the cost, the cooldown, the dodge and the duration are unchanged, and Quietus raises its damage below 35% target health.",
+		"source": "forever",
+		"tooltip": "40 Energy\nMelee Range\nInstant\n20 sec cooldown\nA strike that deals 125% (180% if a Dagger is equipped in your Main Hand) weapon damage and increases your chance to dodge by 15% for 7 sec. Awards 1 combo point."
+	},
+	"16511": {
+		"ability": "Hemorrhage",
+		"file": "sim/rogue/talents_subtlety.go",
+		"note": "Beta client 1.60.1.70009: one rank (16511, level 30) replaces Classic's three, and ranks 2 and 3 (17347, 17348) are gone. It is normalized weapon damage now (Classic used plain weapon damage), 145% with a dagger, and its debuff is the Rupture bonus rather than Classic's physical damage taken.",
+		"source": "forever",
+		"tooltip": "35 Energy\nMelee Range\nInstant\nAn instant strike that deals 100% weapon damage (145% if a Dagger is equipped) and causes the target to take 15% increased Rupture damage from the Rogue. Lasts 15 sec. Awards 1 combo point."
+	},
+	"1784": {
+		"ability": "Stealth",
+		"file": "sim/rogue/stealth.go",
+		"note": "The sim registers rank 1 (1784) for Stealth and for the aura Vanish grants; the aura is a marker with no effect and Forever only changed Camouflage, which shortens Stealth's cooldown, not Stealth itself.",
+		"source": "classic"
+	},
+	"1856": {
+		"ability": "Vanish",
+		"file": "sim/rogue/vanish.go",
+		"note": "5 min cooldown (client 1856) less 45 sec per point of Elusiveness, exactly as in Classic; the Forever talent data copies Elusiveness's Classic ranks, and the Nightslayer 3 piece shortens the cooldown from outside the spell.",
+		"source": "classic"
+	},
+	"22482": {
+		"ability": "Blade Flurry (extra strike)",
+		"file": "sim/rogue/talents_combat.go",
+		"note": "The off-target copy of each melee hit while Blade Flurry is up. Blade Flurry itself (13877) keeps 20% attack speed, 25 Energy and 2 min in the beta client, but 22482 is no longer in it; the client's own extra strike spell is 1226883.",
+		"source": "classic"
+	},
+	"23580": {
+		"ability": "Bloodfang (heal over time)",
+		"file": "sim/rogue/items.go",
+		"note": "Bloodfang Armor 8pc, 50 health a second for 6 seconds, exactly the Classic set bonus; the set survived the cut to Forever's launch item database unchanged.",
+		"source": "classic"
+	},
+	"23581": {
+		"ability": "Bloodfang (damage proc)",
+		"file": "sim/rogue/items.go",
+		"note": "Bloodfang Armor 8pc, 283 to 317 damage at 1 PPM, exactly the Classic set bonus.",
+		"source": "classic"
+	},
+	"23582": {
+		"ability": "Clean Escape",
+		"file": "sim/rogue/items.go",
+		"note": "Nightslayer Armor 8pc, heals 500 when Vanish is used, exactly the Classic set bonus.",
+		"source": "classic"
+	},
+	"24532": {
+		"ability": "Burst of Energy",
+		"file": "sim/rogue/items.go",
+		"note": "The on-use of Renataki's Charm of Trickery (item 19954), 60 Energy on a 3 min cooldown, unchanged from Classic.",
+		"source": "classic"
+	},
+	"25300": {
+		"ability": "Backstab",
+		"file": "sim/rogue/backstab.go",
+		"note": "Rank 9, the rank the sim casts since it reads the client spell store (#427). Beta client 1.60.1.70009 matches Classic Era: 150% weapon damage plus 150, 60 Energy, dagger only; only the combo point effect's type moved.",
+		"source": "classic"
+	},
+	"25347": {
+		"ability": "Deadly Poison V",
+		"file": "sim/rogue/poisons.go",
+		"note": "Beta client 1.60.1.70009: Deadly Poison V (enchant 2630) ticks 23 every 3 sec through 25349 (Classic 34), 5 stacks over 12 sec, 30% chance, 180 charges, which the sim does not model. The sim logs the ticks under the imbue's id 25347; 25349 carries Periodic Can Crit (#364).",
+		"source": "forever",
+		"tooltip": "3 sec cast\nCoats a weapon with poison that lasts for 30 minutes. Each strike has a 30% chance of poisoning the enemy for 92 Nature damage over 12 sec. Stacks up to 5 times on a single target. 180 charges."
+	},
+	"31016": {
+		"ability": "Eviscerate",
+		"assumptions": [
+			"3% of attack power per combo point, which Classic Era does not have and the client carries no number for; the client's tooltip now says the damage is 'increased by Attack Power'. The beta's combat logs agree if the rogue has Improved Eviscerate (7/13/20% in the client): Salty (11 Assassination points, 2026-09-26) lands 74 and 107 before armor at 2 and 3 combo points, where 3% gives 71 and 103. Sinthoras and Ray (3 and 6 Assassination points, talents unknown) land about 179 and 167 at 5 combo points, which fits 3% with Improved Eviscerate or 6% without it. Armor is read from each rogue's Sinister Strikes on the same mob."
+		],
+		"file": "sim/rogue/eviscerate.go",
+		"note": "Rank 9, the rank the sim casts since it reads the client spell store (#427). Beta client 1.60.1.70009 matches Classic Era: damage per combo point, range and 35 Energy are unchanged; the client adds the combo point cost as a second power row.",
+		"source": "classic"
+	},
+	"6774": {
+		"ability": "Slice and Dice",
+		"file": "sim/rogue/slice_and_dice.go",
+		"note": "Rank 2, the rank the sim casts. Beta client 1.60.1.70009 keeps 30% attack speed, 25 Energy and 6 sec plus 3 sec a combo point; only the aura type number changed.",
+		"source": "classic"
+	},
+	"8643": {
+		"ability": "Kidney Shot",
+		"file": "sim/rogue/kidney_shot.go",
+		"note": "Rank 2, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 25 Energy, 20 sec cooldown, stuns for 1 sec plus 1 sec a combo point (2 to 6 sec), 80% of the energy back on a miss. Its third effect is extra damage taken from the rogue, every school, which is 0 until Improved Kidney Shot (14174, new in Forever) raises it to 5/10% for as long as the stun holds. The stun also stops the target dodging, parrying and blocking. Castable from an APL; no default rotation casts it, and a stun-immune target takes neither the stun nor the bonus.",
+		"source": "classic"
+	}
+}

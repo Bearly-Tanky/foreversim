@@ -1,0 +1,59 @@
+name: Update Changelog
+
+# Records every pull request merged into master in ui/app/changelog/merged.json, which the
+# changelog page lists under its hand-written sections. Runs after each merge and commits the
+# result to master; that push deploys the site like any other.
+on:
+    pull_request:
+        types: [closed]
+        branches: [master]
+    workflow_dispatch:
+
+# Several pull requests can close at once, and each run commits to master. Without a queue they
+# race and every loser is rejected as a non fast forward.
+concurrency:
+    group: update-changelog
+    cancel-in-progress: false
+
+jobs:
+    merged-pull-requests:
+        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+        permissions:
+            contents: write
+            pull-requests: read
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: master
+
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: List merged pull requests
+              run: node tools/changelog/merged_prs.mjs
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Commit
+              run: |
+                  git add ui/app/changelog/merged.json
+                  if git diff --cached --quiet; then
+                    echo "Nothing new to commit"
+                    exit 0
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git commit -m "chore(changelog): record merged pull requests"
+                  for attempt in 1 2 3 4 5; do
+                    if git push; then
+                      exit 0
+                    fi
+                    echo "push rejected, rebasing on master (attempt $attempt)"
+                    git pull --rebase origin master
+                  done
+                  echo "could not push after five attempts"
+                  exit 1

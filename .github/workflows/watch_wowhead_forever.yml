@@ -1,0 +1,132 @@
+name: Watch Forever game data
+
+# Two upstreams, polled 4x a day. Each opens (or updates) ONE pull request when it moves. Neither regenerates
+# db.bin or touches sim rules: deciding what a data change means for the sim is review work. Merging to master
+# publishes Pages via deploy.yml.
+#
+#  wowhead - Wowhead's datamined digest (the gear planner's data file: items, sets, enchants, talents, buffs,
+#            base stats). Byte-identical between fetches until it changes, so a file compare is enough.
+#  client  - the raw client tables, per build, from wago.tools. Forever's beta ships under wago's
+#            `wow_classic_beta` product as version 1.60.x (first build 2026-09-16), NOT under a product with
+#            "forever" in the name. Every build stays downloadable, so the diff fetches both and stores nothing.
+on:
+    schedule:
+        - cron: '17 */6 * * *'
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+concurrency:
+    group: watch-forever-data
+    cancel-in-progress: false
+
+jobs:
+    wowhead:
+        runs-on: ubuntu-latest
+        env:
+            SOURCE_URL: https://nether.wowhead.com/forever/data/gear-planner?dv=100
+            SNAPSHOT: assets/db_inputs/wowhead_forever_gearplanner.txt
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Fetch Wowhead's Forever data
+              run: |
+                  curl -fsSL --retry 3 -A "wowsims-forever-data-watch (+https://github.com/${{ github.repository }})" \
+                    "$SOURCE_URL" -o /tmp/new.txt
+                  # A Cloudflare challenge or error page is HTML, not WH.setPageData - never commit that.
+                  grep -q 'WH.setPageData("wow.gearPlanner.' /tmp/new.txt || { echo "::error::not a gear-planner payload"; head -c 300 /tmp/new.txt; exit 1; }
+
+            - name: Compare with the last snapshot
+              id: cmp
+              run: |
+                  if [ -f "$SNAPSHOT" ] && cmp -s "$SNAPSHOT" /tmp/new.txt; then
+                    echo "changed=false" >> "$GITHUB_OUTPUT"; echo "No change."; exit 0
+                  fi
+                  echo "changed=true" >> "$GITHUB_OUTPUT"
+                  day=$(date -u +%Y-%m-%d); echo "day=$day" >> "$GITHUB_OUTPUT"
+                  mkdir -p docs/data-changes "$(dirname "$SNAPSHOT")"
+                  if [ -f "$SNAPSHOT" ]; then
+                    python3 tools/data_watch/wowhead_diff.py "$SNAPSHOT" /tmp/new.txt > /tmp/report.md
+                  else
+                    echo "First snapshot - baseline for future diffs, nothing to compare against." > /tmp/report.md
+                  fi
+                  { echo "# Wowhead Forever data change, $day"; echo; echo "Source: $SOURCE_URL"; echo; cat /tmp/report.md; } > "docs/data-changes/$day.md"
+                  cp /tmp/new.txt "$SNAPSHOT"
+                  head -c 60000 "docs/data-changes/$day.md" > /tmp/body.md   # PR bodies cap at 65536 chars
+
+            - name: Open or update the Wowhead data pull request
+              id: wpr
+              if: steps.cmp.outputs.changed == 'true'
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  branch: data/wowhead-forever
+                  delete-branch: true
+                  add-paths: |
+                      ${{ env.SNAPSHOT }}
+                      docs/data-changes/*.md
+                  commit-message: 'data: Wowhead Forever data changed (${{ steps.cmp.outputs.day }})'
+                  title: 'Wowhead Forever data changed (${{ steps.cmp.outputs.day }})'
+                  body-path: /tmp/body.md
+                  labels: data-change
+
+            # Snapshot + report only (never db.bin or sim rules), so merge straight away.
+            - name: Merge the Wowhead data pull request
+              if: steps.wpr.outputs.pull-request-number
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh pr merge ${{ steps.wpr.outputs.pull-request-number }} --squash --delete-branch --repo ${{ github.repository }}
+
+    client:
+        runs-on: ubuntu-latest
+        env:
+            BUILD_FILE: assets/db_inputs/forever_client_build.txt
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Newest Forever client build on wago.tools
+              id: build
+              run: |
+                  # Classic Era is 1.15.x; Forever beta is 1.60.x. The API list is not sorted, so sort by date.
+                  latest=$(curl -fsSL --retry 3 https://wago.tools/api/builds \
+                    | jq -r '[.[][] | select(.version | test("^1\\.[2-9][0-9]\\."))] | sort_by(.created_at) | last | .version // empty')
+                  prev=$(cat "$BUILD_FILE" 2>/dev/null || true)
+                  if [ -z "$latest" ] || [ "$latest" = "$prev" ]; then
+                    echo "changed=false" >> "$GITHUB_OUTPUT"; echo "Client build unchanged: ${latest:-none}"; exit 0
+                  fi
+                  echo "changed=true" >> "$GITHUB_OUTPUT"
+                  echo "latest=$latest" >> "$GITHUB_OUTPUT"
+                  day=$(date -u +%Y-%m-%d); echo "day=$day" >> "$GITHUB_OUTPUT"
+                  mkdir -p docs/data-changes "$(dirname "$BUILD_FILE")"
+                  if [ -n "$prev" ]; then
+                    python3 tools/data_watch/wago_db2_diff.py "$prev" "$latest" > /tmp/client.md
+                  else
+                    echo "First Forever client build recorded: $latest. Baseline; later builds are diffed against it. Browse tables at https://wago.tools/db2?build=$latest" > /tmp/client.md
+                  fi
+                  out="docs/data-changes/$day-client-$latest.md"
+                  { echo "# Forever client build $latest"; echo; cat /tmp/client.md; } > "$out"
+                  echo "$latest" > "$BUILD_FILE"
+                  head -c 60000 "$out" > /tmp/client_body.md
+
+            - name: Open or update the client data pull request
+              id: cpr
+              if: steps.build.outputs.changed == 'true'
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  branch: data/forever-client
+                  delete-branch: true
+                  add-paths: |
+                      ${{ env.BUILD_FILE }}
+                      docs/data-changes/*-client-*.md
+                  commit-message: 'data: Forever client build ${{ steps.build.outputs.latest }}'
+                  title: 'Forever client build ${{ steps.build.outputs.latest }}'
+                  body-path: /tmp/client_body.md
+                  labels: data-change
+
+            # Snapshot + report only (never db.bin or sim rules), so merge straight away.
+            - name: Merge the client data pull request
+              if: steps.cpr.outputs.pull-request-number
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --squash --delete-branch --repo ${{ github.repository }}

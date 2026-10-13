@@ -1,0 +1,111 @@
+name: Build and Deploy
+on:
+    push:
+        branches:
+            - master
+    workflow_dispatch:
+
+# Upstream deploys to wowsims/pages-deploy with a token this fork does not have, so this publishes to the
+# repository's own GitHub Pages under /<repo>/forever/ (tools/site_base.sh moves the build there), with a
+# root page that redirects to it.
+concurrency:
+    group: pages
+    cancel-in-progress: true
+
+jobs:
+    tests:
+        uses: ./.github/workflows/run_tests.yml
+        with:
+            # The master tip before this push: what is deployed, and what the protos must stay
+            # compatible with unless the version is bumped.
+            proto_baseline: ${{ github.event.before }}
+
+    build-and-deploy:
+        needs: tests
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Checkout 🛎️
+              uses: actions/checkout@v5
+              with:
+                  persist-credentials: false
+
+            - name: Install Go
+              uses: actions/setup-go@v6
+              with:
+                  go-version: 1.25.x
+
+            - name: Install Protoc
+              uses: arduino/setup-protoc@v3
+              with:
+                  version: 3.x
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Install Protoc Go plugin
+              run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+            - name: Install Node
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install npm dependencies
+              run: npm ci
+
+            - name: Install binaryen
+              run: sudo apt-get update && sudo apt-get install -y binaryen
+
+            - name: Build 🔧
+              env:
+                  SITE_BASE: /${{ github.event.repository.name }}/forever/
+              run: |
+                  make dist/forever/.dirstamp
+                  tools/site_base.sh
+
+            - name: Update proto version file
+              run: |
+                  cp sim/core/TestProtoVersioning.results .deployedprotoversion
+
+            - name: Commit updated version file
+              run: |
+                  git config --local user.name "github-actions[bot]"
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  if ! git diff --exit-code; then
+                      git checkout -b github-actions
+                      git add .deployedprotoversion
+                      git commit -m "Auto-update .deployedprotoversion file due to API version increase"
+                      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
+                      git push --set-upstream origin github-actions
+                      gh pr create --fill
+                      gh pr merge --merge --delete-branch
+                  fi
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Add the root redirect
+              run: printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./forever/"><a href="./forever/">Continue to the simulator</a>' > dist/index.html
+
+            # The site used to live at /<repo>/classic/ (master's pages) with a preview at /<repo>/next/.
+            # Every one of those URLs, share links included, redirects to its page here.
+            - name: Add the old URL redirects
+              run: node tools/old_url_redirects.mjs dist
+
+            - name: Configure Pages
+              uses: actions/configure-pages@v5
+
+            - name: Upload the site
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: dist
+
+            - name: Deploy to GitHub Pages 🚀
+              id: deployment
+              uses: actions/deploy-pages@v4

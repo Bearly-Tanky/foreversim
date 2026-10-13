@@ -1,0 +1,3 @@
+-- Emptied. This built item_enchantment_template, 28,594 rows of random-suffix data keyed
+-- by ItemRandomSuffixGroupID. The client no longer ships that id, so the only query against
+-- the table looked for entry 0, which no row has. See RandomSuffixOptions in tables.go.

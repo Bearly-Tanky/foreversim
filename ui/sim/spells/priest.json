@@ -1,0 +1,558 @@
+{
+	"1004": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "140 Mana\n2.5 sec cast\nSmite an enemy for 81 to 91 Holy damage."
+	},
+	"10797": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "50 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 162 Arcane damage over 6 sec."
+	},
+	"10892": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "305 Mana\nInstant\nA word of darkness that causes 426 Shadow damage over 18 sec."
+	},
+	"10893": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "385 Mana\nInstant\nA word of darkness that causes 582 Shadow damage over 18 sec."
+	},
+	"10894": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "470 Mana\nInstant\nA word of darkness that causes 762 Shadow damage over 18 sec."
+	},
+	"10933": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "230 Mana\n2.5 sec cast\nSmite an enemy for 123 to 139 Holy damage."
+	},
+	"10934": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "280 Mana\n2.5 sec cast\nSmite an enemy for 166 to 186 Holy damage."
+	},
+	"10945": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "265 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 325 to 343 Shadow damage."
+	},
+	"10946": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "310 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 406 to 428 Shadow damage."
+	},
+	"10947": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "350 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 477 to 503 Shadow damage."
+	},
+	"1240721": {
+		"ability": "Penance",
+		"file": "sim/priest/penance.go",
+		"note": "Beta client 1.60.1.70205: rank 3, learned at 50. 270 mana, 180 a bolt (1240730) at .285, the same 12 sec cooldown as rank 4 (Category 2414). Its bolt is larger than rank 4's 131 for less mana, so the Smite rotations cast this rank; Wowhead Forever (dataEnv 16) prints the same numbers. Forever has no downranking penalty, the coefficient is .285 at every rank.",
+		"source": "forever",
+		"tooltip": "270 Mana\nChanneled\n12 sec cooldown\nLaunches a volley of holy light at the target, causing 72 Holy damage to an enemy, or 279 healing to an ally, instantly and every 1 sec for 2 sec."
+	},
+	"1277328": {
+		"ability": "Dark Sacrifice",
+		"file": "sim/priest/dark_sacrifice.go",
+		"note": "New in Forever: five ranks (1277324-1277328, trained 20 to 60), free, 10 min cooldown. Beta client 1.60.1.70009 gives the base (rank 5: 320 every 3 sec, five ticks); the Spirit share is from a beta combat log (foreverlogs report 40, rank 1, Spirit 72: 94.4 mana a tick = 80 + Spirit / 5). The health cost is not modelled; the cooldown manager casts it once the whole gain fits. Every rank is flagged No Threat (client 1.60.1.70205 Attributes[1] 0x400), so the mana adds no threat.",
+		"source": "forever",
+		"tooltip": "Instant\n10 min cooldown\nCannibalize 1600 of your own Health over 15 sec to gain (1600 + Spirit) Mana."
+	},
+	"1277335": {
+		"ability": "Chastise",
+		"file": "sim/priest/chastise.go",
+		"note": "New in Forever: five ranks (1277331-1277335, trained 20 to 60) sharing one 2 min cooldown (category 2491). Beta client 1.60.1.70009: coefficient .143; humanoids only; not castable in Shadowform. The root is not modelled and no default rotation casts it.",
+		"source": "forever",
+		"tooltip": "225 Mana\n20 yd range\nInstant\n2 min cooldown\nChastise the target, causing 272 to 306 Holy damage and Immobilizing them for up to 2 sec. Only works against Humanoids."
+	},
+	"1284536": {
+		"ability": "Holy Purpose (Searing Light)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: Forever's Searing Light (14909, 2 ranks) raises Holy damage 2/5% and gives Holy Fire ticks a 5/10% chance at Holy Purpose (1284536, 10 sec), the buff the sim registers. Classic's 14909 is a different effect on Smite and Holy Fire.",
+		"source": "forever",
+		"tooltip": "10 sec\nYour next Holy Nova costs no Mana. Searing Light increases your Holy damage done by 2%/5%, and gives a 5%/10% chance each time your Holy Fire spell deals periodic damage to trigger it."
+	},
+	"1316995": {
+		"ability": "Penance",
+		"file": "sim/priest/penance.go",
+		"note": "Beta client 1.60.1.70009: rank 4, learned at 60 (ranks 1-3: 402174, 1240720, 1240721 at 30, 40, 50). 355 mana, 12 sec cooldown shared by every rank (Category 2414), 131 a bolt (1316993) at .285. The client's rank 3 bolt is 180, larger than rank 4's, so every rank is registered and the Smite rotations cast rank 3 (1240721). #464 lands the bolts on cast and at 1 and 2 sec, as the channel 1316994 states (2000 ms, a 1000 ms period that ticks on application), and #461 lets Improved Healing discount it; the healing half (1316991, 673) is not simulated, no spec heals with it.",
+		"source": "forever",
+		"tooltip": "385 Mana\nChanneled\n12 sec cooldown\nLaunches a volley of holy light at the target, causing 92 Holy damage to an enemy, or 425 healing to an ally, instantly and every 1 sec for 2 sec."
+	},
+	"14751": {
+		"ability": "Inner Focus",
+		"file": "sim/priest/talents_discipline.go",
+		"note": "The client row matches Classic Era 1.15.9: 100% off the next spell, +25% critical effect chance, 3 min cooldown. The crit follows the second effect's mask, which leaves out Mind Flay, Shadow Word: Death and Starshards (#432). Beta client 1.60.1.70009.",
+		"source": "classic"
+	},
+	"14914": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "85 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 56 to 70 Holy damage and an additional 20 Holy damage over 10 sec."
+	},
+	"15237": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 23455.",
+		"source": "forever",
+		"tooltip": "185 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 26 to 30 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 49 to 57. These effects cause no threat."
+	},
+	"15261": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "255 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 184 to 232 Holy damage and an additional 75 Holy damage over 10 sec."
+	},
+	"15262": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "95 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 63 to 79 Holy damage and an additional 25 Holy damage over 10 sec."
+	},
+	"15263": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "125 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 79 to 99 Holy damage and an additional 30 Holy damage over 10 sec."
+	},
+	"15264": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "145 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 89 to 113 Holy damage and an additional 35 Holy damage over 10 sec."
+	},
+	"15265": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "170 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 102 to 128 Holy damage and an additional 65 Holy damage over 10 sec."
+	},
+	"15266": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "200 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 131 to 167 Holy damage and an additional 50 Holy damage over 10 sec."
+	},
+	"15267": {
+		"ability": "Holy Fire",
+		"file": "sim/priest/holy_fire.go",
+		"note": "Beta client 1.60.1.70009: about half Classic's damage (rank 8 355-449 -> 184-232, dot 145 -> 75). Coefficients .75 and .05 a tick, cast and costs unchanged; every rank is registered. The client's rank 5 dot (65) is larger than rank 6's (50).",
+		"source": "forever",
+		"tooltip": "230 Mana\n3.5 sec cast\nConsumes the enemy in Holy flames that cause 162 to 206 Holy damage and an additional 65 Holy damage over 10 sec."
+	},
+	"15286": {
+		"ability": "Vampiric Embrace",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: duration 1 min -> 30 sec and cooldown 10 sec -> 1 min; the 20% healing and 40 mana are Classic Era's (15286 states 20% there too). The Spirit Tap interaction cannot be simulated because nothing dies in a raid encounter.",
+		"source": "forever",
+		"tooltip": "40 Mana\n30 yd range\nInstant\n1 min cooldown\nAfflicts your target with Shadow energy that causes all party members to be healed for 20% of any Shadow spell damage you deal for 30 sec."
+	},
+	"15407": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "45 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 63 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"15430": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 23458.",
+		"source": "forever",
+		"tooltip": "290 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 47 to 55 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 79 to 91. These effects cause no threat."
+	},
+	"15431": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 23459.",
+		"source": "forever",
+		"tooltip": "400 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 72 to 84 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 111 to 127. These effects cause no threat."
+	},
+	"15473": {
+		"ability": "Shadowform",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: Classic's 15473 is +15% Shadow damage and -15% Physical damage taken; Forever adds -50% Shadow mana cost and +100% critical strike damage bonus (on Mind Blast, Mind Flay, Shadow Word: Pain and Devouring Plague, the mask 41984016 names) and drops the damage to 10%. The form blocks only healing. The sim charges nothing to cast it where the client says 40% of base mana, as it did for Classic.",
+		"source": "forever",
+		"tooltip": "Instant\nAssume Shadowform, increasing your Shadow damage by 10%, reducing the Mana cost of all Shadow spells by 50%, increasing the critical strike damage bonus of your Shadow spells by 100%, and reducing Physical damage taken by you by 15%. However, you may not cast healing spells while in this form."
+	},
+	"17311": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "70 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 102 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"17312": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "100 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 153 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"17313": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "135 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 225 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"17314": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "165 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 294 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"18807": {
+		"ability": "Mind Flay",
+		"file": "sim/priest/talents_shadow.go",
+		"note": "Beta client 1.60.1.70009: rank 6 426 -> 390 over 3 ticks at .167 a tick (Classic .15). The demo's 119 at rank 1 was not the client's 63. Cost unchanged; every rank is registered with the talent.",
+		"source": "forever",
+		"tooltip": "205 Mana\nChanneled\nAssault the target's mind with Shadow energy, causing 390 Shadow damage over 3 sec and slowing their movement speed by 50%."
+	},
+	"19276": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "350 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 232 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"19277": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "495 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 344 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"19278": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "645 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 488 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"19279": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "810 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 656 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"19280": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "985 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 848 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"19296": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "85 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 300 Arcane damage over 6 sec."
+	},
+	"19299": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "140 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 528 Arcane damage over 6 sec."
+	},
+	"19302": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "190 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 762 Arcane damage over 6 sec."
+	},
+	"19303": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "245 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 1068 Arcane damage over 6 sec."
+	},
+	"19304": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "300 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 1440 Arcane damage over 6 sec."
+	},
+	"19305": {
+		"ability": "Starshards",
+		"file": "sim/priest/starshards.go",
+		"note": "Beta client 1.60.1.70009: about double Classic's damage (rank 7 936 -> 1800 over 6 ticks) at .167 a tick for every rank. Still Night Elf only; every rank is registered.",
+		"source": "forever",
+		"tooltip": "350 Mana\nChanneled\nRains starshards down on the enemy target's head, causing 1800 Arcane damage over 6 sec."
+	},
+	"23455": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 15237 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 49 to 57. This effect causes no threat."
+	},
+	"23458": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 15430 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 79 to 91. This effect causes no threat."
+	},
+	"23459": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 15431 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 111 to 127. This effect causes no threat."
+	},
+	"2767": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "230 Mana\nInstant\nA word of darkness that causes 288 Shadow damage over 18 sec."
+	},
+	"27799": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 27803.",
+		"source": "forever",
+		"tooltip": "520 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 102 to 118 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 151 to 175. These effects cause no threat."
+	},
+	"27800": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 27804.",
+		"source": "forever",
+		"tooltip": "635 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 138 to 160 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 225 to 259. These effects cause no threat."
+	},
+	"27801": {
+		"ability": "Holy Nova",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: six ranks as in Classic, each a little lower (rank 6 181-209 -> 174-200 damage, 302-350 -> 288-334 healing), .107 on both halves, Classic's costs. The sim registers every rank with the talent; the radius is not modelled. The healing half is dealt through 27805.",
+		"source": "forever",
+		"tooltip": "750 Mana\nInstant\nCauses an explosion of holy light around the caster, causing 174 to 200 Holy damage to all enemy targets within 10 yards and healing all party members within 10 yards for 288 to 334. These effects cause no threat."
+	},
+	"27803": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 27799 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 151 to 175. This effect causes no threat."
+	},
+	"27804": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 27800 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 225 to 259. This effect causes no threat."
+	},
+	"27805": {
+		"ability": "Holy Nova (healing)",
+		"file": "sim/priest/talents_holy.go",
+		"note": "Beta client 1.60.1.70009: the healing half of Holy Nova; 27801 owns the cast, the mana cost and the damage.",
+		"source": "forever",
+		"tooltip": "Instant\nHeals all party members within 10 yards for 288 to 334. This effect causes no threat."
+	},
+	"2944": {
+		"ability": "Devouring Plague",
+		"file": "sim/priest/devouring_plague.go",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"source": "forever",
+		"tooltip": "215 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 128 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
+	},
+	"585": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "20 Mana\n1.5 sec cast\nSmite an enemy for 14 to 18 Holy damage."
+	},
+	"589": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "25 Mana\nInstant\nA word of darkness that causes 30 Shadow damage over 18 sec."
+	},
+	"591": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "30 Mana\n2 sec cast\nSmite an enemy for 26 to 31 Holy damage.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "25-31 +0.6/level",
+			"biggest": 33
+		}
+	},
+	"594": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "50 Mana\nInstant\nA word of darkness that causes 60 Shadow damage over 18 sec.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "10 a tick",
+			"biggest": 18
+		}
+	},
+	"598": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "60 Mana\n2.5 sec cast\nSmite an enemy for 44 to 51 Holy damage."
+	},
+	"6060": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "185 Mana\n2.5 sec cast\nSmite an enemy for 93 to 105 Holy damage."
+	},
+	"8092": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "50 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 40 to 44 Shadow damage.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "37-41 +0.6/level",
+			"biggest": 46
+		}
+	},
+	"8102": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "80 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 69 to 75 Shadow damage."
+	},
+	"8103": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "110 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 102 to 110 Shadow damage."
+	},
+	"8104": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "150 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 153 to 163 Shadow damage."
+	},
+	"8105": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "185 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 198 to 210 Shadow damage."
+	},
+	"8106": {
+		"ability": "Mind Blast",
+		"file": "sim/priest/mind_blast.go",
+		"note": "Beta client 1.60.1.70009: lower at every rank (rank 9 508-537 -> 477-503), ranks 1-2 coefficient .268/.364 -> .429. Cast, cost and cooldown unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "225 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 259 to 275 Shadow damage."
+	},
+	"970": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "95 Mana\nInstant\nA word of darkness that causes 108 Shadow damage over 18 sec."
+	},
+	"984": {
+		"ability": "Smite",
+		"file": "sim/priest/smite.go",
+		"note": "Beta client 1.60.1.70009: rank 8 384-429 -> 166-186, lower from rank 3 up, and no downranking penalty (ranks 1-3 .123/.271/.554 -> .429/.571/.714). Casts and costs are Classic's. Every rank is registered, and #449's smite_lowrank rotation drops to rank 2 when mana runs low.",
+		"source": "forever",
+		"tooltip": "95 Mana\n2.5 sec cast\nSmite an enemy for 59 to 68 Holy damage."
+	},
+	"992": {
+		"ability": "Shadow Word: Pain",
+		"file": "sim/priest/shadow_word_pain.go",
+		"note": "Beta client 1.60.1.70009: lower from rank 2 up (rank 8 852 -> 762 over 6 ticks) and .2 a tick at every rank (Classic .167, lower ranks less). Cost unchanged; every rank is registered.",
+		"source": "forever",
+		"tooltip": "155 Mana\nInstant\nA word of darkness that causes 180 Shadow damage over 18 sec."
+	},
+	"15258": {
+		"ability": "Shadow Weaving",
+		"file": "sim/priest/talents_shadow.go",
+		"source": "forever",
+		"tooltip": "Increases the Shadow damage you deal by 2% for 15 sec, stacking up to 5 times.",
+		"note": "Beta client 1.60.1.70009 (spell 15258): aura 270 at 2 a stack, 15 sec. Era 15258 is \"Shadow Vulnerability\", aura 87 at 3, a damage taken debuff on the target - Forever turned it into a buff on the priest. The talent 15257 is a single spell whose three tree ranks only move the proc chance, 33/67/100%."
+	},
+	"1309595": {
+		"ability": "Shadow Word: Death",
+		"file": "sim/priest/shadow_word_death.go",
+		"note": "New in Forever. Beta client 1.60.1.70009: coefficient .429, 15 sec cooldown; every rank is registered. Backlash and an unnamed script effect (value 150) not modelled.",
+		"source": "forever",
+		"tooltip": "175 Mana\nInstant\n15 sec cooldown\nA word of dark binding that inflicts 302 Shadow damage to the target. If your target is not killed by Shadow Word: Death, you take backlash damage equal to 10% of your maximum health."
+	},
+	"1309633": {
+		"ability": "Shadow Word: Death",
+		"file": "sim/priest/shadow_word_death.go",
+		"note": "New in Forever. Beta client 1.60.1.70009: coefficient .429, 15 sec cooldown; every rank is registered. Backlash and an unnamed script effect (value 150) not modelled.",
+		"source": "forever",
+		"tooltip": "205 Mana\nInstant\n15 sec cooldown\nA word of dark binding that inflicts 379 Shadow damage to the target. If your target is not killed by Shadow Word: Death, you take backlash damage equal to 10% of your maximum health."
+	},
+	"1309635": {
+		"ability": "Shadow Word: Death",
+		"file": "sim/priest/shadow_word_death.go",
+		"note": "New in Forever. Beta client 1.60.1.70009: coefficient .429, 15 sec cooldown; every rank is registered. Backlash and an unnamed script effect (value 150) not modelled.",
+		"source": "forever",
+		"tooltip": "250 Mana\nInstant\n15 sec cooldown\nA word of dark binding that inflicts 414 Shadow damage to the target. If your target is not killed by Shadow Word: Death, you take backlash damage equal to 10% of your maximum health."
+	},
+	"1309636": {
+		"ability": "Shadow Word: Death",
+		"file": "sim/priest/shadow_word_death.go",
+		"note": "New in Forever. Beta client 1.60.1.70009: coefficient .429, 15 sec cooldown; every rank is registered. Backlash and an unnamed script effect (value 150) not modelled.",
+		"source": "forever",
+		"tooltip": "340 Mana\nInstant\n15 sec cooldown\nA word of dark binding that inflicts 458 Shadow damage to the target. If your target is not killed by Shadow Word: Death, you take backlash damage equal to 10% of your maximum health."
+	}
+}

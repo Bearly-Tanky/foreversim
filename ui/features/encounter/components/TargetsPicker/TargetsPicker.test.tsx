@@ -1,0 +1,213 @@
+import { InputType, PresetTarget, Target as TargetProto, TargetInput } from '@generated/proto/common';
+import type { Encounter } from '@sim/raid/encounter';
+import { act, fireEvent, render } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { TargetsPicker } from './TargetsPicker';
+
+const source = vi.hoisted(() => {
+	const listeners = new Set<() => void>();
+	return {
+		listeners,
+		subscribe: (onChange: () => void) => {
+			listeners.add(onChange);
+			return () => listeners.delete(onChange);
+		},
+		notify: () => Array.from(listeners).forEach(listener => listener()),
+	};
+});
+vi.mock('@sim/state/subscriptions', async () => (await import('@sim/testing')).mockSubscriptions(source.subscribe));
+vi.mock('@i18n/config', () => ({ default: { t: (key: string) => key } }));
+vi.mock('@i18n/localization', () => ({
+	translateItemLabel: (label: string) => label,
+	translateMobType: (value: number) => `mob-${value}`,
+	translateSpellSchool: (value: number) => `school-${value}`,
+	translateStat: (value: number) => `stat-${value}`,
+	translateTargetInputLabel: (label: string) => label,
+	translateTargetInputTooltip: (_label: string, tooltip: string) => tooltip,
+}));
+const trackEvent = vi.hoisted(() => vi.fn());
+vi.mock('../../../../tracking/utils', () => ({ trackEvent }));
+
+const defaultTarget = () => TargetProto.create({ level: 73, swingSpeed: 2 });
+
+/** Stands in for the `Encounter` facade: the seven members the target pickers reach for. */
+class FakeEncounter {
+	constructor(
+		public targets: Array<TargetProto> = [defaultTarget()],
+		public presetTargets: Array<PresetTarget> = [],
+	) {}
+	readonly sim = {
+		db: { getAllPresetTargets: () => this.presetTargets },
+		getShowDamageMetrics: () => true,
+		getShowThreatMetrics: () => true,
+		getShowHealingMetrics: () => true,
+	};
+	getTargets() {
+		return this.targets;
+	}
+	getTarget(index: number) {
+		return this.targets[index];
+	}
+	setTargets(next: Array<TargetProto>) {
+		this.targets = next;
+		source.notify();
+	}
+	modifyTarget(index: number, apply: (target: TargetProto) => void) {
+		const draft = TargetProto.clone(this.targets[index]);
+		apply(draft);
+		this.targets = this.targets.map((target, at) => (at === index ? draft : target));
+		source.notify();
+	}
+	applyPresetTarget() {
+		/* no preset targets in this fixture */
+	}
+}
+
+const mount = (encounter: FakeEncounter) => render(<TargetsPicker encounter={encounter as unknown as Encounter} />);
+
+const root = () => document.querySelector('[data-testid="list-picker-root"]') as HTMLElement;
+const targetRoots = () => [...document.querySelectorAll<HTMLElement>('[data-testid="target-picker-root"]')];
+const containers = () => [...root().querySelectorAll<HTMLElement>('[data-testid="list-picker-item-container"]')];
+const actionsButton = (index: number) => containers()[index].querySelector('[data-testid="list-picker-item-actions"]') as HTMLButtonElement;
+const popoverOf = (index: number) => document.getElementById(actionsButton(index).getAttribute('aria-controls')!);
+const idsIn = (element: Element) => [...element.querySelectorAll('[id]')].map(node => node.id);
+
+beforeEach(() => {
+	source.listeners.clear();
+	trackEvent.mockClear();
+});
+
+describe('TargetsPicker', () => {
+	it('wears the classes the encounter stylesheet and the encounter gate select on, and renders one row per target', () => {
+		const encounter = new FakeEncounter();
+		mount(encounter);
+
+		expect(root().hasAttribute('data-input-root')).toBe(true);
+		expect(root().classList.contains('mb-0')).toBe(true);
+		expect(targetRoots()).toHaveLength(1);
+		const sections = [...targetRoots()[0].querySelectorAll('[data-testid="target-picker-section"]')];
+		expect(sections).toHaveLength(3);
+
+		act(() => encounter.setTargets([defaultTarget(), defaultTarget()]));
+		expect(targetRoots()).toHaveLength(2);
+	});
+
+	it('gives every target its own picker ids, withholds delete from the first, and removes the second through the menu', () => {
+		const encounter = new FakeEncounter([defaultTarget(), defaultTarget()]);
+		mount(encounter);
+
+		const [first, second] = targetRoots().map(idsIn);
+		expect(first.length).toBeGreaterThan(10);
+		expect(first).toEqual(expect.arrayContaining(['target-0-picker-npc', 'target-0-picker-level', 'target-0-picker-spell-school']));
+		expect(second).toEqual(expect.arrayContaining(['target-1-picker-npc', 'target-1-picker-level', 'target-1-picker-spell-school']));
+		expect(first.filter(id => second.includes(id))).toEqual([]);
+
+		fireEvent.click(actionsButton(0));
+		expect(popoverOf(0)).not.toBeNull();
+		expect(popoverOf(0)!.querySelector('[data-testid="list-picker-item-delete"]')).toBeNull();
+		fireEvent.click(actionsButton(1));
+		const deleteSecond = popoverOf(1)!.querySelector('[data-testid="list-picker-item-delete"]');
+		expect(deleteSecond).not.toBeNull();
+
+		act(() => void fireEvent.click(deleteSecond!));
+
+		expect(encounter.targets).toHaveLength(1);
+		expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({ label: 'remove-target' }));
+	});
+
+	it('reads each target row from its own index rather than from the first, and writes a level change back to it', () => {
+		const encounter = new FakeEncounter([TargetProto.create({ level: 73 }), TargetProto.create({ level: 68 })]);
+		mount(encounter);
+
+		const levelOf = (index: number) => targetRoots()[index].querySelector('#target-' + index + '-picker-level') as HTMLSelectElement;
+		expect(levelOf(0).value).toBe('73');
+		expect(levelOf(1).value).toBe('68');
+
+		act(() => void fireEvent.change(levelOf(1), { target: { value: '70' } }));
+
+		expect(encounter.targets.map(target => target.level)).toEqual([73, 70]);
+	});
+
+	it('disables the dual-wield miss penalty until dual wield is on', () => {
+		const encounter = new FakeEncounter([TargetProto.create({ dualWield: false })]);
+		mount(encounter);
+		const penalty = () => document.querySelector('#target-0-picker-dw-miss-penalty')!.closest('[data-testid="boolean-picker-root"]')!;
+		expect(penalty().hasAttribute('data-disabled')).toBe(true);
+
+		act(() => encounter.modifyTarget(0, target => (target.dualWield = true)));
+		expect(penalty().hasAttribute('data-disabled')).toBe(false);
+	});
+
+	// Encounters register a preset per raid size and difficulty, all sharing one npc id — which is
+	// this picker's value, and all the sim resolves an AI from.
+	describe('AI options', () => {
+		const preset = (path: string, id: number) => PresetTarget.create({ path, target: TargetProto.create({ id }) });
+		const aiOptions = () => [...document.querySelectorAll<HTMLOptionElement>('#target-0-picker-ai option')].map(option => option.value);
+
+		it('offers one option per npc id, however many presets share it', () => {
+			mount(
+				new FakeEncounter(
+					[defaultTarget()],
+					[
+						preset('Karazhan/Attumen the Huntsman', 16152),
+						preset('Karazhan/Attumen the Huntsman (heroic)', 16152),
+						preset('x/Prince Malchezaar', 15690),
+					],
+				),
+			);
+
+			expect(aiOptions()).toEqual(['0', '16152', '15690']);
+		});
+
+		it('keeps the preset the sim resolves the id to, which is the first one registered', () => {
+			mount(new FakeEncounter([defaultTarget()], [preset('first', 71466), preset('second', 71466)]));
+
+			expect([...document.querySelectorAll<HTMLOptionElement>('#target-0-picker-ai option')].map(option => option.textContent)).toEqual([
+				'common.none',
+				'first',
+			]);
+		});
+	});
+
+	describe('target inputs', () => {
+		const withInputs = () =>
+			new FakeEncounter([
+				TargetProto.create({
+					targetInputs: [
+						TargetInput.create({ label: 'Stacks', inputType: InputType.Number, numberValue: 3 }),
+						TargetInput.create({ label: 'Enraged', inputType: InputType.Bool, boolValue: true }),
+						TargetInput.create({ label: 'Phase', inputType: InputType.Enum, enumValue: 1, enumOptions: ['One', 'Two'] }),
+					],
+				}),
+			]);
+
+		it('renders one picker per input dispatched on its declared type, shows each its own value, offers no list actions, and writes back to its own index', () => {
+			const encounter = withInputs();
+			mount(encounter);
+			const inputRoots = [...document.querySelectorAll('[data-testid="target-input-picker-root"]')];
+
+			expect(inputRoots).toHaveLength(3);
+			const matchesRoot = (node: Element, index: number) =>
+				index === 2
+					? node.firstElementChild!.getAttribute('data-testid') === 'enum-picker-root'
+					: node.firstElementChild!.getAttribute('data-testid') === ['number-picker-root', 'boolean-picker-root'][index];
+			expect(inputRoots.map((node, index) => matchesRoot(node, index))).toEqual([true, true, true]);
+
+			// `float: true`, so the number box shows two decimals.
+			expect(inputRoots[0].querySelector('input')!.value).toBe('3.00');
+			expect(inputRoots[1].querySelector('input')!.checked).toBe(true);
+			expect(inputRoots[2].querySelector('select')!.value).toBe('1');
+
+			const list = document.querySelector('.ui-list-picker-compact')!;
+			expect(list.querySelector('[data-testid="list-picker-new-button"]')).toBeNull();
+			expect(list.querySelector('[data-testid="list-picker-item-actions"]')).toBeNull();
+			expect([...list.querySelectorAll('[data-testid="list-picker-item-container"]')].every(item => !item.hasAttribute('data-draggable'))).toBe(true);
+
+			const numberInput = inputRoots[0].querySelector('input')!;
+			act(() => void fireEvent.change(numberInput, { target: { value: '7' } }));
+
+			expect(encounter.targets[0].targetInputs.map(input => input.numberValue)).toEqual([7, 0, 0]);
+		});
+	});
+});

@@ -1,0 +1,52 @@
+{
+	"name": "wowsims-spelldata",
+	"displayName": "WoWSims Spelldata",
+	"description": "Hover a spell id or a ladder chain in Go, JSON or TypeScript to read the client's row out of sim/core/spelldata.",
+	"version": "0.2.0",
+	"private": true,
+	"publisher": "wowsims",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.91.0"
+	},
+	"main": "./out/extension.js",
+	"activationEvents": [
+		"onLanguage:go",
+		"onLanguage:json",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
+	"contributes": {
+		"configuration": {
+			"title": "WoWSims Spelldata",
+			"properties": {
+				"wowsims-spelldata.goBinary": {
+					"type": "string",
+					"default": "go",
+					"description": "The go binary that starts the hover server. `go` searches the PATH, then GOROOT and the usual install directories; set a full path if none of them has it."
+				},
+				"wowsims-spelldata.trace": {
+					"type": "string",
+					"enum": [
+						"on",
+						"off"
+					],
+					"default": "on",
+					"description": "Log how each hover was resolved to the WoWSims Spelldata output channel."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"build": "node scripts/build.mjs",
+		"check": "node scripts/build.mjs --check",
+		"test": "node --test test/"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"@types/vscode": "~1.91.0",
+		"esbuild": "0.28.2",
+		"typescript": "^5.9.3",
+		"vscode-languageclient": "10.1.1"
+	}
+}

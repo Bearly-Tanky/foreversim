@@ -1,0 +1,11 @@
+id = "wowsims-spelldata"
+name = "WoWSims Spelldata"
+version = "0.2.0"
+schema_version = 1
+authors = ["WoWSims"]
+description = "Hover a spell id or a ladder chain to read the client's row out of sim/core/spelldata."
+repository = "https://github.com/wowsims/forever"
+
+[language_servers.wowsims-spelldata]
+name = "WoWSims Spelldata"
+languages = ["Go", "JSON", "TypeScript", "TSX"]

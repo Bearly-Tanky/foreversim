@@ -1,0 +1,291 @@
+{
+	"6297": {
+		"ability": "Fiery Blaze",
+		"file": "sim/common/forever/enchants_auto_gen.go",
+		"source": "classic",
+		"note": "The damage Enchant: Fiery Blaze (enchant 36) casts, 15% on a weapon hit for 9 to 13 Fire damage within 3 yards in client 1.60.1.70009, registered from the client rows. Re-keyed from the enchant's own 6296, which the sim does not register; the earlier check found 6296 identical to Classic Era."
+	},
+	"7712": {
+		"ability": "Fire Strike",
+		"file": "sim/common/forever/stat_bonus_procs_auto_gen.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py."
+	},
+	"9057": {
+		"ability": "Firebolt (Volcanic Armor)",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "30 to 50 Fire damage on a successful melee attack.",
+		"note": "Client 1.60.1.70009 (spell 9057): 30 to 50, doubled from Era's 15 to 25. The trigger 9233 rolls 10% (Era 5%), read from the client; its description still says 5%."
+	},
+	"9591": {
+		"ability": "Acid Spit (Emerald Dragon Whelp)",
+		"file": "sim/common/classic/emerald_dragon_whelp.go",
+		"source": "assumed",
+		"tooltip": "Inflicts 374 to 503 Nature damage to an enemy.",
+		"note": "#423 read 438.5 +-29.3% (374 to 503) from client 1.60.1.69977, where Era rolls around 64; the 70009 spell store carries no creature spells, so it was not re-checked. The client has no data for the whelp itself, so its stats and spit rate are master's fit to Classic logs.",
+		"assumptions": [
+			"Each spit adds the whelp's 155 spell damage at a coefficient of 1, master's fit to a spit averaging about 594.",
+			"The whelp spits half the time after each swing: 3 sec cast, 90 mana.",
+			"Dragon's Call summons it at 1 PPM for 15 sec, one whelp at a time."
+		]
+	},
+	"15494": {
+		"ability": "Fury of Forgewright",
+		"file": "sim/common/classic/items_weapons.go",
+		"source": "classic",
+		"note": "Checked against client 1.60.1.70009 (spell 15494): 2 extra attacks, unchanged from Classic Era. Forever changed the trigger instead: Ironfoe's equip 1301046 rolls 6% on any melee hit with a 0.1 sec cooldown, which the sim uses (#423)."
+	},
+	"15600": {
+		"ability": "Hand of Justice",
+		"file": "sim/common/forever/items_trinkets.go",
+		"source": "forever",
+		"tooltip": "Chance on melee hit to gain 1 extra attack.",
+		"note": "Client 1.60.1.70009 (spell 15600): ProcChance 3 under a \"${$h/3}%\" tooltip, so 1%, half Era's hardcoded 2%, with a 2 sec proc cooldown. The Dwarf clause has nothing to sim against."
+	},
+	"15604": {
+		"ability": "Second Wind",
+		"file": "sim/common/classic/items_trinkets.go",
+		"source": "forever",
+		"tooltip": "Restores 63 Mana every 1 sec for 10 sec.",
+		"note": "Client 1.60.1.70009 (spell 15604): 63 mana a tick, up from Era's 30. The tooltip's \"doubled in Mountainous areas\" has nothing to sim against."
+	},
+	"16782": {
+		"ability": "Lightning Bolt (Electrostatic Charge)",
+		"file": "sim/common/forever/stat_bonus_procs_auto_gen.go",
+		"note": "The PvP shields' Electrostatic Charge (13959 at 5%, 1216968 at 20%). Identical in client 1.60.1.70009 and Classic Era: 35 to 65 Nature damage to the attacker.",
+		"source": "classic"
+	},
+	"16928": {
+		"ability": "Armor Shatter (Annihilator)",
+		"file": "sim/common/forever/stat_bonus_procs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "Reduces an enemy's armor by 165. Stacks up to 3 times.",
+		"note": "Client 1.60.1.70009 (spell 16928): 165 a stack, down from Era's 200, 3 stacks for 45 sec. The sim builds it from the client rows, the 1 PPM included."
+	},
+	"17315": {
+		"ability": "Puncture Armor (Rivenspike)",
+		"file": "sim/common/forever/items_weapons.go",
+		"source": "forever",
+		"tooltip": "Punctures target's armor lowering it by 100. Can be applied up to 3 times.",
+		"note": "Client 1.60.1.70009 (spell 17315): 100 a stack, halved from Era's 200, 3 stacks for 30 sec. Bashguuder and Rivenspike share it at master's 2 PPM (#353)."
+	},
+	"17333": {
+		"ability": "Spider's Kiss",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "classic",
+		"note": "Unchanged from Classic Era in client 1.60.1.70009: roots the target and lowers its armor by 100 for 10 sec. The sim rolls 5% on a melee hit and, as master did, puts the -100 armor on the wearer instead of the target."
+	},
+	"17625": {
+		"ability": "Unholy Aura (Runeblade of Baron Rivendare)",
+		"file": "sim/common/classic/items_weapons.go",
+		"source": "forever",
+		"tooltip": "Restores 60 health every 5 sec and increases movement speed by 8%.",
+		"note": "Client 1.60.1.70009 (spell 17625): 60 health every 5 sec, tripled from Era's 20 a tick, plus 8% movement speed; the sim applies both (#423)."
+	},
+	"18656": {
+		"ability": "Corruption (Ebon Hilt of Marduk)",
+		"file": "sim/common/classic/items_weapons.go",
+		"source": "forever",
+		"note": "Client 1.60.1.70009 (spell 18656): 28 a tick every 3 sec for 9 sec, 84 in all, well down from Era's 70 a tick for 3 sec, 210 in all. 1 PPM is master's guess; Forever's added 1% threat reduction (1298501) is applied too.",
+		"tooltip": "28 damage every 3 sec for 9 sec."
+	},
+	"18818": {
+		"ability": "Flamestrike",
+		"file": "sim/common/forever/stat_bonus_procs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "90 to 140 Fire damage to all nearby enemies.",
+		"note": "Client 1.60.1.70009 (spell 18818): 90 to 140, up from Era's 75 to 125. Skullflame Shield's 2% chance when struck (18816) is read from the client rows."
+	},
+	"18979": {
+		"ability": "Lightning (Volcanic Armor)",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "classic",
+		"note": "Checked against the beta client (spell 18979) and unchanged from Classic Era; the permanent duration reads 0 in Forever where Era reads -1. Client 1.60.1.70009 states a 10% chance here; the sim rolls 5%, as master did."
+	},
+	"18980": {
+		"ability": "Lightning",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py. The set bonus that fires it (18979, Stormshroud Armor 2 piece) rolls 10% in client 1.60.1.70009, twice Era's 5%; the sim reads it from the client."
+	},
+	"20007": {
+		"ability": "Holy Strength",
+		"file": "sim/common/classic/enchants.go",
+		"source": "classic",
+		"note": "Client 1.60.1.70009 (spell 20007): 100 Strength for 15 sec and a 75 to 125 heal, Classic Era's level 60 values (#366 replaced TBC's 60 Strength). The client states no rate; the sim uses 1 PPM."
+	},
+	"21142": {
+		"ability": "Immolation",
+		"file": "sim/common/classic/items_weapons.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py."
+	},
+	"21153": {
+		"ability": "Bonereaver's Edge",
+		"file": "sim/common/forever/items_weapons.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py."
+	},
+	"21162": {
+		"ability": "Fireball",
+		"file": "sim/common/classic/items_weapons.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py."
+	},
+	"21992": {
+		"ability": "Thunderfury",
+		"file": "sim/common/classic/items_weapons.go",
+		"note": "Client 1.60.1.70009: 300 Nature damage and -25 Nature resistance (21992) and a 20% attack speed reduction for 12 sec (27648), unchanged from Classic.",
+		"source": "classic"
+	},
+	"23266": {
+		"ability": "Fiery Aura",
+		"file": "sim/common/classic/items_trinkets.go",
+		"source": "classic",
+		"note": "Checked against the beta client (spell 23266) and unchanged from Classic Era. The duration reads 0 in Forever where Era reads -1, which is the same permanent aura written differently."
+	},
+	"23682": {
+		"ability": "Heroism",
+		"file": "sim/common/classic/items_trinkets.go",
+		"source": "classic",
+		"note": "Client 1.60.1.70009 (spell 23682): heals 120 to 180, as in Classic Era. The trigger 23689 states no rate; the sim's 2 PPM is master's."
+	},
+	"23684": {
+		"ability": "Aura of the Blue Dragon",
+		"file": "sim/common/forever/stat_bonus_procs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "2% chance on successful spellcast to increase your Spirit by 150 for 15 sec.",
+		"note": "Client 1.60.1.70009: the trigger 23688 rolls 2% on a spellcast and 23684 now grants 150 Spirit for 15 sec, where Era's let 100% of mana regeneration continue while casting. The sim reads both from the client rows."
+	},
+	"23687": {
+		"ability": "Lightning Strike",
+		"file": "sim/common/classic/items_trinkets.go",
+		"source": "classic",
+		"note": "Client 1.60.1.70009 (spell 23687): 200 to 300 Nature damage, as in Classic Era. The trigger 23686 states 1 PPM, the rate the sim uses."
+	},
+	"23863": {
+		"ability": "Revitalize (Ironfeather Armor)",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "classic",
+		"note": "Checked against the beta client (spell 23863) and unchanged from Classic Era; the permanent duration reads 0 in Forever where Era reads -1. Client 1.60.1.70009 states a 4% chance here; the sim rolls 2%, as master did."
+	},
+	"23864": {
+		"ability": "Revitalize",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. Checked with tools/data_watch/spell_diff.py. The set bonus that fires it (23863, Stormshroud Armor 3 piece) rolls 4% in client 1.60.1.70009, twice Era's 2%; the sim reads it from the client."
+	},
+	"27499": {
+		"ability": "Crusader's Wrath",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Increases damage and healing done by magical spells and effects by up to 65 for 10 sec.",
+		"note": "Lightforge Armor 5 piece. The beta client cuts it from 95 to 65 spell power and moves it off 27498, which Forever no longer uses."
+	},
+	"27655": {
+		"ability": "Flame Lash (Heart of Wyrmthalak)",
+		"file": "sim/common/classic/items_trinkets.go",
+		"source": "forever",
+		"note": "Client 1.60.1.70009 (spell 27655): 140 +-20%, so 112 to 168 where Era's is 120 to 180, and the trigger 27656 now hears ranged attacks too. It states no rate; the 0.4 PPM is master's, from a wowhead comment (#423).",
+		"tooltip": "Chance on melee and ranged attacks to bathe your target in flames for 112 to 168 Fire damage."
+	},
+	"27787": {
+		"ability": "Rogue Armor Energize",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"note": "Shadowcraft Armor 5 piece in Forever, down from six, and cut from 35 Energy to 20 (27788). The client states no rate; the sim uses 1 PPM on melee autoattacks.",
+		"source": "forever",
+		"tooltip": "Chance on melee attack to restore 20 Energy."
+	},
+	"450527": {
+		"ability": "Sudden Insight",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Your spellcasts have a 5% chance to restore 200 mana.",
+		"note": "Magister's Regalia 5 piece and Sorcerer's Regalia 4 piece, new in Forever where both sets used to stop at four bonuses."
+	},
+	"450576": {
+		"ability": "Sudden Insight",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Your spellcasts have a 5% chance to restore 200 mana.",
+		"note": "Vestments of the Devout 5 piece, new in Forever."
+	},
+	"450577": {
+		"ability": "Hunter Armor Energize",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Your melee and ranged autoattacks have a 5% chance to restore 200 mana.",
+		"note": "Beaststalker Armor 5 piece and Beastmaster Armor 4 piece. Classic had it at six and four pieces, 4%, and ranged attacks only."
+	},
+	"450585": {
+		"ability": "Dark Reward",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Your spellcasts have a 5% chance to heal you for 270 to 330.",
+		"note": "Dreadmist Raiment 5 piece and Deathmist Raiment 4 piece, new in Forever; the heal itself is 450583."
+	},
+	"450587": {
+		"ability": "Warrior's Resolve",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Chance on melee attack to heal you for 88 to 132 and generate 10 Rage.",
+		"note": "Battlegear of Valor 5 piece and Battlegear of Heroism 4 piece. Classic healed without returning Rage."
+	},
+	"450589": {
+		"ability": "Warrior's Resolve",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Heals you for 88 to 132 and generates 10 Rage.",
+		"note": "The heal and Rage 450587 triggers."
+	},
+	"450608": {
+		"ability": "Nature's Bounty",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Chance on spellcast to restore 200 mana, on melee attack to regenerate 20 Energy over 5 sec, and when struck to generate 10 Rage.",
+		"note": "Wildheart Raiment 5 piece and Feralheart Raiment 4 piece. Classic's version gave 300 mana, 40 Energy or 10 Rage (27781). The client stores no proc chance, so Classic's 2% is kept, and the sim rolls it only when struck in melee, granting the 20 Energy at once."
+	},
+	"450625": {
+		"ability": "Crusader's Wrath",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Chance on melee autoattack and spellcast to increase your damage and healing done by magical spells and effects by up to 65 for 10 sec.",
+		"note": "Lightforge Armor 5 piece trigger; the buff is 27499. No proc chance in the client, so the 3 PPM the sim already used is kept, rolled on melee autoattacks only."
+	},
+	"450626": {
+		"ability": "The Furious Storm",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Chance on melee autoattack and spellcast to increase your damage and healing done by magical spells and effects by up to 65 for 10 sec.",
+		"note": "The Elements 5 piece and The Five Thunders 4 piece; the buff is 27775, which shaman.json owns."
+	},
+	"1290950": {
+		"ability": "Brain Damage",
+		"file": "sim/common/forever/items_weapons.go",
+		"source": "forever",
+		"tooltip": "Wounds the target for 200 to 300 damage and slows its casting speed by 25% for 30 sec.",
+		"note": "The Lobotomizer's Brain Damage is Forever's own spell (#359), client 1.60.1.70009: 250 +-40% Shadow damage and a 25% cast slow, where Era's 24388 lowered Intellect by 25. The sim deals it as Physical rather than Shadow, leaves the cast slow out, and uses master's 0.4 PPM."
+	},
+	"1292029": {
+		"ability": "Devious Strike (Defias Leather)",
+		"file": "sim/common/forever/items_sets.go",
+		"source": "forever",
+		"tooltip": "Causes the target to Bleed for 75 Physical damage over 5 sec.",
+		"note": "Defias Leather 4 piece, new in Forever. Client 1.60.1.70009: 5% chance on a white hit from behind (1292028), 15 a second for 5 sec; since 70009 the ticks can crit. Beta logs agree: about 14.6 a tick and no crits before 70009, crits after (foreverlogs reports 32-46 and 2667-2677)."
+	},
+	"1299743": {
+		"ability": "Deathbone Surge",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Grants a chance when struck in combat to increase damage and healing done by magical spells and effects by up to 70 for 10 sec.",
+		"note": "Deathbone Guardian 3 piece, new in Forever. 15% chance, once a minute."
+	},
+	"1299746": {
+		"ability": "Deathbone Surge",
+		"file": "sim/common/forever/item_sets_classic.go",
+		"source": "forever",
+		"tooltip": "Increases damage and healing done by magical spells and effects by up to 70 for 10 sec.",
+		"note": "The buff 1299743 applies."
+	}
+}

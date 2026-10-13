@@ -1,0 +1,48 @@
+#!/bin/sh
+# NOTE: This script does not play well when adding partial changes, such as with
+# git add -p or git commit -p.
+
+test_fmt() {
+    hash gofmt 2>&- || { echo >&2 "gofmt not in PATH."; exit 1; }
+    IFS='
+'
+    exitcode=0
+    for file in `git diff --cached --name-only --diff-filter=ACM | grep '\.go$'`
+    do
+        output=`gofmt -w "$file"`
+        if test -n "$output"
+        then
+            # any output is a syntax error
+            echo >&2 "$output"
+            exitcode=1
+        fi
+        git add "$file"
+    done
+    exit $exitcode
+}
+
+# The generated spell data against what the generator writes today. Skipped without the client
+# database, which is gitignored, and only run for a commit that touches the generator or its output.
+test_spelldata() {
+    test -f tools/database/wowsims.db || return 0
+    hash go 2>&- || return 0
+    git diff --cached --name-only --diff-filter=ACM |
+        grep -qE '^(tools/database/|sim/core/spelldata/|assets/db_inputs/spell_store_inputs\.json|sim/[a-z]+/spell_data_auto_gen\.go|sim/core/buffs/[a-z]+_auto_gen\.go|ui/features/settings/model/buffs_debuffs_auto_gen\.ts|proto/buffs\.proto)' || return 0
+
+    if ! go run ./tools/database/gen_spelldata -check
+    then
+        echo >&2 "The generated spell data above is not what the generator writes."
+        echo >&2 "Run 'go run ./tools/database/gen_spelldata' and commit the result."
+        exit 1
+    fi
+}
+
+case "$1" in
+    --about )
+        echo "Check Go code formatting and the generated spell data"
+        ;;
+    * )
+        test_spelldata
+        test_fmt
+        ;;
+esac

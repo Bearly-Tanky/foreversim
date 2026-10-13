@@ -1,0 +1,292 @@
+{
+	"10060": {
+		"ability": "Power Infusion",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Client 10060 (1.60.1.70009): +20% damage in every magic school and +20% healing for 15 sec on a 3 min cooldown, identical to Classic Era; #341 made it +20% from client 10060. The raid option and the priest's own cast (sim/priest/talents_discipline.go) both apply this generated aura.",
+		"source": "classic"
+	},
+	"10293": {
+		"ability": "Devotion Aura",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Client 10293 (1.60.1.70009): 735 armor to the party, as in Classic Era. The raid option applies the generated aura with no Improved Devotion Aura points.",
+		"source": "classic"
+	},
+	"10301": {
+		"ability": "Retribution Aura",
+		"file": "sim/core/buffs/paladin.go",
+		"note": "Client 10301 (1.60.1.70009): 30 Holy damage to each melee attacker where Era's is 20, and #385 scales it with Holy spell power at 0.1357 (1.5/3.5/3 x 0.95), checked in game at level 20. The spell power is the protected member's own, not the paladin's: in beta logs 2729-2736 one paladin's party splits by holder on rank 2 (base 12): the paladin ~28, a warlock ~30, a priest ~22, two warriors 12 flat, and every warrior, rogue and hunter holder across 40 reports sits at the base (7 rank 1, 12 rank 2). The raid option reads the tank's own spell power.",
+		"source": "forever",
+		"tooltip": "Causes 30 Holy damage, plus 13.6% of the struck member's Holy spell power, to any enemy that strikes a party member within 30 yards."
+	},
+	"10610": {
+		"ability": "Windfury Totem Rank 3",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "Grants attacks an extra swing with 246 bonus attack power.",
+		"note": "Client 10610 (1.60.1.70009): 246 attack power where Era's is 315, for 1 sec where Era's is 1.5, on two charges. Since 70009 the totem gives a party aura (10612, area A_PROC_TRIGGER_SPELL) instead of Era's main-hand enchant 564, which nothing in the client applies any more: 20% on any melee auto or special that deals damage, either hand (ProcTypeMask 0x14), 100 ms internal cooldown (ProcCategoryRecovery), not from other procs (no ATTR3 CAN_PROC_FROM_PROCS, so paladin seal hits do not roll it); the extra attack is always main-hand. The raid buff and the shaman's own totem (10614) both read that row."
+	},
+	"11198": {
+		"ability": "Expose Armor Rank 5",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "Finishing move that reduces the target armor by 450 per combo point for 30 sec.",
+		"note": "Client 11198 (1.60.1.70009): 450 a combo point where Era is 340, carried in EffectPointsPerResource rather than the base points - a reader that only looks at base points sees 0 in both builds and finds nothing changed. The raid option applies it at five combo points, 2250 armor. Forever also replaced Improved Expose Armor: it reduces the energy cost and refunds combo points now, and no longer touches the armor. 2250/1700 is 1.32, neither 1.25 nor 1.5, so this is a retune and not the talent folded in. Forever’s Sunder Armor carries the same 450 on its own base points."
+	},
+	"11374": {
+		"ability": "Gift of Arthas",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 11374 (1.60.1.70009): +8 physical damage taken for 3 min, identical to Classic Era. The debuff option applies it all fight; the elixir (sim/core/consumes.go) procs it on an attacker.",
+		"source": "classic"
+	},
+	"11556": {
+		"ability": "Demoralizing Shout Rank 5",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "Reduces the melee attack power of nearby enemies by 205 for 45 sec.",
+		"note": "Client 11556 (1.60.1.70009): 196 plus 1.4 a level where Era's is 140 plus 1, for 45 sec where Era's is 30; the sim floors the level-60 amount to 205. The 1.4 is the 1+0.08x5 Improved Demoralizing Shout used to add, and the talent is gone from Forever's tree. The warrior casts the same rank in sim/warrior/demoralizing_shout.go."
+	},
+	"11597": {
+		"ability": "Sunder Armor",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 11597 (1.60.1.70009): 450 armor per stack to 5 stacks for 30 sec, as in Classic Era; the threat effect Forever's row adds belongs to the warrior's own cast. The raid option ramps to five stacks over the first five global cooldowns.",
+		"source": "classic"
+	},
+	"11717": {
+		"ability": "Curse of Recklessness",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "The raid option's copy; the warlock casts the same rank in sim/warlock/curse_of_recklessness.go. Client 11717 (1.60.1.70009): -505 armor for 2 min where Era's is -640. Forever's row turns the +90 attack power into a dummy aura (Era's was a real attack power aura), and the generated debuff leaves it out.",
+		"source": "forever",
+		"tooltip": "115 Mana\nInstant\nCurses the target with recklessness, reducing its armor by 505 and preventing it from fleeing for 2 min."
+	},
+	"12579": {
+		"ability": "Winter's Chill",
+		"file": "sim/mage/talents_frost.go",
+		"note": "Client 1.60.1.70009: Winter's Chill (11180) procs at 20% a point from Frost damage and allows one stack a point, and 12579 is 2% crit a stack for 15 sec on the mage's own Frostbolt and Ice Lance (A_MOD_CRIT_CHANCE_FOR_CASTER_WITH_ABILITIES). Classic's five-stack raid debuff (28593) is gone from the client and from core.",
+		"source": "forever",
+		"tooltip": "Passive\nYour Frost damage has a 20% chance per point to grant Winter's Chill, increasing the critical strike chance of your own Frostbolt and Ice Lance by 2% for 15 sec. Stacks once per point.\nIt helps only the mage who procced it."
+	},
+	"1259799": {
+		"ability": "Elune's Light",
+		"file": "sim/core/racials.go",
+		"note": "Forever's night elf racial, client 1259799 (1.60.1.70009): +10% crit chance with spells and attacks for 15 sec on a 3 min cooldown. It has no Classic spell, so the UI has to render this entry itself.",
+		"source": "forever",
+		"tooltip": "Instant\n3 min cooldown\nIncreases your critical strike chance with spells and attacks by 10% for 15 sec."
+	},
+	"1260198": {
+		"ability": "Touch of the Grave",
+		"file": "sim/core/racials.go",
+		"source": "forever",
+		"note": "Forever's Undead racial, from the client's spells: aura 1260189 (warrior, paladin, rogue, 5%) or 1260201 (everyone else, 10%) on a landed hit, 1 sec cooldown, drains 5% of the caster's maximum health as Shadow damage and heals the same.",
+		"tooltip": "Passive\nYour damaging attacks and spells have a chance to drain 5% of your maximum health from the target as Shadow damage, healing you for the same amount."
+	},
+	"14325": {
+		"ability": "Hunter's Mark",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 14325 (1.60.1.70009): 71 ranged attack power for every attacker where Era's is 110 (#422); 2 min, 60 mana. The raid option applies it with no Improved Hunter's Mark points.",
+		"source": "forever",
+		"tooltip": "60 Mana\nInstant\nPlaces the Hunter's Mark on the target, increasing the Ranged Attack Power of all attackers against that target by 71. Lasts 2 min."
+	},
+	"14893": {
+		"ability": "Inspiration",
+		"file": "sim/core/buffs.go",
+		"note": "Client 1.60.1.70009: the talent 14892's rank curve reads 8/17/25% armor (Era's 15363 is gone; the buff 14893 states rank 1's 8), 15 sec. The healing-model uptime (feral bear, protection paladin, protection warrior) applies three points.",
+		"source": "forever",
+		"tooltip": "Passive\nYour non-periodic critical heals increase your target's armor by 25% for 15 sec."
+	},
+	"15851": {
+		"ability": "Dragonbreath Chili (proc)",
+		"file": "sim/core/consumes.go",
+		"note": "Client 15851 (1.60.1.70009): 65 Fire damage (57 to 73) to every enemy, spell power coefficient 1, identical to Classic Era; 15852 is the aura that carries it.",
+		"source": "classic"
+	},
+	"15852": {
+		"ability": "Dragonbreath Chili",
+		"file": "sim/core/consumes.go",
+		"note": "The eater's aura, client 15852 (1.60.1.70009): a 5% chance on a landed melee hit, 10 sec internal cooldown, to breathe the 15851 fire. Identical to Classic Era.",
+		"source": "classic"
+	},
+	"17360": {
+		"ability": "Mana Tide Totem",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "The party buff is rank 3: client 17360 (1.60.1.70009) restores 290 mana every 3 sec while the totem stands, 13 sec from its cast 17359, on a 5 min cooldown, the same as Classic Era. A shaman with the talent adds a source to the party (#466).",
+		"source": "classic"
+	},
+	"17364": {
+		"ability": "Stormstrike",
+		"file": "sim/shaman/stormstrike.go",
+		"note": "The shaman's own Stormstrike; the Classic raid-wide copy in core is gone. Client 17364 (1.60.1.70009): 125 mana, an 8 sec cooldown and one charge of +20% on the shaman's own next Lightning Bolt, Chain Lightning or Earth Shock for 12 sec (aura 271), where Era's costs 21% of base mana, cools down 20 sec and raises Nature damage taken from anyone.",
+		"source": "forever",
+		"tooltip": "125 Mana\nMelee Range\nInstant\n8 sec cooldown\nInstantly strike for normal weapon damage and increase the damage you deal to the target with your next Lightning Bolt, Chain Lightning, or Earth Shock spell by 20% for 12 sec."
+	},
+	"17794": {
+		"ability": "Improved Shadow Bolt (Shadow Vulnerability)",
+		"file": "sim/warlock/talents_destruction.go",
+		"note": "Client 1.60.1.70009: Improved Shadow Bolt (17793) reads 4/8/12/16/20% and Shadow Vulnerability (17794) lasts 12 sec with no charges, applied from the caster (A_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER), so only the warlock whose Shadow Bolt crit raises its own Shadow damage. Classic's four-charge raid debuff (17800) is gone from the client and from core.",
+		"source": "forever",
+		"tooltip": "Passive\nYour Shadow Bolt critical strikes increase the Shadow damage you deal to that target by 4% per point, to 20% at five points, for 12 sec.\nThe window is a flat 12 sec and is not spent by your hits, and the bonus is yours alone rather than the raid's."
+	},
+	"20346": {
+		"ability": "Judgement of Light",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 20346 (1.60.1.70009): 40 sec where Era's is 10, and each proc heals the attacker for 61 (20343). The client states no proc chance, so the sim's 50% is a guess until tested in game.",
+		"source": "assumed",
+		"tooltip": "Each melee attack that lands on the judged target has a 50% chance to heal the attacker for 61. Lasts 40 sec.",
+		"assumptions": ["Each melee hit on a target under Judgement of Light has a 50% chance to heal the attacker (the client states no chance)."]
+	},
+	"20355": {
+		"ability": "Judgement of Wisdom",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 20355 (1.60.1.70009): 40 sec where Era's is 10, and each proc restores 59 mana (20353). The client states no proc chance, so the sim's 50% is a guess until tested in game.",
+		"source": "assumed",
+		"tooltip": "Each attack or spell that lands on the judged target has a 50% chance to restore 59 mana to the attacker. Lasts 40 sec.",
+		"assumptions": ["Each attack or spell on a target under Judgement of Wisdom has a 50% chance to return mana (the client states no chance)."]
+	},
+	"20554": {
+		"ability": "Berserking",
+		"file": "sim/core/racials.go",
+		"note": "Client 20554 (1.60.1.70009): a flat 10% attack and casting speed for 10 sec on a 3 min cooldown, at no cost, where Era's scales 10% to 30% with missing health. The sim multiplies both speeds by 1.1.",
+		"source": "forever",
+		"tooltip": "Instant\n3 min cooldown\nIncreases your attack and casting speed by 10% for 10 sec."
+	},
+	"20572": {
+		"ability": "Blood Fury",
+		"file": "sim/core/racials.go",
+		"note": "Client 20572 (1.60.1.70009): 10% attack power and 10% spell power for 15 sec on a 2 min cooldown, with no healing penalty; Era's is 25% base melee attack power and halves healing taken. The sim scales melee and ranged attack power, spell damage and healing.",
+		"source": "forever",
+		"tooltip": "Instant\n2 min cooldown\nIncreases your attack power and spell power by 10% for 15 sec."
+	},
+	"20594": {
+		"ability": "Stoneform",
+		"file": "sim/core/racials.go",
+		"note": "Client 20594 (1.60.1.70009): 10% less Physical damage taken for 8 sec on a 3 min cooldown, plus the Bleed, Poison and Disease cleanse and immunity; Era's gives +10% armor instead.",
+		"source": "forever",
+		"tooltip": "Instant\n3 min cooldown\nInstantly removes and grants immunity to all Bleed, Poison, and Disease effects, and reduces all Physical damage taken by 10% for 8 sec."
+	},
+	"20905": {
+		"ability": "Trueshot Aura",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Beta client 1.60.1.70009: ranks of 30, 40, 50, 75 and 50 ranged attack power at 25, 32, 40, 50 and 60 (1299346, 1299348, 19506, 20905, 20906); Era's rank 5 was 100. Lower ranks stay castable, so the party gets rank 4's 75 whatever rank 5 grants on the server.",
+		"source": "forever",
+		"tooltip": "Increases the Ranged Attack Power of party members within 45 yards by 75."
+	},
+	"22959": {
+		"ability": "Improved Scorch (Fire Vulnerability)",
+		"file": "sim/mage/scorch.go",
+		"note": "Client 1.60.1.70009: Improved Scorch (11095) procs at 33/67/100% and Fire Vulnerability (22959) is 3% a stack to 5 stacks for 30 sec, applied from the caster (A_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER), so only the mage who stacked it deals more Fire damage. Classic's raid-wide debuff is gone from the client and from core.",
+		"source": "forever",
+		"tooltip": "Passive\nYour Scorch has a 33% chance per point to increase the Fire damage you deal to the target by 3% for 30 sec. Stacks up to 5 times, for 15% at full stacks.\nThe bonus is yours alone; it no longer raises the Fire damage the rest of the raid deals."
+	},
+	"24977": {
+		"ability": "Insect Swarm",
+		"file": "sim/druid/insect_swarm.go",
+		"note": "The druid's own top rank; the raid option applies the same aura from sim/core/buffs/debuffs_auto_gen.go, hit reduction only. Client 24977 (1.60.1.70009): -2% chance to hit for 12 sec as in Era, but 31 Nature damage every 2 sec (0.158 spell power a tick) where Era's is 54.",
+		"source": "forever",
+		"tooltip": "160 Mana\nInstant\nThe enemy target is swarmed by insects, decreasing their chance to hit with attacks by 2% and causing 186 Nature damage over 12 sec."
+	},
+	"25289": {
+		"ability": "Battle Shout Rank 7",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"source": "forever",
+		"tooltip": "Increases the attack power of all party members within 20 yards by 139 for 3 min.",
+		"note": "Client 25289 (1.60.1.70009): 139 attack power where Era's is 232, for 3 min where Era's is 2. Improved Battle Shout is gone from the tree and did not become baseline; the raid option's improved state is three pieces of Battlegear of Wrath, +30 (23563). The warrior casts the same rank in sim/warrior/battle_shout.go."
+	},
+	"25359": {
+		"ability": "Grace of Air Totem Rank 3",
+		"file": "sim/shaman/totems.go",
+		"source": "forever",
+		"tooltip": "310 Mana\nInstant\nSummons a Grace of Air Totem for 5 min that increases the Agility of party members within 30 yards by 89.",
+		"note": "The shaman's own top-rank totem. Client 25359 (1.60.1.70009): 5 min where Era's is 2, and its aura 25360 gives 89 Agility where Era's gives 77 (#348)."
+	},
+	"25360": {
+		"ability": "Grace of Air",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "The raid buff reads the totem's party aura, client 25360 (1.60.1.70009): 89 Agility where Era's is 77 (#348). With totem twisting on, the raid option keeps it up 9 sec of every 10.",
+		"source": "forever",
+		"tooltip": "Increases the Agility of party members within 30 yards by 89."
+	},
+	"25361": {
+		"ability": "Strength of Earth Totem Rank 5",
+		"file": "sim/shaman/totems.go",
+		"source": "forever",
+		"tooltip": "275 Mana\nInstant\nSummons a Strength of Earth Totem for 5 min that increases the Strength of party members within 30 yards by 53.",
+		"note": "The shaman's own top-rank totem. Client 25361 (1.60.1.70009): 5 min where Era's is 2, and its aura 25362 gives 53 Strength where Era's gives 77 (#348); Forever has no Enhancing Totems, so that is the whole value."
+	},
+	"25362": {
+		"ability": "Strength of Earth",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "The raid buff reads the totem's party aura, client 25362 (1.60.1.70009): 53 Strength where Era's is 77 (#348), up all fight. The shaman's own totem is 25361.",
+		"source": "forever",
+		"tooltip": "Increases the Strength of party members within 30 yards by 53."
+	},
+	"25898": {
+		"ability": "Greater Blessing of Kings",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Client 25898 (1.60.1.70009): +10% to all stats as in Classic Era, but for an hour where Era's lasts 15 min; the raid option applies it permanently.",
+		"source": "forever",
+		"tooltip": "Increases total stats of all party and raid members of the chosen class by 10% for 1 hour."
+	},
+	"25916": {
+		"ability": "Greater Blessing of Might",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Client 25916 (1.60.1.70009): 133 attack power for an hour where Era's is 185 for 15 min; the raid option applies it permanently. Blessing of Might rank 7 (25291) carries the same 133.",
+		"source": "forever",
+		"tooltip": "Increases the attack power of all party and raid members of the chosen class by 133 for 1 hour."
+	},
+	"28142": {
+		"ability": "Atiesh, Greatstaff of the Guardian (mage)",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "+2% spell crit to the party per mage Atiesh; one of four ids that share the database name 'Power of the Guardian' (28143 spell damage, 28144 healing, 28145 MP5). Client 28142 (1.60.1.70009) is identical to Classic Era.",
+		"source": "classic"
+	},
+	"28143": {
+		"ability": "Atiesh, Greatstaff of the Guardian (warlock)",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "+33 spell damage and healing to the party per warlock Atiesh. Client 28143 (1.60.1.70009) is identical to Classic Era.",
+		"source": "classic"
+	},
+	"28144": {
+		"ability": "Atiesh, Greatstaff of the Guardian (priest)",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "+62 healing power to the party per priest Atiesh. Client 28144 (1.60.1.70009) is identical to Classic Era.",
+		"source": "classic"
+	},
+	"28145": {
+		"ability": "Atiesh, Greatstaff of the Guardian (druid)",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "+11 MP5 to the party per druid Atiesh. Client 28145 (1.60.1.70009) is identical to Classic Era.",
+		"source": "classic"
+	},
+	"29166": {
+		"ability": "Innervate",
+		"file": "sim/core/buffs/buffs_auto_gen.go",
+		"note": "Client 29166 (1.60.1.70009): full regen while casting and five times spirit regen for 20 sec on a 6 min cooldown, identical to Classic Era. The raid option spends it when the target falls to 1000 mana, 40% of maximum for a mage.",
+		"source": "classic"
+	},
+	"3043": {
+		"ability": "Scorpid Sting",
+		"file": "sim/core/buffs/debuffs_auto_gen.go",
+		"note": "Client 3043 (1.60.1.70009): -2% chance to hit for 20 sec for 9% of base mana, where Era's takes 20 Strength and Agility for 70 mana; the raid option applies the hit reduction.",
+		"source": "forever",
+		"tooltip": "9% of base mana\nInstant\nStings the target, reducing its chance to hit by 2% for 20 sec."
+	},
+	"34917": {
+		"ability": "Vampiric Touch (mana metrics filter)",
+		"file": "sim/core/mana.go",
+		"note": "Not a registration: doneIteration skips resource metrics tagged 34917 so Vampiric Touch mana threat can be charged to the priest instead. The id has no Classic database entry (Vampiric Touch is a Burning Crusade spell) and nothing in this sim ever creates a metric with it, so the guard is dead.",
+		"source": "classic"
+	},
+	"9898": {
+		"ability": "Demoralizing Roar",
+		"file": "sim/druid/demoralizing_roar.go",
+		"note": "The druid's own top rank; the raid option applies the same aura from sim/core/buffs/debuffs_auto_gen.go. Client 9898 (1.60.1.70009): 193 plus 1.4 a level where Era's is 130 plus 1, which the sim floors to 205 at 60 (Era 138); 30 sec as in Era, and no Improved Demoralizing Roar points.",
+		"source": "forever",
+		"tooltip": "10 Rage\nInstant\nThe druid roars, decreasing nearby enemies' melee attack power by 205. Lasts 30 sec."
+	},
+	"9910": {
+		"ability": "Thorns",
+		"file": "sim/druid/thorns.go",
+		"note": "Rank 6, the druid's own cast; the raid option registers the same shield in sim/core/buffs/buffs_auto_gen.go. Client 9910 (1.60.1.70009): 22 Nature damage per melee hit taken, up from Classic Era's 18; 1.60.1.70291 put it back to 18 (#758). Forever has no Improved Thorns or Brambles, so neither copy takes talent points, and the damage is dealt under 9910 itself.",
+		"source": "forever",
+		"tooltip": "320 Mana\nInstant\nThorns sprout from the friendly target causing 18 Nature damage to attackers when hit. Lasts 10 min."
+	}
+}

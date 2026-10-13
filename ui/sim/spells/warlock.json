@@ -1,0 +1,324 @@
+{
+	"1088": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "110 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 58 to 66 Shadow damage."
+	},
+	"1106": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "160 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 78 to 90 Shadow damage."
+	},
+	"11659": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "265 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 140 to 156 Shadow damage."
+	},
+	"11660": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "315 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 188 to 210 Shadow damage."
+	},
+	"11661": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "370 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 237 to 265 Shadow damage."
+	},
+	"11678": {
+		"ability": "Rain of Fire",
+		"file": "sim/warlock/rain_of_fire.go",
+		"note": "Beta client 1.60.1.70205: an area trigger casts a damage spell every 2 seconds on every enemy in the area, 1282385 at rank 4, which the sim registers for the ticks; the sim casts rank 4 only. 221 a tick (Era's 226) at .083 per tick. Beta log 2695 (rank 1): 4 ticks 2 s apart on up to 5 targets, ticks crit. The parent spell's dummy effect carries .03, which the sim does not read.",
+		"source": "forever",
+		"tooltip": "1185 Mana\nChanneled\nCalls down a fiery rain to burn enemies in the area of effect for 884 Fire damage over 8 sec."
+	},
+	"11689": {
+		"ability": "Life Tap",
+		"file": "sim/warlock/lifetap.go",
+		"note": "Forever makes Life Tap a plain mana gain that grows with Spirit: 424 plus Spirit, raised by Improved Life Tap, with no spell power or damage modifier on it (#432), and #441 made the health cost equal the mana it returns. Beta client 1.60.1.70009. Every rank is flagged No Threat (client 1.60.1.70205 Attributes[1] 0x400), so the mana it returns adds no threat.",
+		"source": "forever",
+		"tooltip": "Instant\nConverts health equal to 424 plus your Spirit into as much Mana."
+	},
+	"11700": {
+		"ability": "Drain Life",
+		"file": "sim/warlock/drain_life.go",
+		"note": "Forever lowered the damage from rank 2 up and gave rank 1 the full 0.1 coefficient; the sim registers rank 6 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 1 (689) ticks 18.6 with Curse of the Elements up (66 ticks), 10 + 0.1 x about 79 shadow spell power, the same power that fits this warlock's Bane of Agony and Corruption.",
+		"source": "forever",
+		"tooltip": "300 Mana\nChannelled, 5 sec\nTransfers 51 health every 1 sec from the target to the caster. Lasts 5 sec."
+	},
+	"11713": {
+		"ability": "Bane of Agony",
+		"file": "sim/warlock/agony.go",
+		"note": "Forever renames Curse of Agony to Bane of Agony, roughly halves the damage and raises the coefficient to 0.133 per tick; the sim registers rank 6 only. Values from the beta client 1.60.1.70009. Beta logs agree (foreverlogs report 2683, a level 20 warlock, rank 2 1014, 671 non-crit ticks): the tick steps up every 4 ticks by half the base, 16.0 / 21.2 / 26.4 with Curse of the Elements up, while the spell power part stays flat, which is how agony.go ramps it. A ramp on the whole tick would read 1:2:3.",
+		"source": "forever",
+		"tooltip": "215 Mana\nInstant\nBanes the target with agony, causing 552 Shadow damage over 24 sec. This damage is dealt slowly at first, and builds up as the Bane reaches its full duration. Only one Bane per Warlock can be active on any one target."
+	},
+	"11735": {
+		"ability": "Demon Armor",
+		"file": "sim/warlock/armors.go",
+		"note": "Matches Classic Era in the beta client 1.60.1.70009 (570 armor, 15 Shadow resistance, 15 health regeneration); Demonic Aegis raises the armor and Shadow resistance by 15% per point.",
+		"source": "classic"
+	},
+	"11763": {
+		"ability": "Firebolt",
+		"file": "sim/warlock/pets.go",
+		"note": "Forever halved the damage. The pet spells are not in the sim's spell store, so pets.go carries rank 7's client row by hand (44 + 0.6 a level from 58, capped at 63, +-11.4%: 42 to 48 at 60, was a hand-typed 43 to 48; 0.571 coefficient, 115 mana) and no lower rank is registered. Values from the beta client 1.60.1.70094. The Imp starts its next Firebolt about 0.43 sec after the last one lands (beta logs: 281 Firebolts a median 2.435 sec apart with a 2.0 sec cast, foreverlogs.gg 2687 and 2695); the sim casts every 2.4 sec.",
+		"source": "forever",
+		"tooltip": "115 Mana\n2 sec cast\nDeals 43 to 48 Fire damage to a target."
+	},
+	"11780": {
+		"ability": "Lash of Pain",
+		"file": "sim/warlock/pets.go",
+		"note": "Forever halved the damage. The pet spells are not in the sim's spell store, so pets.go carries rank 6 by hand (50, 0.429 coefficient, 160 mana, 12 sec cooldown) and no lower rank is registered. Values from the beta client 1.60.1.69893.",
+		"source": "forever",
+		"tooltip": "160 Mana\nInstant\n12 sec cooldown\nAn instant attack that lashes the target, causing 50 Shadow damage."
+	},
+	"1225228": {
+		"ability": "Bane of Havoc",
+		"assumptions": [
+			"The copied 15% is not modified again: no armor, resistance or damage-taken debuff on the baned target changes it",
+			"Only the warlock's own damage is copied, not the demon's"
+		],
+		"file": "sim/warlock/talents_destruction.go",
+		"note": "Destruction talent, new in Forever (beta client 1.60.1.70009): a 5 min bane, one target at a time, whose A_DUMMY 15 copies 15% of the warlock's damage to other targets onto the baned target. It shares the bane slot with Agony and Doom. The row has no global cooldown category, so the sim casts it off the GCD. Only matters with two or more targets; no default rotation casts it.",
+		"source": "assumed",
+		"tooltip": "5% of base mana\n30 yd range\nInstant\nAfflicts the target for 5 min, causing 15% of all damage done by the Warlock to other targets to also be dealt to the cursed target. Bane of Havoc is limited to 1 target, and only one Bane per Warlock can be active on any one target."
+	},
+	"1293696": {
+		"ability": "Demonic Brand",
+		"assumptions": ["The extra hit carries three times normal threat"],
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "The brand the pet carries (10 sec, beta client 1.60.1.70009), whose id the sim gives the branded hit. The talent is 1293695: 17/33/50% less Searing Pain threat and 2/4/6 branded attacks. #432 settled the hit from the client's SpellDescriptionVariables formula for 1293696/1293697 (1.60.1.69977, also resolved on Wowhead's Forever tooltip), ((level - 26) * 1.5) + 14 to + 17 plus 7.8% of spell power. The client (1.60.1.70009) splits the hit by pet: the Imp's is Fire (1293698, on fire spell power), the other demons' Shadow (1293697, on shadow spell power); 1293699 (Physical, 1 point) has no pet that uses it. The brand procs on the target taking melee or spell hits (ProcTypeMask 139944), so the Imp's Firebolt and the Succubus' Lash of Pain spend charges too (the Imp never spent one before, having no melee). Both hit rows (1293697/1293698, client 1.60.1.70205) carry Always Hit (Attributes[3] 0x40000) and no Cannot Crit, so the hit never misses and crits on the pet's spell crit; the sim rolled spell hit and never crit before.",
+		"source": "assumed",
+		"tooltip": "Your pet's next attacks against the branded target generate high threat and deal 65 to 68 plus 7.8% of Shadow spell power Fire or Shadow damage based on the pet."
+	},
+	"1293813": {
+		"ability": "Incinerate",
+		"file": "sim/warlock/incinerate.go",
+		"note": "Forever's Incinerate is a Destruction talent: 412758 (Season of Discovery's id) is rank 1 and 1293812/1293813 are ranks 2 and 3. The sim registers rank 3 only, 25% harder on a target with Immolate (the row's second effect). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "325 Mana\n2.5 sec cast\nDeals 201 to 233 Fire damage to your target and an additional 25% damage if the target is afflicted by Immolate."
+	},
+	"1311680": {
+		"ability": "Curse of the Elements",
+		"file": "sim/warlock/curse_of_elements.go",
+		"note": "Rank 4. Forever folds Curse of Shadow into Curse of the Elements, which now lowers every magic resistance by 75 and raises all magic damage taken by 10% (school mask 126). The debuff reads 1311680 from the client (sim/core/buffs/debuffs_auto_gen.go), and #411 made every warlock of a raid share one copy per target. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "200 Mana\nInstant\nCurses the target for 5 min, reducing Magic resistances by 75 and increasing Magic damage taken by 10%. Only one Curse per Warlock can be active on any one target."
+	},
+	"1316697": {
+		"ability": "Wrack",
+		"file": "sim/warlock/wrack.go",
+		"note": "Wrack is the Forever Affliction capstone (1316697, formerly Drain Hope), registered under its own id: 36 per tick with a 0.143 coefficient for 200 mana, and its second effect (mask 1026) makes Corruption and Bane of Agony tick 10% harder while it channels. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "200 Mana\nChannelled, 6 sec\nTears the target apart from within, dealing 36 Shadow damage every 1 sec and increasing the damage they take from your other Shadow damage over time effects by 10%. Lasts 6 sec."
+	},
+	"17923": {
+		"ability": "Searing Pain",
+		"file": "sim/warlock/searing_pain.go",
+		"note": "Forever roughly halved the damage and gave rank 1 the full 0.429 coefficient; the sim registers rank 6 only. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "168 Mana\n1.5 sec cast\nInflict searing pain on the enemy target, causing 107 to 125 Fire damage. Causes a high amount of threat."
+	},
+	"17924": {
+		"ability": "Soul Fire",
+		"file": "sim/warlock/soulfire.go",
+		"note": "Rank 2, the only one the sim registers; Bane and Decimation cut its cast time and cooldown. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "335 Mana\n6 sec cast\n1 min cooldown\nBurn the enemy's soul, causing 389 to 487 Fire damage."
+	},
+	"17926": {
+		"ability": "Death Coil",
+		"file": "sim/warlock/death_coil.go",
+		"note": "Rank 3, the only one the sim registers. The client files the damage as a health leech; the sim deals 460 with a 0.214 coefficient and heals the warlock for what lands. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "600 Mana\nInstant\n2 min cooldown\nCauses the enemy target to run in horror for 3 sec and causes 460 Shadow damage. The caster gains 100% of the damage caused in health."
+	},
+	"17941": {
+		"ability": "Shadow Trance (Nightfall)",
+		"file": "sim/warlock/talents_affliction.go",
+		"note": "Forever's Nightfall (18094) adds Drain Soul and Wrack to Classic's Corruption and Drain Life, 2% a point, and the buff drops the Season of Discovery Shadow Cleave half. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "10 sec\nYour next Shadow Bolt is instant cast. Nightfall gives your Corruption, Drain Soul, Drain Life, and Wrack spells a 2% chance per point to trigger it after damaging the opponent."
+	},
+	"18288": {
+		"ability": "Amplify Curse",
+		"file": "sim/warlock/talents_affliction.go",
+		"note": "The client row matches Classic Era 1.15.9 - 3 min cooldown, a 30 sec window, +50% to the next Bane of Agony - so only the name of the spell it amplifies moved with the curse/bane split. Beta client 1.60.1.70009.",
+		"source": "classic"
+	},
+	"18789": {
+		"ability": "Burning Shadow",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Classic's Burning Wish (+15% Fire, from the Imp) is Burning Shadow (+15% Shadow, from the Imp) in Forever. The sim keeps it for the fight when the demon is sacrificed before the pull, or with Demonic Pact while another demon is out (#465). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "2 hrs\nIncreases Shadow damage done by 15%."
+	},
+	"18791": {
+		"ability": "Touch of Fire",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Classic's Touch of Shadow (+15% Shadow, from the Succubus) is Touch of Fire (+15% Fire, from the Succubus) in Forever. The sim keeps it for the fight when the demon is sacrificed before the pull, or with Demonic Pact while another demon is out (#465). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "2 hrs\nIncreases Fire damage done by 15%."
+	},
+	"18792": {
+		"ability": "Fel Energy",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Granted by the Voidwalker in Forever, the Felhunter in Classic; 2% of maximum mana every 4 sec (#432). The sim keeps it for the fight when the demon is sacrificed before the pull, or with Demonic Pact while another demon is out (#465). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "2 hrs\nRestores 2% of total Mana every 4 sec."
+	},
+	"18871": {
+		"ability": "Shadowburn",
+		"file": "sim/warlock/shadowburn.go",
+		"note": "Rank 6, the only one the sim registers. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "365 Mana\nInstant\n15 sec cooldown\nInstantly blasts the target for 258 to 288 Shadow damage. If the target dies within 8 sec of being hit with Shadowburn, the caster gains a Soul Shard."
+	},
+	"18881": {
+		"ability": "Siphon Life",
+		"file": "sim/warlock/siphon_life.go",
+		"note": "A Forever Affliction talent; rank 4 is the only one the sim registers. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "365 Mana\nInstant\nTransfers 41 health from the target to the caster every 3 sec. Lasts 30 sec."
+	},
+	"18932": {
+		"ability": "Conflagrate",
+		"file": "sim/warlock/conflagrate.go",
+		"note": "Forever adds two ranks below Classic's four (1293817, 1293818), so 18932 is rank 6 of 6 and the only one the sim registers. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "255 Mana\nInstant\n10 sec cooldown\nIgnites a target that is already afflicted by your Immolate spell, dealing 251 to 313 Fire damage and consuming your Immolate effect."
+	},
+	"19028": {
+		"ability": "Soul Link",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "The client rows match Classic Era 1.15.9 - 20% of base mana, +3% damage dealt and 30% less damage taken (25228) on both warlock and demon while the link holds. Beta client 1.60.1.70009.",
+		"source": "classic"
+	},
+	"23785": {
+		"ability": "Master Demonologist",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Forever's talent is 23785, which the sim also gives the buff (tag 1 for the Imp, tag 3 for the Succubus), on both the warlock and the demon (#432). Only the Imp's Fire and the Succubus's Shadow halves are modelled. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "Passive\nGrants both the Warlock and the summoned demon an effect as long as that demon is active.\nImp - Increases Fire damage done by 2% per point.\nVoidwalker - Reduces Physical damage taken by 2% per point.\nSuccubus/Incubus - Increases Shadow damage done by 2% per point.\nFelhunter - Reduces Magic damage taken by 2% per point."
+	},
+	"25307": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "380 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 253 to 283 Shadow damage."
+	},
+	"25309": {
+		"ability": "Immolate",
+		"file": "sim/warlock/immolate.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty; the sim registers rank 8 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 3 (1094) at level 20 lands 41.7 on impact and 18.4 a tick with Curse of the Elements up (26 and 114 hits), 32 + 0.2 and 12 + 0.13 of about 42 fire spell power.",
+		"source": "forever",
+		"tooltip": "380 Mana\n2 sec cast\nBurns the enemy for 158 Fire damage and then an additional 275 Fire damage over 15 sec."
+	},
+	"25311": {
+		"ability": "Corruption",
+		"file": "sim/warlock/corruption.go",
+		"note": "Forever roughly halved the damage and raised the coefficient to 0.2 per tick at every rank; the sim registers rank 7 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 2 (6222) ticks 32.8 non-crit with Curse of the Elements up (188 ticks), 13 + 0.2 x about 78 shadow spell power with Improved Corruption's 10% (the log has no talent detail, only 10 Affliction points). The same warlock's Bane of Agony, Drain Life and Shadow Bolt give 73 to 79, so the low rank carries the full coefficient.",
+		"source": "forever",
+		"tooltip": "340 Mana\n2 sec cast\nCorrupts the target, causing 438 Shadow damage over 18 sec."
+	},
+	"412732": {
+		"ability": "Demonic Knowledge",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Forever's talent is 412732, which the sim also gives the buff, on both the warlock and the demon (#432). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "Passive\nIncreases your spell damage and your Demon pet's spell damage by up to 33/67/100% of your level while you have a summoned Demon pet active."
+	},
+	"426311": {
+		"ability": "Shadow and Flame",
+		"file": "sim/warlock/talents_destruction.go",
+		"foreverId": 426316,
+		"note": "Forever's talent is 426316; the sim registers its buffs 426311 (Fire, after Shadowburn) and 1293816 (Shadow, after Conflagrate), and the Immolate Conflagrate spares is in conflagrate.go. Soul Shard refunds are not modelled. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "Passive\nHitting an enemy with Conflagrate increases all Shadow damage you deal by 2% per point for 20 sec, and hitting an enemy with Shadowburn increases all Fire damage you deal by 2% per point for 20 sec. In addition, Conflagrate has a 20% chance per point not to consume Immolate, and Shadowburn has a 20% chance per point to instantly refund a Soul Shard."
+	},
+	"440873": {
+		"ability": "Decimation",
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "The talent is 440870 and its buff 440873, Season of Discovery ids that Forever reuses; Forever's talent has 2 ranks. Soul Fire's Soul Shard cost is not modelled. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "Passive\nReduces the cooldown of your Soul Fire spell by 45% per point. When you cast Shadow Bolt or Searing Pain on an enemy below 35% health, they deal 3% increased damage per point, and for the next 10 sec your Soul Fire spell has its cast time reduced by 20% per point and costs no Soul Shards."
+	},
+	"603": {
+		"ability": "Bane of Doom",
+		"file": "sim/warlock/doom.go",
+		"note": "Forever renames Curse of Doom to Bane of Doom, cuts its damage from 3200 to 1742 and gives it a 4.0 spell power coefficient (Classic's carried none). Amplify Curse does not reach it (18288's mask names Bane of Agony and Curse of Weakness only). Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "300 Mana\nInstant\n1 min cooldown\nBanes the target with impending doom, causing 1742 Shadow damage after 1 min. Only one Bane per Warlock can be active on any one target."
+	},
+	"686": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "25 Mana\n1.7 sec cast\nSends a shadowy bolt at the enemy, causing 12 to 16 Shadow damage."
+	},
+	"695": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "40 Mana\n2.2 sec cast\nSends a shadowy bolt at the enemy, causing 22 to 27 Shadow damage.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "22-28 +0.6/level",
+			"biggest": 38
+		}
+	},
+	"705": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "70 Mana\n2.8 sec cast\nSends a shadowy bolt at the enemy, causing 40 to 46 Shadow damage."
+	},
+	"7641": {
+		"ability": "Shadow Bolt",
+		"file": "sim/warlock/shadowbolt.go",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty. Every rank is registered since #447, so a low-rank rotation can cast it. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "210 Mana\n3 sec cast\nSends a shadowy bolt at the enemy, causing 101 to 113 Shadow damage."
+	},
+	"7799": {
+		"ability": "Firebolt",
+		"file": "sim/warlock/pets.go",
+		"note": "Rank 2, which the sim does not register (pets.go carries rank 7, 11763, only); kept for its beta measurement. Forever halved the damage. Values from the beta client 1.60.1.69893.",
+		"source": "forever",
+		"tooltip": "20 Mana\n2 sec cast\nDeals 7 to 9 Fire damage to a target.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "6-8 +0.2/level",
+			"biggest": 9
+		}
+	},
+	"980": {
+		"ability": "Bane of Agony",
+		"file": "sim/warlock/agony.go",
+		"note": "Rank 1, which the sim does not register (agony.go casts rank 6, 11713, only); kept for its beta measurement. Forever renames Curse of Agony to Bane of Agony, roughly halves the damage and raises the coefficient to 0.133 per tick. Values from the beta client 1.60.1.70009.",
+		"source": "forever",
+		"tooltip": "25 Mana\nInstant\nBanes the target with agony, causing 72 Shadow damage over 24 sec. This damage is dealt slowly at first, and builds up as the Bane reaches its full duration. Only one Bane per Warlock can be active on any one target.",
+		"measured": {
+			"date": "2026-09-19",
+			"how": "the client's own damage meter, levelling sessions on the beta",
+			"client": "6 a tick",
+			"biggest": 14
+		}
+	}
+}

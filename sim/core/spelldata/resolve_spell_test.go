@@ -1,0 +1,441 @@
+package spelldata
+
+import (
+	"testing"
+	"time"
+
+	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/dbcenums"
+)
+
+// The category two of the rows below share, as SpellCategories.Category states it.
+const testCategory int16 = 971
+
+// Rows in the shapes the resolvers have to answer for: the four power bars, the three cooldown
+// shapes, and the attributes and targets the flags come from.
+func resolverRows() []Spell {
+	return []Spell{
+		{
+			ID: 100, Name: "Rage Melee", Rank: "Rank 3", School: 1, DefenseType: 2,
+			Attr:       [17]uint32{dbcenums.ATTR_INDEX_EX_1: dbcenums.ATTR_EX_1_DISCOUNT_POWER_ON_MISS},
+			CooldownMs: 6000, GCDMs: 1500, StartRecoveryCategory: 133, MaxRange: 5,
+			ClassFlags: core.ClassFlags{Family: 4, Mask: [4]uint32{0: 0x20}},
+			Effects: []Effect{
+				{SpellID: 100, Type: dbcenums.E_WEAPON_PERCENT_DAMAGE, BasePoints: 100, Target: [2]dbcenums.ImplicitTarget{6, 0}},
+			},
+			Powers: []Power{{Type: 1, Cost: 300}},
+		},
+		{
+			ID: 200, Name: "Category Only", School: 1, DefenseType: 2,
+			CategoryCooldownMs: 6000, GCDMs: 1500, StartRecoveryCategory: 133, Category: testCategory,
+			Effects: []Effect{{SpellID: 200, Type: dbcenums.E_SCHOOL_DAMAGE, Target: [2]dbcenums.ImplicitTarget{6, 0}}},
+			Powers:  []Power{{Type: 1, Cost: 150}},
+		},
+		{
+			ID: 250, Name: "Physical Shout", School: 1, DefenseType: 1,
+			GCDMs: 1500, StartRecoveryCategory: 133,
+			Effects: []Effect{{SpellID: 250, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{20, 0}}},
+			Powers:  []Power{{Type: 1, Cost: 100}},
+		},
+		{
+			ID: 300, Name: "Own And Category", School: 1, DefenseType: 2,
+			CooldownMs: 30000, CategoryCooldownMs: 6000, GCDMs: 1500, StartRecoveryCategory: 133,
+			Category: testCategory,
+			Effects:  []Effect{{SpellID: 300, Type: dbcenums.E_SCHOOL_DAMAGE, Target: [2]dbcenums.ImplicitTarget{6, 0}}},
+		},
+		{
+			ID: 350, Name: "Categoryless Cooldown", School: 1, DefenseType: 2,
+			CategoryCooldownMs: 8000, GCDMs: 1500, StartRecoveryCategory: 133,
+			Effects: []Effect{{SpellID: 350, Type: dbcenums.E_SCHOOL_DAMAGE, Target: [2]dbcenums.ImplicitTarget{6, 0}}},
+		},
+		{
+			ID: 400, Name: "Mana Caster", Rank: "Rank 7", School: 16, DefenseType: 1, Speed: 24,
+			CastTimeMs: 2500, GCDMs: 1500, StartRecoveryCategory: 133, MinRange: 8, MaxRange: 30,
+			Effects: []Effect{
+				{SpellID: 400, Type: dbcenums.E_SCHOOL_DAMAGE, BasePoints: 500, SPCoef: 0.814,
+					Target: [2]dbcenums.ImplicitTarget{6, 0}},
+			},
+			Powers: []Power{{Type: 0, Cost: 425, CostPct: 19}},
+		},
+		{
+			ID: 500, Name: "Passive Aura", Rank: "Passive",
+			Attr:    [17]uint32{dbcenums.ATTR_INDEX_BASE: dbcenums.ATTR_PASSIVE},
+			Effects: []Effect{{SpellID: 500, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{1, 0}}},
+		},
+		{
+			ID: 600, Name: "Energy Channel", School: 8, DefenseType: 1,
+			Attr: [17]uint32{
+				dbcenums.ATTR_INDEX_EX_1: dbcenums.ATTR_EX_1_IS_CHANNELLED | dbcenums.ATTR_EX_1_DISCOUNT_POWER_ON_MISS,
+				dbcenums.ATTR_INDEX_EX_4: dbcenums.ATTR_EX_4_SUPPRESS_WEAPON_PROCS,
+			},
+			DurationMs: 6000, GCDMs: 1000, StartRecoveryCategory: 133,
+			Effects: []Effect{{SpellID: 600, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{6, 0}}},
+			Powers:  []Power{{Type: 3, Cost: 60}},
+		},
+		{
+			ID: 700, Name: "Raid Heal", School: 2, DefenseType: 1,
+			Effects: []Effect{{SpellID: 700, Type: dbcenums.E_HEAL, BasePoints: 900, SPCoef: 0.6,
+				Target: [2]dbcenums.ImplicitTarget{57, 0}}},
+			Powers: []Power{{Type: 2, Cost: 40}},
+		},
+		{
+			ID: 750, Name: "Percent Cost Form", School: 1,
+			Effects: []Effect{{SpellID: 750, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{1, 0}}},
+			Powers:  []Power{{Type: 0, CostPct: 4}},
+		},
+		{
+			ID: 800, Name: "Bleed", School: 1, DefenseType: 2, SpellLevel: 50, DurationMs: 21000,
+			Mechanic:              dbcenums.MECHANIC_BLEED,
+			GCDMs:                 1500,
+			StartRecoveryCategory: 133,
+			MaxStack:              5,
+			Effects: []Effect{
+				{SpellID: 800, Type: dbcenums.E_APPLY_AURA, Aura: dbcenums.A_PERIODIC_DAMAGE,
+					BasePoints: 70, PPL: 1, SpellLevel: 50, PeriodMs: 3000, SPCoef: 0.1, Target: [2]dbcenums.ImplicitTarget{6, 0}},
+			},
+			Powers: []Power{{Type: 1, Cost: 100}},
+		},
+		{
+			ID: 900, Name: "Permanent Charge Aura", DurationMs: -1, ProcCharges: 3,
+			Effects: []Effect{{SpellID: 900, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{1, 0}}},
+		},
+		{
+			ID: 1000, Name: "Tickless Aura", DurationMs: 10000,
+			Effects: []Effect{{SpellID: 1000, Type: dbcenums.E_APPLY_AURA, Target: [2]dbcenums.ImplicitTarget{1, 0}}},
+		},
+	}
+}
+
+// The timers are all a resolved config needs off the unit, and both are created on demand.
+func testUnit() *core.Unit {
+	return &core.Unit{}
+}
+
+func TestSpellConfigFromARow(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(400))
+
+	if config.ActionID != (core.ActionID{SpellID: 400}) {
+		t.Errorf("ActionID = %v, want spell 400", config.ActionID)
+	}
+	if config.Rank != 7 {
+		t.Errorf("Rank = %d, want 7", config.Rank)
+	}
+	if config.SpellSchool != core.SpellSchoolFrost {
+		t.Errorf("SpellSchool = %v, want frost", config.SpellSchool)
+	}
+	if config.DefenseType != core.DefenseTypeMagic {
+		t.Errorf("DefenseType = %v, want magic", config.DefenseType)
+	}
+	if config.MissileSpeed != 24 {
+		t.Errorf("MissileSpeed = %v, want 24", config.MissileSpeed)
+	}
+	if config.MinRange != 8 || config.MaxRange != 30 {
+		t.Errorf("range = %v-%v, want 8-30", config.MinRange, config.MaxRange)
+	}
+	if config.Cast.DefaultCast.CastTime != time.Millisecond*2500 {
+		t.Errorf("cast time = %v, want 2.5s", config.Cast.DefaultCast.CastTime)
+	}
+	if config.Cast.DefaultCast.GCD != time.Millisecond*1500 {
+		t.Errorf("GCD = %v, want 1.5s", config.Cast.DefaultCast.GCD)
+	}
+	if config.Cast.IgnoreHaste {
+		t.Error("a magic spell should not ignore haste")
+	}
+	if config.ManaCost.FlatCost != 425 || config.ManaCost.BaseCostPercent != 19 {
+		t.Errorf("mana cost = %d flat, %v%%, want 425 and 19", config.ManaCost.FlatCost,
+			config.ManaCost.BaseCostPercent)
+	}
+	if config.Flags != 0 {
+		t.Errorf("flags = %v, want none", config.Flags)
+	}
+}
+
+// A rank the client does not state answers 0, which is what the APL UI reads as "no ranks".
+func TestSpellConfigRank(t *testing.T) {
+	withRows(t, resolverRows())
+
+	if got := SpellConfig(testUnit(), Find(100)).Rank; got != 3 {
+		t.Errorf("Rank of a ranked spell = %d, want 3", got)
+	}
+	if got := SpellConfig(testUnit(), Find(500)).Rank; got != 0 {
+		t.Errorf("Rank of a spell whose subtext is a word = %d, want 0", got)
+	}
+	if got := SpellConfig(testUnit(), Find(600)).Rank; got != 0 {
+		t.Errorf("Rank of a spell with no subtext = %d, want 0", got)
+	}
+}
+
+func TestSpellConfigBleedMultipliers(t *testing.T) {
+	withRows(t, resolverRows())
+
+	config := SpellConfig(testUnit(), Find(800))
+	if config.DamageMultiplier != 1 || config.ThreatMultiplier != 1 {
+		t.Errorf("multipliers = %v damage, %v threat, want 1 and 1 off the client's bleed mechanic",
+			config.DamageMultiplier, config.ThreatMultiplier)
+	}
+	if config := SpellConfig(testUnit(), Find(100)); config.DamageMultiplier != 0 {
+		t.Errorf("damage multiplier = %v, want none on a spell without the mechanic", config.DamageMultiplier)
+	}
+}
+
+func TestSpellConfigRageCostAndRefund(t *testing.T) {
+	withRows(t, resolverRows())
+
+	rage := SpellConfig(testUnit(), Find(100)).RageCost
+	if rage.Cost != 30 {
+		t.Errorf("rage cost = %d, want 30 off the client's 0-1000 bar", rage.Cost)
+	}
+	if rage.Refund != 0.8 {
+		t.Errorf("rage refund = %v, want 0.8", rage.Refund)
+	}
+
+	if refund := SpellConfig(testUnit(), Find(200)).RageCost.Refund; refund != 0 {
+		t.Errorf("rage refund without the client's flag = %v, want 0", refund)
+	}
+}
+
+func TestSpellConfigEnergyAndFocusCosts(t *testing.T) {
+	withRows(t, resolverRows())
+
+	energy := SpellConfig(testUnit(), Find(600)).EnergyCost
+	if energy.Cost != 60 || energy.Refund != 0.8 {
+		t.Errorf("energy cost = %d, refund %v, want 60 and 0.8", energy.Cost, energy.Refund)
+	}
+
+	focus := SpellConfig(testUnit(), Find(700)).FocusCost
+	if focus.Cost != 40 || focus.Refund != 0 {
+		t.Errorf("focus cost = %d, refund %v, want 40 and 0", focus.Cost, focus.Refund)
+	}
+}
+
+// A spell the row states no cost for leaves every cost option empty.
+func TestSpellConfigWithoutAPowerRow(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(300))
+
+	if config.ManaCost.FlatCost != 0 || config.RageCost.Cost != 0 || config.EnergyCost.Cost != 0 ||
+		config.FocusCost.Cost != 0 {
+		t.Errorf("a row with no power row resolved to a cost: %+v", config)
+	}
+}
+
+func TestSpellConfigOwnCooldown(t *testing.T) {
+	withRows(t, resolverRows())
+	unit := testUnit()
+	config := SpellConfig(unit, Find(100))
+
+	if config.Cast.CD.Timer == nil {
+		t.Fatal("a spell with its own cooldown got no timer")
+	}
+	if config.Cast.CD.Timer == unit.CategoryTimer(int32(testCategory)) {
+		t.Error("a spell with its own cooldown should not run off a category timer")
+	}
+	if config.Cast.CD.Duration != time.Second*6 {
+		t.Errorf("cooldown = %v, want 6s", config.Cast.CD.Duration)
+	}
+	if config.Cast.SharedCD.Timer != nil {
+		t.Error("a spell with no category cooldown got a shared cooldown")
+	}
+}
+
+// Two spells in one category run off the unit's timer for that category.
+func TestSpellConfigCategoryCooldownSharesTheTimer(t *testing.T) {
+	withRows(t, resolverRows())
+	unit := testUnit()
+	config := SpellConfig(unit, Find(200))
+
+	if config.Cast.CD.Timer != unit.CategoryTimer(int32(testCategory)) {
+		t.Error("a category cooldown did not run off the unit's timer for that category")
+	}
+	if config.Cast.CD.Duration != time.Second*6 {
+		t.Errorf("category cooldown = %v, want 6s", config.Cast.CD.Duration)
+	}
+	if config.Cast.SharedCD.Timer != nil {
+		t.Error("a spell with only a category cooldown got a shared cooldown too")
+	}
+}
+
+// A category cooldown with no category to share is the spell's own recovery time.
+func TestSpellConfigCategoryCooldownWithoutACategory(t *testing.T) {
+	withRows(t, resolverRows())
+	unit := testUnit()
+	config := SpellConfig(unit, Find(350))
+
+	if config.Cast.CD.Timer == nil {
+		t.Fatal("a categoryless category cooldown got no timer")
+	}
+	if config.Cast.CD.Timer == unit.CategoryTimer(0) {
+		t.Error("a categoryless category cooldown landed on the timer for category 0")
+	}
+	if config.Cast.CD.Duration != time.Second*8 {
+		t.Errorf("cooldown = %v, want 8s", config.Cast.CD.Duration)
+	}
+}
+
+// A spell with both keeps its own cooldown and shares the category's.
+func TestSpellConfigBothCooldowns(t *testing.T) {
+	withRows(t, resolverRows())
+	unit := testUnit()
+	config := SpellConfig(unit, Find(300))
+
+	if config.Cast.CD.Timer == nil || config.Cast.CD.Timer == unit.CategoryTimer(int32(testCategory)) {
+		t.Error("the spell's own cooldown did not get a timer of its own")
+	}
+	if config.Cast.CD.Duration != time.Second*30 {
+		t.Errorf("cooldown = %v, want 30s", config.Cast.CD.Duration)
+	}
+	if config.Cast.SharedCD.Timer != unit.CategoryTimer(int32(testCategory)) {
+		t.Error("the shared cooldown did not run off the unit's timer for the category")
+	}
+	if config.Cast.SharedCD.Duration != time.Second*6 {
+		t.Errorf("shared cooldown = %v, want 6s", config.Cast.SharedCD.Duration)
+	}
+}
+
+// Only the client's global cooldown category spends the GCD.
+func TestSpellConfigGCDGate(t *testing.T) {
+	withRows(t, resolverRows())
+
+	if got := SpellConfig(testUnit(), Find(100)).Cast.DefaultCast.GCD; got != time.Millisecond*1500 {
+		t.Errorf("GCD of a row in category 133 = %v, want 1.5s", got)
+	}
+	if got := SpellConfig(testUnit(), Find(700)).Cast.DefaultCast.GCD; got != 0 {
+		t.Errorf("GCD of a row outside category 133 = %v, want none", got)
+	}
+}
+
+// A cast that spends a resource without a GCD or a cast time reads as a cast rather than as the empty
+// one core takes for a proc, whether the row states the cost flat or as a share of the bar.
+func TestSpellConfigMarksACostedOffGCDCastNonEmpty(t *testing.T) {
+	withRows(t, resolverRows())
+
+	if !SpellConfig(testUnit(), Find(700)).Cast.DefaultCast.NonEmpty {
+		t.Error("a focus cost with no GCD resolved to an empty cast")
+	}
+	if !SpellConfig(testUnit(), Find(750)).Cast.DefaultCast.NonEmpty {
+		t.Error("a cost stated only as a percentage of the bar resolved to an empty cast")
+	}
+	if SpellConfig(testUnit(), Find(500)).Cast.DefaultCast.NonEmpty {
+		t.Error("a passive with no cost should be left an empty cast")
+	}
+}
+
+// Haste shortens a cast and its GCD by school, not by the hit table the row files the spell under:
+// the client's shouts are physical spells with the magic defense type.
+func TestSpellConfigIgnoreHasteFollowsTheSchool(t *testing.T) {
+	withRows(t, resolverRows())
+
+	if !SpellConfig(testUnit(), Find(250)).Cast.IgnoreHaste {
+		t.Error("a physical spell with the magic defense type did not ignore haste")
+	}
+	if !SpellConfig(testUnit(), Find(100)).Cast.IgnoreHaste {
+		t.Error("a physical ability did not ignore haste")
+	}
+	if SpellConfig(testUnit(), Find(400)).Cast.IgnoreHaste {
+		t.Error("a frost spell ignored haste")
+	}
+}
+
+func TestSpellConfigFlagsFromTheRow(t *testing.T) {
+	withRows(t, resolverRows())
+
+	passive := SpellConfig(testUnit(), Find(500)).Flags
+	if !passive.Matches(core.SpellFlagPassiveSpell) {
+		t.Error("a passive row did not resolve to SpellFlagPassiveSpell")
+	}
+	if !passive.Matches(core.SpellFlagHelpful) {
+		t.Error("an effect targeting the caster did not resolve to SpellFlagHelpful")
+	}
+
+	channel := SpellConfig(testUnit(), Find(600)).Flags
+	if !channel.Matches(core.SpellFlagChanneled) {
+		t.Error("a channeled row did not resolve to SpellFlagChanneled")
+	}
+	if !channel.Matches(core.SpellFlagSuppressWeaponProcs) {
+		t.Error("a row with Suppress Weapon Procs did not resolve to the flag")
+	}
+	if channel.Matches(core.SpellFlagHelpful) {
+		t.Error("an effect targeting an enemy resolved to SpellFlagHelpful")
+	}
+
+	if !SpellConfig(testUnit(), Find(700)).Flags.Matches(core.SpellFlagHelpful) {
+		t.Error("an effect targeting a raid member did not resolve to SpellFlagHelpful")
+	}
+}
+
+func TestSpellConfigMeleeOption(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(100), Melee(core.ProcMaskMeleeMHSpecial))
+
+	if config.ProcMask != core.ProcMaskMeleeMHSpecial {
+		t.Errorf("proc mask = %v, want the melee main-hand special mask", config.ProcMask)
+	}
+	if !config.Flags.Matches(core.SpellFlagMeleeMetrics) || !config.Flags.Matches(core.SpellFlagAPL) {
+		t.Errorf("flags = %v, want the melee metrics and APL flags", config.Flags)
+	}
+	if config.DamageMultiplier != 1 || config.ThreatMultiplier != 1 {
+		t.Errorf("multipliers = %v and %v, want 1 and 1", config.DamageMultiplier, config.ThreatMultiplier)
+	}
+	if !config.Cast.IgnoreHaste {
+		t.Error("a melee ability should ignore haste")
+	}
+	if config.BonusCoefficient != 0 {
+		t.Errorf("bonus coefficient = %v, want none on a melee ability", config.BonusCoefficient)
+	}
+}
+
+func TestSpellConfigMagicOption(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(400), Magic(core.ProcMaskSpellDamage))
+
+	if config.ProcMask != core.ProcMaskSpellDamage {
+		t.Errorf("proc mask = %v, want the spell damage mask", config.ProcMask)
+	}
+	if !config.Flags.Matches(core.SpellFlagAPL) || config.Flags.Matches(core.SpellFlagMeleeMetrics) {
+		t.Errorf("flags = %v, want the APL flag and no melee metrics", config.Flags)
+	}
+	if config.BonusCoefficient != 0.814 {
+		t.Errorf("bonus coefficient = %v, want the damage effect's 0.814", config.BonusCoefficient)
+	}
+
+	// A spell with nothing but a heal takes its coefficient off the heal.
+	if got := SpellConfig(testUnit(), Find(700), Magic(core.ProcMaskSpellHealing)).BonusCoefficient; got != 0.6 {
+		t.Errorf("bonus coefficient of a heal = %v, want 0.6", got)
+	}
+}
+
+func TestSpellConfigProcFlagsAndTag(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(100), Proc(), Flags(core.SpellFlagIgnoreResists), Tag(2))
+
+	if !config.Flags.Matches(core.SpellFlagPassiveSpell) ||
+		!config.Flags.Matches(core.SpellFlagNoOnCastComplete) {
+		t.Errorf("flags = %v, want the passive and no-on-cast-complete flags", config.Flags)
+	}
+	if config.Flags.Matches(core.SpellFlagNoMetrics) {
+		t.Error("a proc sub-spell keeps its metrics")
+	}
+	if !config.Flags.Matches(core.SpellFlagIgnoreResists) {
+		t.Error("the caller's own flag was not kept")
+	}
+	if config.ActionID.Tag != 2 {
+		t.Errorf("tag = %d, want 2", config.ActionID.Tag)
+	}
+	if config.RageCost.Cost != 0 || config.Cast.DefaultCast.GCD != 0 || config.Cast.CD.Timer != nil {
+		t.Errorf("a proc sub-spell has no cost, GCD or cooldown of its own, got %d rage, %v GCD, timer %v",
+			config.RageCost.Cost, config.Cast.DefaultCast.GCD, config.Cast.CD.Timer)
+	}
+}
+
+// Melee and Magic put a spell in the rotation, and Proc takes the sub-spell they resolve back out of
+// it: the flags the warrior's own proc sub-spells carry today.
+func TestSpellConfigProcLeavesTheRotation(t *testing.T) {
+	withRows(t, resolverRows())
+	config := SpellConfig(testUnit(), Find(100), Melee(core.ProcMaskMeleeMHSpecial), Proc())
+
+	want := core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete
+	if config.Flags != want {
+		t.Errorf("flags = %v, want %v", config.Flags, want)
+	}
+}

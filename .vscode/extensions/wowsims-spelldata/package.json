@@ -1,0 +1,38 @@
+{
+	"name": "wowsims-spelldata",
+	"displayName": "WoWSims Spelldata",
+	"version": "0.2.0",
+	"publisher": "wowsims",
+	"engines": {
+		"vscode": "^1.91.0"
+	},
+	"main": "./out/extension.js",
+	"activationEvents": [
+		"onLanguage:go",
+		"onLanguage:json",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
+	"contributes": {
+		"configuration": {
+			"title": "WoWSims Spelldata",
+			"properties": {
+				"wowsims-spelldata.goBinary": {
+					"type": "string",
+					"default": "go",
+					"description": "The go binary that starts the hover server. `go` searches the PATH, then GOROOT and the usual install directories; set a full path if none of them has it."
+				},
+				"wowsims-spelldata.trace": {
+					"type": "string",
+					"enum": [
+						"on",
+						"off"
+					],
+					"default": "on",
+					"description": "Log how each hover was resolved to the WoWSims Spelldata output channel."
+				}
+			}
+		}
+	},
+	"x-generated": "make vscode-spelldata"
+}

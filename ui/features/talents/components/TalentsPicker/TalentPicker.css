@@ -1,0 +1,187 @@
+@layer components {
+	:root {
+		--talent-icon-size: 2.5rem;
+		--talent-cell-size: 3.5rem;
+	}
+
+	.ui-talents-picker-trees {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+
+		@variant max-lg {
+			display: flex;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			overscroll-behavior-x: contain;
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+	}
+
+	.ui-talents-picker-tree {
+		@variant max-xxxl {
+			flex: 1;
+		}
+
+		@variant max-lg {
+			flex: 0 0 100%;
+			scroll-snap-align: center;
+		}
+	}
+
+	.ui-talent-picker-root {
+		position: relative;
+		display: block;
+		width: var(--talent-icon-size);
+		height: var(--talent-icon-size);
+		margin: calc(var(--talent-icon-size) / 5);
+		border: 1px solid var(--color-talent-partial);
+		border-radius: 4px;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		cursor: pointer;
+
+		&[data-points='0']:not([data-can-add='true']) {
+			filter: grayscale(100%);
+		}
+
+		&[data-full='true'] {
+			border-color: var(--color-talent-full);
+		}
+	}
+
+	.ui-talent-picker-points {
+		position: absolute;
+		right: -8px;
+		bottom: -8px;
+		margin: 0;
+		padding: 0 2px;
+		border-radius: 2px;
+		background-color: var(--color-black);
+		color: var(--color-talent-partial);
+		font-size: 11px;
+
+		.ui-talent-picker-root[data-full='true'] & {
+			color: var(--color-talent-full);
+		}
+
+		.ui-talent-picker-root[data-points='0'][data-all-spent='true'] & {
+			display: none;
+		}
+	}
+
+	/* Five directional sprites, sized off the row/col span the arrow covers. The two diagonals draw
+	   their vertical leg with a nested element, because one background cannot carry both segments. */
+	.ui-talent-req-arrow {
+		position: relative;
+		background-repeat: no-repeat;
+		pointer-events: none;
+	}
+
+	.ui-talent-req-arrow[data-req-dir='down'] {
+		top: 3rem;
+		height: 1.3rem;
+		background-image: url('/forever/assets/talent_calc/down.png');
+		background-position: bottom center;
+
+		&[data-req-arrow-row-size='2'] {
+			height: 4.8rem;
+		}
+
+		&[data-req-arrow-row-size='3'] {
+			height: 8.3rem;
+		}
+
+		&[data-req-arrow-row-size='4'] {
+			height: 11.8rem;
+		}
+
+		&[data-req-active='true'] {
+			background-image: url('/forever/assets/talent_calc/down2.png');
+		}
+	}
+
+	.ui-talent-req-arrow[data-req-dir='rightdown'] {
+		top: 1.4rem;
+		left: 3rem;
+		width: 2.7rem;
+		background-image: url('/forever/assets/talent_calc/rightdown.png');
+		background-position: right top;
+
+		& > div:first-child {
+			position: relative;
+			top: 0.9rem;
+			height: 2rem;
+			background-image: url('/forever/assets/talent_calc/down.png');
+			background-repeat: no-repeat;
+			background-position: bottom right;
+		}
+
+		&[data-req-arrow-row-size='2'] > div:first-child {
+			height: 5.5rem;
+		}
+
+		&[data-req-active='true'] {
+			background-image: url('/forever/assets/talent_calc/rightdown2.png');
+
+			& > div:first-child {
+				background-image: url('/forever/assets/talent_calc/down2.png');
+			}
+		}
+	}
+
+	.ui-talent-req-arrow[data-req-dir='leftdown'] {
+		top: 1.4rem;
+		left: 1.3rem;
+		width: 3rem;
+		background-image: url('/forever/assets/talent_calc/leftdown.png');
+		background-position: left top;
+
+		& > div:first-child {
+			position: relative;
+			top: 0.9rem;
+			height: 2rem;
+			background-image: url('/forever/assets/talent_calc/down.png');
+			background-repeat: no-repeat;
+			background-position: bottom left;
+		}
+
+		&[data-req-arrow-row-size='2'] > div:first-child {
+			height: 5.5rem;
+		}
+
+		&[data-req-active='true'] {
+			background-image: url('/forever/assets/talent_calc/leftdown2.png');
+
+			& > div:first-child {
+				background-image: url('/forever/assets/talent_calc/down2.png');
+			}
+		}
+	}
+
+	.ui-talent-req-arrow[data-req-dir='left'] {
+		right: 0.9rem;
+		width: 2rem;
+		background-image: url('/forever/assets/talent_calc/left.png');
+		background-position: left center;
+
+		&[data-req-active='true'] {
+			background-image: url('/forever/assets/talent_calc/left2.png');
+		}
+	}
+
+	.ui-talent-req-arrow[data-req-dir='right'] {
+		left: 3rem;
+		width: 1.3rem;
+		background-image: url('/forever/assets/talent_calc/right.png');
+		background-position: right center;
+
+		&[data-req-active='true'] {
+			background-image: url('/forever/assets/talent_calc/right2.png');
+		}
+	}
+}

@@ -1,0 +1,62 @@
+# nodejs modules
+node_modules
+
+ui/**/*_auto_gen.ts
+# Generated from the client database, which CI does not have, so it is committed.
+!ui/features/settings/model/buffs_debuffs_auto_gen.ts
+.dirstamp
+
+# IDE folders
+.idea
+.history
+
+# binaries
+dist
+binary_dist
+sim/web/__debug_bin
+/wowsimcli*
+/wowsimforever*
+
+# temporary files
+*.results.tmp
+package.json.tmp
+.stylelintcache
+
+#.dockerignore
+/forever/
+*.code-workspace
+wowsimforever
+
+# old result file
+TestAPL.results
+
+# macos
+.DS_Store
+
+# air tmp dir
+tmp/
+
+# lib
+wowsimforever*.so
+wowsimforever*.dll
+wowsimforever*.h
+wowsims.db
+assets/db_inputs/dbc/
+forever.sln
+
+# agents
+graphify-out
+.claude
+CLAUDE.md
+tools/db2tool/listfile.csv
+tools/db2tool/TACTKeys.txt
+tools/db2tool/DBDCache
+tools/db2tool/dbfilesclient/
+tools/db2tool/caches/
+tools/db2tool/cdncache/
+
+# Client-extracted databases and caches. Output of `make db` from a local WoW
+# install, tens of MB each, and rebuildable - the same reason wowsims.db is here.
+tools/database/*.db
+
+__pycache__/

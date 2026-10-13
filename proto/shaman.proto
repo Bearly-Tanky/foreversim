@@ -1,0 +1,177 @@
+syntax = "proto3";
+package proto;
+
+option go_package = "./proto";
+// DO NOT REMOVE THE COMMENTS
+// BEGIN GENERATED
+// ShamanTalents message.
+message ShamanTalents {
+    // Elemental
+    int32 convection = 1;
+    int32 concussion = 2;
+    int32 elemental_warding = 3;
+    int32 reverberation = 4;
+    int32 call_of_flame = 5;
+    int32 elemental_devastation = 6;
+    bool elemental_focus = 7;
+    int32 elemental_alacrity = 8;
+    int32 improved_fire_nova = 9;
+    int32 eye_of_the_storm = 10;
+    bool call_of_thunder = 11;
+    int32 elemental_reach = 12;
+    int32 lightning_overload = 13;
+    bool earthbound = 14;
+    int32 elemental_fury = 15;
+    bool lava_burst = 16;
+    // Enhancement
+    int32 earths_grasp = 17;
+    int32 thundering_strikes = 18;
+    int32 ancestral_knowledge = 19;
+    int32 guardian_totems = 20;
+    int32 mental_dexterity = 21;
+    int32 improved_ghost_wolf = 22;
+    int32 improved_lightning_shield = 23;
+    int32 elemental_weapons = 24;
+    bool shamanistic_focus = 25;
+    int32 anticipation = 26;
+    int32 toughness = 27;
+    int32 flurry = 28;
+    bool stormstrike = 29;
+    bool spirit_weapons = 30;
+    int32 mental_quickness = 31;
+    int32 improved_stormstrike = 32;
+    int32 maelstrom_weapon = 33;
+    bool rage_of_the_farseer = 34;
+    // Restoration
+    int32 improved_healing_wave = 35;
+    int32 totemic_focus = 36;
+    int32 mindfulness = 37;
+    int32 natural_grace = 38;
+    int32 tidal_focus = 39;
+    int32 improved_reincarnation = 40;
+    int32 ancestral_healing = 41;
+    int32 healing_focus = 42;
+    bool water_shield = 43;
+    int32 tidal_mastery = 44;
+    int32 restorative_totems = 45;
+    bool mana_tide_totem = 46;
+    int32 healing_way = 47;
+    bool natures_swiftness = 48;
+    int32 purification = 49;
+    bool riptide = 50;
+}
+
+// END GENERATED
+
+enum EarthTotem {
+	NoEarthTotem = 0;
+	EarthElementalTotem = 1;
+	TremorTotem = 2;
+	EarthbindTotem = 3;
+    StrengthOfEarthTotem = 4;
+}
+
+enum AirTotem {
+	NoAirTotem = 0;
+    GraceOfAirTotem = 1;
+	GroundingTotem = 2;
+    NatureResistanceTotem = 3;  
+    WindfuryTotem = 4;
+    WrathOfAirTotem = 5;
+}
+
+enum FireTotem {
+	NoFireTotem = 0;
+	MagmaTotem = 1;
+	SearingTotem = 2;
+    FlametongueTotem = 3;
+    FireNovaTotem = 4;
+	FireElementalTotem = 5;
+    FrostResistanceTotem = 6;
+}
+
+enum WaterTotem {
+	NoWaterTotem = 0;
+	ManaSpringTotem = 1;
+	HealingStreamTotem = 2;
+	FireResistanceTotem = 3;
+}
+
+message ShamanTotems {
+    enum TotemType {
+	    TypeUnknownTotem = 0;
+	    Earth = 1;
+	    Air = 2;
+	    Fire = 3;
+	    Water = 4;
+    }
+
+	EarthTotem earth = 1;
+	AirTotem air = 2;
+	FireTotem fire = 3;
+	WaterTotem water = 4;
+}
+
+enum ShamanImbue {
+    NoImbue = 0;
+    WindfuryWeapon = 1;
+    FlametongueWeapon = 2;
+    FrostbrandWeapon = 3;
+    RockbiterWeapon = 4;
+}
+
+enum ShamanSyncType {
+  NoSync = 0;
+  SyncMainhandOffhandSwings = 1;
+  DelayOffhandSwings = 2;
+    Auto = 3;
+}
+
+message ShamanOptions {
+	ShamanImbue imbue_mh = 1;
+    ShamanImbue imbue_mh_swap = 2;
+    double shield_procrate = 3;
+}
+
+message ElementalShaman {
+	message Rotation {
+	}
+
+	message Options {
+		ShamanOptions class_options = 1;
+	}
+	Options options = 2;
+}
+
+message EnhancementShaman {
+	message Rotation {
+	}
+
+	message Options {
+		ShamanOptions class_options = 1;
+		ShamanSyncType sync_type = 2;
+		ShamanImbue imbue_oh = 3;
+        ShamanImbue imbue_oh_swap = 4;
+	}
+
+	Options options = 3;
+}
+
+enum ShamanHealSpell {
+	AutoHeal = 0;
+	HealingWave = 1;
+	HealingSurge = 2;
+	ChainHeal = 3;
+}
+
+message RestorationShaman {
+	message Rotation {
+	}
+
+	message Options {
+		ShamanOptions class_options = 1;
+		int32 earth_shield_p_p_m = 2;
+	}
+
+	Options options = 3;
+}

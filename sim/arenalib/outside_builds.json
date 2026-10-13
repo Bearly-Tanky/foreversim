@@ -1,0 +1,126 @@
+{
+	"warrior": [
+		{
+			"name": "MythicSim Fury 15/36/0",
+			"talents": "30305013-25353005150010501",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Arms 34/17/0",
+			"talents": "30305213032515001-25053000002",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"hunter": [
+		{
+			"name": "MythicSim BM 31/20/0",
+			"talents": "5320001505101251-00503520014",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim MM 5/39/7",
+			"talents": "5-3050552011523151-5002",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"retribution_paladin": [
+		{
+			"name": "MythicSim Ret 10/8/33",
+			"talents": "52003-503-05225231001330321",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"enhancement_shaman": [
+		{
+			"name": "MythicSim Enh 17/34/0",
+			"talents": "2505131-055030031005112251",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"shadow_priest": [
+		{
+			"name": "MythicSim Shadow 18/0/33",
+			"talents": "025300011303--500222501201302251",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"rogue": [
+		{
+			"name": "MythicSim Assassination 32/19/0",
+			"talents": "00530310551021051-302303202004",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Combat 18/33/0",
+			"talents": "005322105-32103321001515231",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Subtlety 20/0/31",
+			"talents": "005323115--0321203310213211501",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"warlock": [
+		{
+			"name": "MythicSim Demo 2/31/18",
+			"talents": "02-0025003231221001351-0550005003",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Destro 9/11/31",
+			"talents": "2502-0050203001-1550305103101051",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Affliction 35/0/16",
+			"talents": "2535002013521105--05000551",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"mage": [
+		{
+			"name": "MythicSim Frost 10/3/38",
+			"talents": "050005-03-0555000331001331251",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Arcane 35/11/5",
+			"talents": "055205003100311531-230500001-005",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		},
+		{
+			"name": "MythicSim Fire 12/34/5",
+			"talents": "230205-03552020130133051-005",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"feral_druid": [
+		{
+			"name": "MythicSim Feral 9/35/7",
+			"talents": "050022-55000032121032212051-052",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"balance_druid": [
+		{
+			"name": "MythicSim Balance 41/0/10",
+			"talents": "5532220115501351--505",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"elemental_shaman": [
+		{
+			"name": "MythicSim Ele 31/7/13",
+			"talents": "5500301320123051-050002-50305",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	],
+	"tank_warrior": [
+		{
+			"name": "MythicSim Prot 0/20/31",
+			"talents": "-0505203005-250033120310021251",
+			"source": "https://mythicsim.com/wow-forever/tier-list"
+		}
+	]
+}

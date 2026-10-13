@@ -1,0 +1,11 @@
+@layer components {
+	.ui-gear-change-icon-gem-socket {
+		--changed-socket-marker-size: calc(var(--gem-width) * 0.7);
+
+		@apply flex items-center justify-center bg-contain bg-no-repeat tracking-normal data-interactive:cursor-pointer data-interactive:select-none;
+	}
+
+	.ui-gear-change-icon-gem-marker {
+		@apply ml-px text-(length:--changed-socket-marker-size) text-danger;
+	}
+}

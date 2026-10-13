@@ -1,0 +1,898 @@
+import { StatCapConfig, StatCapType, StatWeightsResult, UIStat as UnitStatProto } from '@generated/proto/api';
+import { Class, PseudoStat, Stat, UnitStats } from '@generated/proto/common';
+import { translatePseudoStat, translateStat } from '@i18n/localization';
+
+import * as Mechanics from '../constants/mechanics';
+import { CURRENT_API_VERSION } from '../constants/other';
+import { getEnumValues } from '../utils/collections';
+
+const STATS_LEN = getEnumValues(Stat).length;
+const PSEUDOSTATS_LEN = getEnumValues(PseudoStat).length;
+
+export class UnitStat {
+	private readonly stat: Stat | null;
+	private readonly pseudoStat: PseudoStat | null;
+
+	// Used to link a "child" PseudoStat like PhysicalHitPercent to a
+	// "parent" Stat like HitRating, so that both values can be displayed
+	// together in the character sheet.
+	private readonly rootStat: Stat | null;
+
+	private constructor(stat: Stat | null, pseudoStat: PseudoStat | null, rootStat: Stat | null) {
+		this.stat = stat;
+		this.pseudoStat = pseudoStat;
+		this.rootStat = rootStat;
+	}
+
+	isStat(): boolean {
+		return this.stat != null;
+	}
+	isPseudoStat(): boolean {
+		return this.pseudoStat != null;
+	}
+	hasRootStat(): boolean {
+		return this.rootStat != null;
+	}
+
+	getStat(): Stat {
+		if (!this.isStat()) {
+			throw new Error('Not a stat!');
+		}
+		return this.stat!;
+	}
+	getPseudoStat(): PseudoStat {
+		if (!this.isPseudoStat()) {
+			throw new Error('Not a pseudo stat!');
+		}
+		return this.pseudoStat!;
+	}
+	getRootStat(): Stat {
+		if (!this.hasRootStat()) {
+			throw new Error('No root stat for this PseudoStat');
+		}
+		return this.rootStat!;
+	}
+
+	equals(other: UnitStat): boolean {
+		return this.stat == other.stat && this.pseudoStat == other.pseudoStat;
+	}
+
+	equalsStat(other: Stat): boolean {
+		return this.isStat() && this.stat == other;
+	}
+
+	equalsPseudoStat(other: PseudoStat): boolean {
+		return this.isPseudoStat() && this.pseudoStat == other;
+	}
+
+	linkedToStat(other: Stat): boolean {
+		return this.stat == other || this.rootStat == other;
+	}
+
+	getFullName(playerClass: Class): string {
+		const fullName = this.isStat() ? translateStat(this.getStat()) : translatePseudoStat(this.getPseudoStat());
+		// Not sure if this is needed anymore, but keeping it for now
+		if (playerClass == Class.ClassHunter) {
+			return fullName.replace('Physical', 'Ranged');
+		} else {
+			return fullName.replace('Physical', 'Melee');
+		}
+	}
+
+	getShortName(playerClass: Class): string {
+		const fullName = this.getFullName(playerClass);
+		return fullName.replace(' Rating', '').replace(' Percent', '');
+	}
+
+	getKey(): string {
+		return this.isStat() ? Stat[this.stat!] : PseudoStat[this.getPseudoStat()];
+	}
+
+	// Convert a UnitStat value from its Rating representation to a percentage representation
+	// (0-100). If a percentage representation does not make sense for the stat in question
+	// (Strength for example), then null is returned.
+	convertRatingToPercent(ratingValue: number): number | null {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
+			return ratingValue / Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
+			return ratingValue / Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
+			return ratingValue / Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
+			return ratingValue / Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatExpertiseRating)) {
+			return ratingValue / Mechanics.EXPERTISE_RATING_PER_EXPERTISE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatDefenseRating)) {
+			return ratingValue / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL;
+		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
+			return ratingValue / Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatParryRating)) {
+			return ratingValue / Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
+		} else if (this.linkedToStat(Stat.StatBlockRating)) {
+			return ratingValue / Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
+			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (
+			this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow)
+		) {
+			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else {
+			return null;
+		}
+	}
+
+	// Convert a UnitStat value from its percentage representation (0-100) to the equivalent amount of
+	// Rating. If a Rating representation does not make sense for the stat in question (Block in Cata
+	// for example), then null is returned.
+	// For PseudoStatReducedCritTakenPercent, parentStat specifies the source (DefenseRating).
+	convertPercentToRating(percentOrPointsValue: number, parentStat?: Stat): number | null {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatExpertiseRating)) {
+			return percentOrPointsValue * Mechanics.EXPERTISE_RATING_PER_EXPERTISE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatDefenseRating)) {
+			return percentOrPointsValue * Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL;
+		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
+			return percentOrPointsValue * Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatParryRating)) {
+			return percentOrPointsValue * Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
+		} else if (this.linkedToStat(Stat.StatBlockRating)) {
+			return percentOrPointsValue * Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (
+			this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow)
+		) {
+			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent)) {
+			if (parentStat === Stat.StatDefenseRating) {
+				return percentOrPointsValue * (Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL / Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE);
+			}
+			return null;
+		} else {
+			return null;
+		}
+	}
+
+	convertDefaultUnitsToRating(value: number): number | null {
+		if (this.isStat()) {
+			// Proper Stats are either already in Rating units, or
+			// do not have a Rating representation.
+			if (Stat[this.stat!].includes('Rating')) {
+				return value;
+			} else {
+				return null;
+			}
+		} else {
+			// PseudoStats are either in percent units, or do not
+			// have a Rating representation.
+			return this.convertPercentToRating(value);
+		}
+	}
+
+	convertDefaultUnitsToPercent(value: number): number | null {
+		if (this.isStat()) {
+			// Proper stats are either in Rating units, or do not
+			// have a percent representation.
+			return this.convertRatingToPercent(value);
+		} else {
+			// PseudoStats are either already in percent units, or do
+			// not have a percent representation.
+			if (PseudoStat[this.getPseudoStat()].includes('Percent')) {
+				return value;
+			} else {
+				return null;
+			}
+		}
+	}
+
+	convertRatingToDefaultUnits(ratingValue: number): number | null {
+		if (this.isStat()) {
+			return Stat[this.stat!].includes('Rating') ? ratingValue : null;
+		} else {
+			return this.convertRatingToPercent(ratingValue);
+		}
+	}
+
+	convertPercentToDefaultUnits(percentValue: number): number | null {
+		if (this.isStat()) {
+			return this.convertPercentToRating(percentValue);
+		} else {
+			return PseudoStat[this.getPseudoStat()].includes('Percent') ? percentValue : null;
+		}
+	}
+
+	convertEpToRatingScale(epValue: number): number {
+		if (this.isPseudoStat() && PseudoStat[this.pseudoStat!].includes('Percent')) {
+			return this.convertRatingToPercent(epValue) ?? epValue;
+		} else {
+			return epValue;
+		}
+	}
+
+	getProtoValue(proto: UnitStats): number {
+		if (this.isStat()) {
+			return proto.stats[this.stat!];
+		} else {
+			return proto.pseudoStats[this.pseudoStat!];
+		}
+	}
+
+	setProtoValue(proto: UnitStats, val: number) {
+		if (this.isStat()) {
+			proto.stats[this.stat!] = val;
+		} else {
+			proto.pseudoStats[this.pseudoStat!] = val;
+		}
+	}
+
+	toJson(): object {
+		return UnitStatProto.toJson(this.toProto()) as object;
+	}
+
+	static fromJson(obj: any): UnitStat {
+		return UnitStat.fromProto(UnitStatProto.fromJson(obj));
+	}
+
+	toProto(): UnitStatProto {
+		const protoMessage = UnitStatProto.create({
+			apiVersion: CURRENT_API_VERSION,
+		});
+
+		if (this.isStat()) {
+			protoMessage.unitStat = {
+				oneofKind: 'stat',
+				stat: this.stat!,
+			};
+		} else if (this.isPseudoStat()) {
+			protoMessage.unitStat = {
+				oneofKind: 'pseudoStat',
+				pseudoStat: this.pseudoStat!,
+			};
+		} else {
+			throw new Error('Neither a Stat nor a PseudoStat!');
+		}
+
+		return protoMessage;
+	}
+
+	static fromProto(protoMessage: UnitStatProto): UnitStat {
+		if (protoMessage.unitStat.oneofKind == 'stat') {
+			return UnitStat.fromStat(protoMessage.unitStat.stat);
+		} else if (protoMessage.unitStat.oneofKind == 'pseudoStat') {
+			return UnitStat.fromPseudoStat(protoMessage.unitStat.pseudoStat);
+		} else {
+			return new UnitStat(null, null, null);
+		}
+	}
+
+	static fromStat(stat: Stat): UnitStat {
+		return new UnitStat(stat, null, stat);
+	}
+	static fromPseudoStat(pseudoStat: PseudoStat): UnitStat {
+		return new UnitStat(null, pseudoStat, UnitStat.getRootStat(pseudoStat));
+	}
+
+	static getAllStats(): Array<UnitStat> {
+		const allStats = getEnumValues(Stat) as Array<Stat>;
+		return allStats.map(stat => UnitStat.fromStat(stat));
+	}
+	static getAllPseudoStats(): Array<UnitStat> {
+		const allPseudoStats = getEnumValues(PseudoStat) as Array<PseudoStat>;
+		return allPseudoStats.map(pseudoStat => UnitStat.fromPseudoStat(pseudoStat));
+	}
+	static getAll(): Array<UnitStat> {
+		return [UnitStat.getAllStats(), UnitStat.getAllPseudoStats()].flat();
+	}
+
+	// Returns the "parent" Stat (such as HitRating) associated with a
+	// "child" PseudoStat (such as PhysicalHitPercent), or null if there is
+	// no such root Stat.
+	static getRootStat(pseudoStat: PseudoStat): Stat | null {
+		const pseudoStatName = PseudoStat[pseudoStat];
+
+		if (pseudoStatName.includes('Expertise')) {
+			return Stat.StatExpertiseRating;
+		} else if (pseudoStatName.includes('Dodge')) {
+			return Stat.StatDodgeRating;
+		} else if (pseudoStatName.includes('Parry')) {
+			return Stat.StatParryRating;
+		} else if (pseudoStatName.includes('BlockValue')) {
+			return Stat.StatBlockValue;
+		} else if (pseudoStatName.includes('Block')) {
+			return Stat.StatBlockRating;
+		} else if (pseudoStatName.includes('SpellHaste')) {
+			return Stat.StatSpellHasteRating;
+		} else if (pseudoStatName.includes('SpellHit')) {
+			return Stat.StatSpellHitRating;
+		} else if (pseudoStatName.includes('SchoolHit')) {
+			return null;
+		} else if (pseudoStatName.includes('SpellCrit')) {
+			return Stat.StatSpellCritRating;
+		} else if (pseudoStatName.includes('Haste')) {
+			return Stat.StatMeleeHasteRating;
+		} else if (pseudoStatName.includes('Hit')) {
+			return Stat.StatMeleeHitRating;
+		} else if (pseudoStatName.includes('ReducedCritTaken')) {
+			return null;
+		} else if (pseudoStatName.includes('Crit')) {
+			return Stat.StatMeleeCritRating;
+		} else {
+			return null;
+		}
+	}
+
+	// Inverse of the above
+	static getChildren(parentStat: Stat): PseudoStat[] {
+		switch (parentStat) {
+			case Stat.StatMeleeHitRating:
+				return [PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent];
+			case Stat.StatMeleeCritRating:
+				return [PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent];
+			case Stat.StatMeleeHasteRating:
+				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent];
+			case Stat.StatSpellHitRating:
+				return [
+					PseudoStat.PseudoStatSpellHitPercent,
+					PseudoStat.PseudoStatSchoolHitPercentArcane,
+					PseudoStat.PseudoStatSchoolHitPercentFire,
+					PseudoStat.PseudoStatSchoolHitPercentFrost,
+					PseudoStat.PseudoStatSchoolHitPercentHoly,
+					PseudoStat.PseudoStatSchoolHitPercentNature,
+					PseudoStat.PseudoStatSchoolHitPercentShadow,
+				];
+			case Stat.StatSpellCritRating:
+				return [PseudoStat.PseudoStatSpellCritPercent];
+			case Stat.StatSpellHasteRating:
+				return [PseudoStat.PseudoStatSpellHastePercent];
+			case Stat.StatDefenseRating:
+				return [PseudoStat.PseudoStatReducedCritTakenPercent];
+			case Stat.StatExpertiseRating:
+				return [PseudoStat.PseudoStatExpertisePercent];
+			default:
+				return [];
+		}
+	}
+
+	static createDisplayStatArray(statList: Stat[], pseudoStatList: PseudoStat[]): UnitStat[] {
+		return displayStatOrder.filter(
+			displayStat =>
+				(displayStat.isStat() && statList.includes(displayStat.stat!)) ||
+				(displayStat.isPseudoStat() && pseudoStatList.includes(displayStat.pseudoStat!)),
+		);
+	}
+}
+
+const RATING_WEIGHTED_PERCENT_PSEUDO_STATS = new Set(
+	(getEnumValues(PseudoStat) as PseudoStat[]).filter(pseudoStat => {
+		const unitStat = UnitStat.fromPseudoStat(pseudoStat);
+		return unitStat.hasRootStat() && unitStat.getRootStat() !== Stat.StatBlockValue;
+	}),
+);
+
+// A ranged percent is the total the character sheet shows, melee share included. Valued at a rating's
+// weight, the share is counted once: by the melee pseudo stat, unless the ranged total has a weight of
+// its own and counts it there.
+const RANGED_TOTAL_MELEE_SHARE = new Map(
+	[Stat.StatMeleeHitRating, Stat.StatMeleeCritRating].map(rating => {
+		const [melee, ranged] = UnitStat.getChildren(rating);
+		return [ranged, melee] as const;
+	}),
+);
+const MELEE_SHARE_RANGED_TOTAL = new Map([...RANGED_TOTAL_MELEE_SHARE].map(([ranged, melee]) => [melee, ranged]));
+
+export const displayStatOrder: Array<UnitStat> = [
+	UnitStat.fromStat(Stat.StatHealth),
+	UnitStat.fromStat(Stat.StatMana),
+	UnitStat.fromStat(Stat.StatArmor),
+	UnitStat.fromStat(Stat.StatBonusArmor),
+	UnitStat.fromStat(Stat.StatStamina),
+	UnitStat.fromStat(Stat.StatStrength),
+	UnitStat.fromStat(Stat.StatAgility),
+	UnitStat.fromStat(Stat.StatIntellect),
+	UnitStat.fromStat(Stat.StatSpirit),
+	UnitStat.fromStat(Stat.StatHealingPower),
+	UnitStat.fromStat(Stat.StatSpellDamage),
+	UnitStat.fromStat(Stat.StatArcaneDamage),
+	UnitStat.fromStat(Stat.StatFireDamage),
+	UnitStat.fromStat(Stat.StatFrostDamage),
+	UnitStat.fromStat(Stat.StatHolyDamage),
+	UnitStat.fromStat(Stat.StatNatureDamage),
+	UnitStat.fromStat(Stat.StatShadowDamage),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
+	UnitStat.fromStat(Stat.StatMP5),
+	UnitStat.fromStat(Stat.StatAttackPower),
+	UnitStat.fromStat(Stat.StatRangedAttackPower),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatExpertisePercent),
+	UnitStat.fromStat(Stat.StatArmorPenetration),
+	UnitStat.fromStat(Stat.StatSpellPiercing),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
+	UnitStat.fromStat(Stat.StatDefenseRating),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
+	UnitStat.fromStat(Stat.StatBlockValue),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
+	UnitStat.fromStat(Stat.StatArcaneResistance),
+	UnitStat.fromStat(Stat.StatFireResistance),
+	UnitStat.fromStat(Stat.StatFrostResistance),
+	UnitStat.fromStat(Stat.StatNatureResistance),
+	UnitStat.fromStat(Stat.StatShadowResistance),
+];
+
+/**
+ * Represents values for all character stats (stam, agi, spell power, hit raiting, etc).
+ *
+ * This is an immutable type.
+ */
+export class Stats {
+	private readonly stats: Array<number>;
+	private readonly pseudoStats: Array<number>;
+
+	constructor(stats?: Array<number>, pseudoStats?: Array<number>) {
+		this.stats = Stats.initStatsArray(STATS_LEN, stats);
+		this.pseudoStats = Stats.initStatsArray(PSEUDOSTATS_LEN, pseudoStats);
+	}
+
+	private static initStatsArray(expectedLen: number, newStats?: Array<number>): Array<number> {
+		let stats = newStats?.slice(0, expectedLen) || [];
+
+		if (stats.length < expectedLen) {
+			stats = stats.concat(new Array(expectedLen - (newStats?.length || 0)).fill(0));
+		}
+
+		for (let i = 0; i < expectedLen; i++) {
+			if (stats[i] == null) stats[i] = 0;
+		}
+		return stats;
+	}
+
+	equals(other: Stats): boolean {
+		return (
+			this.stats.every((newStat, statIdx) => newStat == other.getStat(statIdx)) &&
+			this.pseudoStats.every((newStat, statIdx) => newStat == other.getPseudoStat(statIdx))
+		);
+	}
+
+	getStat(stat: Stat): number {
+		return this.stats[stat];
+	}
+	getPseudoStat(stat: PseudoStat): number {
+		return this.pseudoStats[stat];
+	}
+	getUnitStat(stat: UnitStat): number {
+		if (stat.isStat()) {
+			return this.stats[stat.getStat()];
+		} else {
+			return this.pseudoStats[stat.getPseudoStat()];
+		}
+	}
+
+	withStat(stat: Stat, value: number): Stats {
+		const newStats = this.stats.slice();
+		newStats[stat] = value;
+		return new Stats(newStats, this.pseudoStats);
+	}
+	withPseudoStat(stat: PseudoStat, value: number): Stats {
+		const newStats = this.pseudoStats.slice();
+		newStats[stat] = value;
+		return new Stats(this.stats, newStats);
+	}
+	withUnitStat(stat: UnitStat, value: number): Stats {
+		if (stat.isStat()) {
+			return this.withStat(stat.getStat(), value);
+		} else {
+			return this.withPseudoStat(stat.getPseudoStat(), value);
+		}
+	}
+
+	addStat(stat: Stat, value: number): Stats {
+		return this.withStat(stat, this.getStat(stat) + value);
+	}
+	addPseudoStat(pseudoStat: PseudoStat, value: number): Stats {
+		return this.withPseudoStat(pseudoStat, this.getPseudoStat(pseudoStat) + value);
+	}
+
+	add(other: Stats): Stats {
+		return new Stats(
+			this.stats.map((value, stat) => value + other.stats[stat]),
+			this.pseudoStats.map((value, stat) => value + other.pseudoStats[stat]),
+		);
+	}
+
+	subtract(other: Stats): Stats {
+		return new Stats(
+			this.stats.map((value, stat) => value - other.stats[stat]),
+			this.pseudoStats.map((value, stat) => value - other.pseudoStats[stat]),
+		);
+	}
+
+	scale(scalar: number): Stats {
+		return new Stats(
+			this.stats.map((value, _stat) => value * scalar),
+			this.pseudoStats.map((value, _stat) => value * scalar),
+		);
+	}
+
+	// A percent pseudo stat with a weight of its own is worth that weight, and one the weights leave at
+	// 0 is worth its linked rating's weight.
+	computeEP(epWeights: Stats): number {
+		let total = 0;
+		this.stats.forEach((stat, idx) => {
+			total += stat * epWeights.stats[idx];
+		});
+		this.pseudoStats.forEach((value, idx) => {
+			if (value === 0) {
+				return;
+			}
+			const weight = epWeights.pseudoStats[idx];
+			if (weight !== 0 || !RATING_WEIGHTED_PERCENT_PSEUDO_STATS.has(idx)) {
+				total += value * weight;
+				return;
+			}
+
+			const meleeShare = RANGED_TOTAL_MELEE_SHARE.get(idx);
+			if (meleeShare !== undefined) {
+				value = Math.max(0, value - this.pseudoStats[meleeShare]);
+			}
+			// Melee and ranged haste are separate speeds, but one haste rating raises both.
+			if (idx === PseudoStat.PseudoStatRangedHastePercent) {
+				value = Math.max(0, value - this.pseudoStats[PseudoStat.PseudoStatMeleeHastePercent]);
+			}
+			const rangedTotal = MELEE_SHARE_RANGED_TOTAL.get(idx);
+			if (value === 0 || (rangedTotal !== undefined && epWeights.pseudoStats[rangedTotal] !== 0)) {
+				return;
+			}
+			const unitStat = UnitStat.fromPseudoStat(idx);
+			total += unitStat.convertPercentToRating(value)! * epWeights.stats[unitStat.getRootStat()];
+		});
+		return total;
+	}
+
+	computeGapToCap(unitStat: UnitStat, cap: number): number {
+		let statDelta = cap - this.getUnitStat(unitStat);
+
+		if (unitStat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHastePercent)) {
+			statDelta /= this.getPseudoStat(PseudoStat.PseudoStatMeleeSpeedMultiplier);
+		} else if (unitStat.equalsPseudoStat(PseudoStat.PseudoStatRangedHastePercent)) {
+			statDelta /= this.getPseudoStat(PseudoStat.PseudoStatRangedSpeedMultiplier);
+		} else if (unitStat.equalsPseudoStat(PseudoStat.PseudoStatSpellHastePercent)) {
+			statDelta /= this.getPseudoStat(PseudoStat.PseudoStatCastSpeedMultiplier);
+		}
+
+		return statDelta == 0 ? 1e-12 : statDelta;
+	}
+
+	computeStatCapsDelta(statCaps: Stats): Stats {
+		return new Stats(
+			statCaps.stats.map((value, key) => {
+				return value > 0 ? this.computeGapToCap(UnitStat.fromStat(key), value) : 0;
+			}),
+			statCaps.pseudoStats.map((value, key) => {
+				return value > 0 ? this.computeGapToCap(UnitStat.fromPseudoStat(key), value) : 0;
+			}),
+		);
+	}
+
+	getBuffedStats(): Map<Stat, number> {
+		const buffedStats = new Map<Stat, number>();
+
+		for (const [statIdx, statValue] of this.stats.entries()) {
+			if (statValue > 0) {
+				buffedStats.set(statIdx, statValue);
+			}
+		}
+
+		return buffedStats;
+	}
+
+	asProtoArray(): Array<number> {
+		return this.stats.slice();
+	}
+
+	asUnitStatArray(): [UnitStat, number][] {
+		const statValues = this.stats.map((value, key) => [UnitStat.fromStat(key), value] as [UnitStat, number]);
+		const pseudoStatValues = this.pseudoStats.map((value, key) => [UnitStat.fromPseudoStat(key), value] as [UnitStat, number]);
+		return statValues.concat(pseudoStatValues);
+	}
+
+	toJson(): object {
+		return UnitStats.toJson(this.toProto()) as object;
+	}
+
+	toProto(): UnitStats {
+		return UnitStats.create({
+			stats: this.stats.slice(),
+			pseudoStats: this.pseudoStats.slice(),
+			apiVersion: CURRENT_API_VERSION,
+		});
+	}
+
+	static fromJson(obj: any): Stats {
+		return Stats.fromProto(UnitStats.fromJson(obj));
+	}
+
+	static fromMap(statsMap: Partial<Record<Stat, number>>, pseudoStatsMap?: Partial<Record<PseudoStat, number>>): Stats {
+		const statsArr = new Array(STATS_LEN).fill(0);
+		Object.entries(statsMap).forEach(entry => {
+			const [statStr, value] = entry;
+			statsArr[Number(statStr)] = value;
+		});
+
+		const pseudoStatsArr = new Array(PSEUDOSTATS_LEN).fill(0);
+		if (pseudoStatsMap) {
+			Object.entries(pseudoStatsMap).forEach(entry => {
+				const [pseudoStatstr, value] = entry;
+				pseudoStatsArr[Number(pseudoStatstr)] = value;
+			});
+		}
+
+		return new Stats(statsArr, pseudoStatsArr);
+	}
+
+	static fromProto(unitStats?: UnitStats): Stats {
+		if (unitStats) {
+			return new Stats(unitStats.stats, unitStats.pseudoStats);
+		} else {
+			return new Stats();
+		}
+	}
+}
+
+// Folds a stat weights result down to a single EP number, weighted by the
+// player's EP ratios (dps, hps, tps, dtps, tmi, pDeath — in that order).
+export const scaledEpValue = (stat: UnitStat, epRatios: number[], result: StatWeightsResult | null): number => {
+	if (!result) return 0;
+
+	return (
+		(result.dps?.epValues ? epRatios[0] * stat.getProtoValue(result.dps.epValues) : 0) +
+		(result.hps?.epValues ? epRatios[1] * stat.getProtoValue(result.hps.epValues) : 0) +
+		(result.tps?.epValues ? epRatios[2] * stat.getProtoValue(result.tps.epValues) : 0) +
+		(result.dtps?.epValues ? epRatios[3] * stat.getProtoValue(result.dtps.epValues) : 0) +
+		(result.tmi?.epValues ? epRatios[4] * stat.getProtoValue(result.tmi.epValues) : 0) +
+		(result.pDeath?.epValues ? epRatios[5] * stat.getProtoValue(result.pDeath.epValues) : 0)
+	);
+};
+
+// Used for spec specific stat presets to be used
+// as a easy to access reference
+export interface UnitStatPresets {
+	unitStat: UnitStat;
+	// Name of the preset and the value in percentage
+	presets: Map<string, number>;
+}
+
+export interface BreakpointConfig {
+	breakpoints: number[];
+	capType: StatCapType;
+	postCapEPs: number[];
+}
+
+// Represents a StatCapConfig proto message as a proper class for UI convenience
+export class StatCap {
+	readonly unitStat: UnitStat;
+	readonly capType: StatCapType;
+	breakpoints: number[] = [];
+	postCapEPs: number[] = [];
+
+	constructor(unitStat: UnitStat, breakpoints: number[], capType: StatCapType, postCapEPs: number[]) {
+		// Check for valid inputs
+		if (capType == StatCapType.TypeSoftCap && breakpoints.length != postCapEPs.length) {
+			throw new Error('Breakpoint and EP counts do not match!');
+		}
+		if (capType != StatCapType.TypeSoftCap && capType != StatCapType.TypeThreshold) {
+			throw new Error('Only SoftCap and Threshold cap types are supported currently!');
+		}
+
+		this.unitStat = unitStat;
+		this.capType = capType;
+		this.breakpoints = breakpoints;
+		this.postCapEPs = postCapEPs;
+	}
+
+	static fromStat(stat: Stat, config: BreakpointConfig): StatCap {
+		return new StatCap(UnitStat.fromStat(stat), config.breakpoints, config.capType, config.postCapEPs);
+	}
+
+	static fromPseudoStat(pseudoStat: PseudoStat, config: BreakpointConfig): StatCap {
+		return new StatCap(UnitStat.fromPseudoStat(pseudoStat), config.breakpoints, config.capType, config.postCapEPs);
+	}
+
+	static fromProto(message: StatCapConfig[]): StatCap[] {
+		const statCapObjects: StatCap[] = [];
+
+		message
+			.filter(config => config.unitStat)
+			.forEach(config => {
+				statCapObjects.push(new StatCap(UnitStat.fromProto(config.unitStat!), config.breakpoints, config.capType, config.postCapEPs));
+			});
+
+		return statCapObjects;
+	}
+
+	static cloneSoftCaps(softCaps: StatCap[]): StatCap[] {
+		const clonedSoftCaps: StatCap[] = [];
+
+		softCaps.forEach(config => {
+			clonedSoftCaps.push(new StatCap(config.unitStat, config.breakpoints.slice(), config.capType, config.postCapEPs.slice()));
+		});
+
+		return clonedSoftCaps;
+	}
+}
+
+// Helper utility to determine whether a particular PseudoStat has been configured as either a hard cap or
+// soft cap.
+export function pseudoStatHasCap(pseudoStat: PseudoStat, hardCaps: Stats, softCaps: StatCap[]): boolean {
+	if (hardCaps.getPseudoStat(pseudoStat) != 0) {
+		return true;
+	}
+
+	for (const config of softCaps) {
+		if (config.unitStat.equalsPseudoStat(pseudoStat)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+export const DEFAULT_GEM_STATS = [Stat.StatStamina];
+export const DEFAULT_MELEE_GEM_STATS = [
+	...DEFAULT_GEM_STATS,
+	Stat.StatStrength,
+	Stat.StatAgility,
+	Stat.StatMeleeHitRating,
+	Stat.StatMeleeCritRating,
+	Stat.StatMeleeHasteRating,
+];
+export const DEFAULT_CASTER_GEM_STATS = [
+	...DEFAULT_GEM_STATS,
+	Stat.StatIntellect,
+	Stat.StatSpellDamage,
+	Stat.StatSpellHitRating,
+	Stat.StatSpellCritRating,
+	Stat.StatSpellHasteRating,
+];
+export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];
+export const DEFAULT_HEALER_GEM_STATS = [
+	...DEFAULT_GEM_STATS,
+	Stat.StatIntellect,
+	Stat.StatSpirit,
+	Stat.StatHealingPower,
+	Stat.StatSpellCritRating,
+	Stat.StatSpellHasteRating,
+	Stat.StatMP5,
+];
+
+// ---------------------------------------------------------------------------
+// Stat attribution (moved out of components/character_stats.tsx so the math is
+// UI-free and reusable).
+
+export type StatMods = {
+	base?: Stats;
+	gear?: Stats;
+	talents?: Stats;
+	buffs?: Stats;
+	consumes?: Stats;
+	debuffs?: Stats;
+	final?: Stats;
+	stats?: Array<Stat>;
+};
+export type StatWrites = {
+	base: Stats;
+	gear: Stats;
+	talents: Stats;
+	buffs: Stats;
+	consumes: Stats;
+	debuffs: Stats;
+	final: Stats;
+	stats: Array<Stat>;
+};
+
+export interface StatAttribution {
+	base: Stats;
+	gear: Stats;
+	talents: Stats;
+	buffs: Stats;
+	consumes: Stats;
+	debuffs: Stats;
+	final: Stats;
+}
+
+// Derives the per-source stat deltas shown in the character sheet from the
+// cumulative server-computed stages (base ⊂ gear ⊂ talents ⊂ buffs ⊂ consumes).
+// Debuffs are not one of those stages — the caller computes them from the raid's
+// debuff settings and passes them in.
+export function computeStatAttribution(
+	playerStats: {
+		baseStats?: UnitStats;
+		gearStats?: UnitStats;
+		talentsStats?: UnitStats;
+		buffsStats?: UnitStats;
+		consumesStats?: UnitStats;
+		finalStats?: UnitStats;
+	},
+	bonusStats: Stats,
+	debuffStats: Stats,
+	statMods: StatMods,
+	statOverwrites?: StatWrites,
+): StatAttribution {
+	const baseStats = Stats.fromProto(playerStats.baseStats);
+	const gearStats = Stats.fromProto(playerStats.gearStats);
+	const talentsStats = Stats.fromProto(playerStats.talentsStats);
+	const buffsStats = Stats.fromProto(playerStats.buffsStats);
+	const consumesStats = Stats.fromProto(playerStats.consumesStats);
+
+	let finalStats = Stats.fromProto(playerStats.finalStats)
+		.add(statMods.base || new Stats())
+		.add(statMods.gear || new Stats())
+		.add(statMods.talents || new Stats())
+		.add(statMods.buffs || new Stats())
+		.add(statMods.consumes || new Stats())
+		.add(statMods.debuffs || new Stats())
+		.add(statMods.final || new Stats())
+		.add(debuffStats);
+
+	let baseDelta = baseStats.add(statMods.base || new Stats());
+	let gearDelta = gearStats
+		.subtract(baseStats)
+		.subtract(bonusStats)
+		.add(statMods.gear || new Stats());
+	let talentsDelta = talentsStats.subtract(gearStats).add(statMods.talents || new Stats());
+	let buffsDelta = buffsStats.subtract(talentsStats).add(statMods.buffs || new Stats());
+	let consumesDelta = consumesStats.subtract(buffsStats).add(statMods.consumes || new Stats());
+	let debuffsDelta = debuffStats.add(statMods.debuffs || new Stats());
+
+	if (statOverwrites?.stats) {
+		statOverwrites.stats.forEach(stat => {
+			baseDelta = baseDelta.withStat(stat, statOverwrites.base.getStat(stat));
+			gearDelta = gearDelta.withStat(stat, statOverwrites.gear.getStat(stat));
+			talentsDelta = talentsDelta.withStat(stat, statOverwrites.talents.getStat(stat));
+			buffsDelta = buffsDelta.withStat(stat, statOverwrites.buffs.getStat(stat));
+			consumesDelta = consumesDelta.withStat(stat, statOverwrites.consumes.getStat(stat));
+			debuffsDelta = debuffsDelta.withStat(stat, statOverwrites.debuffs.getStat(stat));
+			finalStats = finalStats.withStat(stat, statOverwrites.final.getStat(stat));
+		});
+	}
+
+	return { base: baseDelta, gear: gearDelta, talents: talentsDelta, buffs: buffsDelta, consumes: consumesDelta, debuffs: debuffsDelta, final: finalStats };
+}

@@ -1,0 +1,8 @@
+{
+	"23513": {
+		"ability": "Essence of the Red",
+		"file": "sim/encounters/forever_raids.go",
+		"source": "classic",
+		"note": "Identical in the Forever beta client and Classic Era - duration, cooldown, cast time, cost and every effect value, coefficient, period and per-level - so Wowhead's Classic tooltip describes it. The 70009 spell store carries no boss spells, so it was not re-checked; the sim gives 500 mana, 50 Energy or 20 Rage a second for 4 minutes on Vaelastrasz."
+	}
+}

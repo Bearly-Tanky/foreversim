@@ -1,0 +1,1 @@
+export { ThreatMetricsTable } from './ThreatMetricsTable';

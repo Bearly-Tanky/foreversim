@@ -1,0 +1,157 @@
+{
+	"files.watcherExclude": {
+		"**/.git/objects/**": true,
+		"**/.git/subtree-cache/**": true,
+		"**/node_modules/*/**": true
+	},
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"editor.formatOnSave": true,
+	"oxc.fmt.experimental": true,
+	"javascript.preferences.importModuleSpecifier": "relative",
+	"javascript.preferences.importModuleSpecifierEnding": "minimal",
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"typescript.preferences.importModuleSpecifierEnding": "minimal",
+	"css.validate": false,
+	"stylelint.validate": ["css"],
+	"tailwindCSS.experimental.configFile": "ui/styles/style.css",
+	"tailwindCSS.classFunctions": ["clsx"],
+	"tailwindCSS.classAttributes": [
+		"class",
+		"className",
+		"bodyClassName",
+		"cellClassName",
+		"clearClassName",
+		"iconClassName",
+		"inputClassName",
+		"labelClassName",
+		"rowClassName",
+		"selectClassName",
+		"triggerClassName"
+	],
+	"[javascript][javascriptreact][typescript][typescriptreact][html]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.oxc": "always"
+		},
+		"editor.quickSuggestions": {
+			"strings": "on"
+		}
+	},
+	"[css]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.stylelint": "always"
+		}
+	},
+	"[go]": {
+		"editor.defaultFormatter": "golang.go",
+		"editor.hover.above": false
+	},
+	"[json]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"json.schemas": [
+		{
+			"fileMatch": ["*.apl.json"],
+			"url": "./schemas/apl_rotation.schema.json"
+		},
+		{
+			"fileMatch": ["*.gear.json"],
+			"url": "./schemas/gear.schema.json"
+		},
+		{
+			"fileMatch": ["assets/locales/**/translation.json"],
+			"url": "./schemas/translation.schema.json"
+		},
+		{
+			"fileMatch": ["assets/locales/**/talents.json"],
+			"url": "./schemas/talents.schema.json"
+		},
+		{
+			"fileMatch": ["assets/locales/**/character.json"],
+			"url": "./schemas/character.schema.json"
+		},
+		{
+			"fileMatch": ["assets/locales/**/stats.json"],
+			"url": "./schemas/stats.schema.json"
+		}
+	],
+	"Lua.diagnostics.globals": [
+		"FONT_COLOR_CODE_CLOSE",
+		"SELECTED_CHAT_FRAME",
+		"DEFAULT_CHAT_FRAME",
+		"InterfaceOptions_AddCategory",
+		"NORMAL_FONT_COLOR",
+		"GameFontNormal",
+		"GameFontHighlight",
+		"ACCEPT",
+		"CANCEL",
+		"GameFontHighlightLarge",
+		"GameFontHighlightSmall",
+		"SlashCmdList",
+		"hash_SlashCmdList",
+		"NORMAL_FONT_COLOR_CODE",
+		"CLOSE",
+		"PanelTemplates_TabResize",
+		"PanelTemplates_SetDisabledTabState",
+		"PanelTemplates_SelectTab",
+		"PanelTemplates_DeselectTab",
+		"SetDesaturation",
+		"ColorPickerFrame",
+		"OpacitySliderFrame",
+		"ChatFontNormal",
+		"OKAY",
+		"NOT_BOUND",
+		"NUM_BAG_SLOTS",
+		"NUM_BANKBAGSLOTS",
+		"InterfaceOptionsFrame_OpenToCategory",
+		"BANK_CONTAINER",
+		"CreateFrame",
+		"geterrorhandler",
+		"IsLoggedIn",
+		"PlaySound",
+		"GetRealmName",
+		"UnitName",
+		"UnitClass",
+		"UnitRace",
+		"UnitFactionGroup",
+		"GetCurrentRegion",
+		"GetLocale",
+		"C_Container",
+		"GetTalentInfo",
+		"UnitFullName",
+		"GetPlayerInfoByGUID",
+		"UnitLevel",
+		"tInvert",
+		"GetItemInfo",
+		"IsEquippableItem",
+		"UnitGUID",
+		"GetSpellInfo",
+		"GetInventorySlotInfo",
+		"GetInventoryItemLink",
+		"max",
+		"min",
+		"ceil",
+		"BackdropTemplateMixin",
+		"floor",
+		"GetCursorInfo",
+		"ClearCursor",
+		"hooksecurefunc",
+		"GetMacroInfo",
+		"IsShiftKeyDown",
+		"IsControlKeyDown",
+		"IsAltKeyDown",
+		"issecurevariable",
+		"GetTime",
+		"C_Timer",
+		"format",
+		"gsub",
+		"strfind",
+		"strsub",
+		"strchar",
+		"strbyte",
+		"tinsert",
+		"UIParent"
+	],
+	"makefile.configureOnOpen": false,
+	"wowsims-spelldata.goBinary": "/usr/local/go/bin/go"
+}

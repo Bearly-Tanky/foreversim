@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "class": "rogue",
+  "overrides": [
+    {
+      "talent": "remorseless-attacks",
+      "tree": "assassination",
+      "set": {
+        "description": "After killing a non-trivial enemy, gives you a {0}% increased critical strike chance on your next Sinister Strike, Backstab, Ambush, Mutilate, or Ghostly Strike. Lasts 20 sec."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/rogue/assassination/remorseless-attacks.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "initiative",
+      "tree": "subtlety",
+      "set": {
+        "description": "Gives you a {0}% chance to add an additional combo point to your target when using your Ambush, Garrote, or Cheap Shot ability."
+      },
+      "reason": "audit 2026-09-13: reader error (PUNCT); corrected against data/review/rogue/subtlety/initiative.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "improved-expose-armor",
+      "tree": "assassination",
+      "set": {
+        "ranks": [
+          [
+            5,
+            1,
+            5
+          ],
+          [
+            10,
+            1,
+            5
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; the per-rank values are a linear extrapolation of that one tooltip and match the scaling the sim applies, and the community talent calculator is rebuilt from the same footage, so it corroborates them rather than confirming them",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "puncturing-wounds",
+      "tree": "combat",
+      "set": {
+        "ranks": [
+          [
+            10,
+            5,
+            15
+          ],
+          [
+            20,
+            10,
+            30
+          ],
+          [
+            30,
+            15,
+            45
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; the per-rank values are a linear extrapolation of that one tooltip and match the scaling the sim applies, and the community talent calculator is rebuilt from the same footage, so it corroborates them rather than confirming them",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "hack-and-slash",
+      "tree": "combat",
+      "set": {
+        "ranks": [
+          [
+            1,
+            1,
+            3
+          ],
+          [
+            2,
+            2,
+            6
+          ],
+          [
+            3,
+            3,
+            9
+          ],
+          [
+            4,
+            4,
+            12
+          ],
+          [
+            5,
+            5,
+            15
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; the per-rank values are a linear extrapolation of that one tooltip and match the scaling the sim applies, and the community talent calculator is rebuilt from the same footage, so it corroborates them rather than confirming them",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "elusiveness",
+      "tree": "subtlety",
+      "set": {
+        "description": "Reduces the cooldown of your Vanish and Blind abilities by {0} sec.",
+        "ranks": [
+          [
+            45
+          ],
+          [
+            90
+          ]
+        ]
+      },
+      "reason": "the datamined pass stored whole sentences where the per-rank values belong, which is the wrong shape for the picker; rank 2's '1.5 min' is written as 90 sec so both ranks read in the same unit",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "cutthroat",
+      "tree": "subtlety",
+      "set": {
+        "ranks": [
+          [
+            3,
+            10
+          ],
+          [
+            6,
+            10
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            15,
+            10
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so all five ranks displayed 3% while the sim rolled 3% per point; the proc chance is extrapolated linearly to match the sim, and the 10 sec duration is held at rank 1 because a duration has no scaling to read",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "quietus",
+      "tree": "subtlety",
+      "set": {
+        "ranks": [
+          [
+            2,
+            35
+          ],
+          [
+            4,
+            35
+          ],
+          [
+            6,
+            35
+          ],
+          [
+            8,
+            35
+          ],
+          [
+            10,
+            35
+          ]
+        ]
+      },
+      "reason": "the health threshold was extrapolated along with the damage bonus, which reads \u201cbelow 175% health\u201d at rank 5; the sim holds the threshold at rank 1\u2019s 35% because it cannot scale, and the tree now reads the same",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    }
+  ]
+}

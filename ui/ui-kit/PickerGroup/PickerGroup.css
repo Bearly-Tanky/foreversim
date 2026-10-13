@@ -1,0 +1,19 @@
+@layer components {
+	.ui-picker-group {
+		@apply grid w-full gap-3;
+		grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+	}
+
+	.ui-picker-group-icons {
+		@apply flex flex-wrap gap-1;
+	}
+
+	/* A labelled icon picker takes the row to itself, label left and icon right. Vanilla did this
+	   with the same `:has()` on its own label class; without it four labelled pickers share one
+	   flex row and the labels truncate to two characters. The two classes are the only elements
+	   that carry `data-testid="form-label"` — `PickerShell`'s field label and `IconEnumPicker`'s
+	   selected-text caption — and a test id is not a styling hook. */
+	.ui-player-icon-group .ui-icon-field:has(.ui-picker-label, .ui-field-label) {
+		@apply w-full flex-row-reverse justify-between;
+	}
+}

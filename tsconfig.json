@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"lib": ["DOM", "es2021", "DOM.Iterable"],
+		"outDir": "dist/forever",
+		"pretty": false,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"types": ["node", "gtag.js", "golang-wasm-exec", "vite/client"],
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
+		"skipLibCheck": true,
+		"paths": {
+			"@sim/*": ["./ui/sim/*"],
+			"@generated/*": ["./ui/generated/*"],
+			"@worker/*": ["./ui/worker/*"],
+			"@ui-kit/*": ["./ui/ui-kit/*"],
+			"@features/*": ["./ui/features/*"],
+			"@app/*": ["./ui/app/*"],
+			"@specs/*": ["./ui/specs/*"],
+			"@i18n/*": ["./ui/i18n/*"]
+		}
+	},
+	"include": ["."],
+	"exclude": ["node_modules", "dist", "binary_dist", ".history", "ui/generated/proto/*", ".vscode/extensions/wowsims-spelldata", "tools/vscode-spelldata"]
+}

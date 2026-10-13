@@ -1,0 +1,12 @@
+.git
+coverage
+node_modules
+
+# Build artifacts — must be regenerated inside the image, never copied from host
+dist
+binary_dist
+wowsimforever
+wowsimforever-*
+*.so
+*.dll
+*.wasm

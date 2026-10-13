@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "class": "hunter",
+  "overrides": [
+    {
+      "talent": "improved-revive-pet",
+      "tree": "beast-mastery",
+      "set": {
+        "description": "Revive Pet's casting time is reduced by {0} sec, mana cost is reduced by {1}%, and increases the health your pet returns with by an additional {2}%."
+      },
+      "reason": "audit 2026-09-13: reader error (PUNCT); corrected against data/review/hunter/beast-mastery/improved-revive-pet.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "intimidation",
+      "tree": "beast-mastery",
+      "set": {
+        "description": "Command your pet to Stun the target for {0} sec on its next successful attack, which also gains {1}% increased critical strike chance. Generates high threat."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/hunter/beast-mastery/intimidation.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "improved-stings",
+      "tree": "marksmanship",
+      "set": {
+        "description": "Increased the damage of your Serpent Sting ability by {0}%, reduces the cooldown of your Viper Sting ability by {1} sec, and increases the duration of your Scorpid Sting ability by {2} sec."
+      },
+      "reason": "audit 2026-09-13: reader error (WORD); corrected against data/review/hunter/marksmanship/improved-stings.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "lone-wolf",
+      "tree": "marksmanship",
+      "set": {
+        "description": "You deal {0}% increased damage with all attacks while you do not have an active pet."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/hunter/marksmanship/lone-wolf.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "clever-traps",
+      "tree": "survival",
+      "set": {
+        "description": "Increases the duration of Freezing and Frost trap effects by {0}% and the damage of Immolation and Explosive trap effects by {1}%."
+      },
+      "reason": "audit 2026-09-13: reader error (PCT); corrected against data/review/hunter/survival/clever-traps.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "deadly-aspects",
+      "tree": "beast mastery",
+      "set": {
+        "ranks": [
+          [
+            2,
+            30,
+            12,
+            2,
+            30,
+            12
+          ],
+          [
+            4,
+            30,
+            12,
+            4,
+            30,
+            12
+          ],
+          [
+            6,
+            30,
+            12,
+            6,
+            30,
+            12
+          ],
+          [
+            8,
+            30,
+            12,
+            8,
+            30,
+            12
+          ],
+          [
+            10,
+            30,
+            12,
+            10,
+            30,
+            12
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; audit 2026-09-15 against sim/hunter/aspects.go: only the proc chance grows with points, as in the Classic Improved Aspect of the Hawk (talent 1382) this talent is built from. The earlier revision multiplied every slot by the rank, which promised +150% attack speed for 60 sec at 5/5 and left the picker reading a scaling the sim never applied. The 2% per rank is still extrapolated from the one observed tooltip.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "improved-mend-pet",
+      "tree": "beast mastery",
+      "set": {
+        "ranks": [
+          [
+            15,
+            1,
+            10
+          ],
+          [
+            30,
+            1,
+            20
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; rank 2 is the community talent calculator's linear extrapolation of that tooltip, which is rebuilt from the same BlizzCon footage and so corroborates the assumption rather than confirming it. Mend Pet is not modelled, so the sim has nothing to check it against.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "improved-stings",
+      "tree": "marksmanship",
+      "set": {
+        "ranks": [
+          [
+            6,
+            2,
+            15
+          ],
+          [
+            12,
+            4,
+            30
+          ],
+          [
+            18,
+            6,
+            45
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; ranks 2 and 3 are the community talent calculator's linear extrapolation of that tooltip, not a datamine. Audit 2026-09-15: the sim scales the Serpent Sting damage the same way, the Viper Sting cooldown and the Scorpid Sting duration are not modelled.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "rapid-killing",
+      "tree": "marksmanship",
+      "set": {
+        "ranks": [
+          [
+            1,
+            20,
+            10
+          ],
+          [
+            2,
+            40,
+            20
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; rank 2 is the community talent calculator's linear extrapolation of that tooltip, not a datamine. Audit 2026-09-15: the sim takes the same second minute off Rapid Fire, but the buff a kill grants is not modelled, so nothing checks the doubled 40 sec window or the 20% damage.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "rapid-recuperation",
+      "tree": "marksmanship",
+      "set": {
+        "ranks": [
+          [
+            25,
+            50,
+            15
+          ],
+          [
+            50,
+            100,
+            15
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; audit 2026-09-15 against sim/hunter/talents.go: the regeneration grows with points but the 15 sec window does not, and the earlier revision doubled it. A duration read off a single tooltip is not extrapolated, and Resourcefulness and Expose Prey, stamped in the same pass, keep theirs flat. The 50% at rank 2 is still extrapolated.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "resourcefulness",
+      "tree": "survival",
+      "set": {
+        "ranks": [
+          [
+            30,
+            50,
+            50,
+            30
+          ],
+          [
+            60,
+            100,
+            50,
+            30
+          ]
+        ]
+      },
+      "reason": "beta client 1.60.1.69893: the proc chance curve is 50/100 (440529 effect 2), not the demo's 30 extrapolated to 60; the cost cut is 30/60 and the buff (1242688) is 50% for 30 sec at both ranks.",
+      "by": "beta-pass",
+      "at": "2026-09-17T00:00:00Z"
+    },
+    {
+      "talent": "expose-prey",
+      "tree": "survival",
+      "set": {
+        "ranks": [
+          [
+            5,
+            5
+          ],
+          [
+            10,
+            5
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1's value; rank 2 is the community talent calculator's linear extrapolation of that tooltip, not a datamine. Audit 2026-09-15: the sim applies the same 10% proc chance at rank 2 and keeps the 5 sec window flat.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    }
+  ]
+}

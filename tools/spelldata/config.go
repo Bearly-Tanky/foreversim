@@ -1,0 +1,291 @@
+package main
+
+import (
+	"fmt"
+	"go/ast"
+	"go/token"
+	"go/types"
+	"io"
+	"reflect"
+	"slices"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/dbcenums"
+	"github.com/wowsims/forever/sim/core/spelldata"
+)
+
+type configOption struct {
+	label  string
+	source string
+	opt    spelldata.SpellOpt
+	err    error
+}
+
+// The options a SpellConfig call can pass, called with the arguments converted to what each takes.
+var optionBuilders = map[string]any{
+	"Melee": spelldata.Melee,
+	"Magic": spelldata.Magic,
+	"Proc":  spelldata.Proc,
+	"Flags": spelldata.Flags,
+	"Tag":   spelldata.Tag,
+}
+
+func readOption(expr ast.Expr) configOption {
+	source := types.ExprString(expr)
+	option := configOption{label: source, source: source}
+
+	call, ok := expr.(*ast.CallExpr)
+	var name string
+	if ok {
+		name, ok = pkgSelector(call.Fun, "spelldata")
+	}
+	if !ok {
+		option.err = fmt.Errorf("not a spelldata option call")
+		return option
+	}
+
+	args := make([]string, 0, len(call.Args))
+	for _, arg := range call.Args {
+		args = append(args, strings.ReplaceAll(types.ExprString(arg), "core.", ""))
+	}
+	option.label = name + "(" + strings.Join(args, " | ") + ")"
+	if len(option.label) > 48 {
+		option.label = name + "(…)"
+	}
+
+	builder, known := optionBuilders[name]
+	if !known {
+		option.err = fmt.Errorf("spelldata.%s is not an option this reads", name)
+		return option
+	}
+	build := reflect.ValueOf(builder)
+	if len(call.Args) != build.Type().NumIn() {
+		option.err = fmt.Errorf("spelldata.%s takes %s", name, arguments(build.Type().NumIn()))
+		return option
+	}
+
+	in := make([]reflect.Value, 0, len(call.Args))
+	for i, arg := range call.Args {
+		value, err := evalConst(arg)
+		if err != nil {
+			option.err = err
+			return option
+		}
+		converted, err := convertArg(argument{source: types.ExprString(arg), value: value}, build.Type().In(i))
+		if err != nil {
+			option.err = err
+			return option
+		}
+		in = append(in, converted)
+	}
+	option.opt = build.Call(in)[0].Interface().(spelldata.SpellOpt)
+	return option
+}
+
+type configRow struct {
+	field string
+	value string
+	from  string
+}
+
+type configResult struct {
+	spell   *spelldata.Spell
+	pick    string
+	rows    []configRow
+	skipped []configOption
+}
+
+func evalSpellConfig(expr *ast.CallExpr, declarations map[string]declaration, pkg string, trace *tracer) (*configResult, error) {
+	if len(expr.Args) < 2 {
+		return nil, fmt.Errorf("%s is not a SpellConfig call with a row", types.ExprString(expr))
+	}
+
+	s, pick, err := configPick(expr.Args[1], declarations, pkg, trace)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &configResult{spell: s, pick: pick}
+	labels := []string{"row"}
+	var opts []spelldata.SpellOpt
+	for _, arg := range expr.Args[2:] {
+		option := readOption(arg)
+		if option.err != nil {
+			trace.add("  option %s unevaluated: %v", option.source, option.err)
+			result.skipped = append(result.skipped, option)
+			continue
+		}
+		trace.add("  option %s", option.label)
+		opts = append(opts, option.opt)
+		labels = append(labels, option.label)
+	}
+
+	stages := make([]core.SpellConfig, 0, len(opts)+1)
+	for i := 0; i <= len(opts); i++ {
+		stages = append(stages, spelldata.SpellConfig(&core.Unit{}, s, opts[:i]...))
+	}
+	result.rows = attribute(stages, labels)
+	return result, nil
+}
+
+func configPick(arg ast.Expr, declarations map[string]declaration, pkg string, trace *tracer) (*spelldata.Spell, string, error) {
+	trace.add("  row %s", types.ExprString(arg))
+	c, err := walkChain(arg, func(token.Pos) int { return 0 })
+	if err != nil {
+		return nil, "", err
+	}
+	c, err = resolveChain(c, declarations, trace)
+	if err != nil {
+		return nil, "", err
+	}
+	result, err := evalExpr(ladderFamilies(), c, pkg)
+	if err != nil {
+		return nil, "", err
+	}
+	if result.kind != kindSpell {
+		return nil, "", fmt.Errorf("%s reads a %s, not a row", types.ExprString(arg), result.kind)
+	}
+	return result.spell, c.text(false), nil
+}
+
+type configField struct {
+	name    string
+	read    func(*core.SpellConfig) string
+	bits    func(*core.SpellConfig) uint64
+	bitName func(bit uint64) (string, bool)
+}
+
+func nonZero[T comparable](v T, format func(T) string) string {
+	var zero T
+	if v == zero {
+		return ""
+	}
+	return format(v)
+}
+
+func floatText(v float64) string          { return strconv.FormatFloat(v, 'f', -1, 64) }
+func durationText(v time.Duration) string { return v.String() }
+func intText[T int32 | int](v T) string   { return strconv.Itoa(int(v)) }
+func boolText(bool) string                { return "true" }
+
+var configFields = []configField{
+	{name: "ActionID", read: func(c *core.SpellConfig) string {
+		if c.ActionID.Tag != 0 {
+			return fmt.Sprintf("SpellID %d, Tag %d", c.ActionID.SpellID, c.ActionID.Tag)
+		}
+		return nonZero(c.ActionID.SpellID, func(id int32) string { return fmt.Sprintf("SpellID %d", id) })
+	}},
+	{name: "Rank", read: func(c *core.SpellConfig) string { return nonZero(c.Rank, intText[int32]) }},
+	{name: "SpellSchool", read: func(c *core.SpellConfig) string { return nonZero(c.SpellSchool, core.SpellSchool.String) }},
+	{name: "DefenseType", read: func(c *core.SpellConfig) string { return nonZero(c.DefenseType, core.DefenseType.String) }},
+	{name: "Flags", bits: func(c *core.SpellConfig) uint64 { return uint64(c.Flags) },
+		bitName: func(bit uint64) (string, bool) { return dbcenums.Named(core.SpellFlag(bit)) }},
+	{name: "ProcMask", bits: func(c *core.SpellConfig) uint64 { return uint64(c.ProcMask) },
+		bitName: func(bit uint64) (string, bool) { return dbcenums.Named(core.ProcMask(bit)) }},
+	{name: "Cast.DefaultCast.CastTime", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.DefaultCast.CastTime, durationText) }},
+	{name: "Cast.DefaultCast.GCD", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.DefaultCast.GCD, durationText) }},
+	{name: "Cast.DefaultCast.NonEmpty", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.DefaultCast.NonEmpty, boolText) }},
+	{name: "Cast.IgnoreHaste", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.IgnoreHaste, boolText) }},
+	{name: "Cast.CD", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.CD.Duration, durationText) }},
+	{name: "Cast.SharedCD", read: func(c *core.SpellConfig) string { return nonZero(c.Cast.SharedCD.Duration, durationText) }},
+	{name: "ManaCost.FlatCost", read: func(c *core.SpellConfig) string { return nonZero(c.ManaCost.FlatCost, intText[int32]) }},
+	{name: "ManaCost.BaseCostPercent", read: func(c *core.SpellConfig) string { return nonZero(c.ManaCost.BaseCostPercent, floatText) }},
+	{name: "RageCost.Cost", read: func(c *core.SpellConfig) string { return nonZero(c.RageCost.Cost, intText[int32]) }},
+	{name: "RageCost.Refund", read: func(c *core.SpellConfig) string { return nonZero(c.RageCost.Refund, floatText) }},
+	{name: "EnergyCost.Cost", read: func(c *core.SpellConfig) string { return nonZero(c.EnergyCost.Cost, intText[int32]) }},
+	{name: "EnergyCost.Refund", read: func(c *core.SpellConfig) string { return nonZero(c.EnergyCost.Refund, floatText) }},
+	{name: "FocusCost.Cost", read: func(c *core.SpellConfig) string { return nonZero(c.FocusCost.Cost, intText[int32]) }},
+	{name: "FocusCost.Refund", read: func(c *core.SpellConfig) string { return nonZero(c.FocusCost.Refund, floatText) }},
+	{name: "DamageMultiplier", read: func(c *core.SpellConfig) string { return nonZero(c.DamageMultiplier, floatText) }},
+	{name: "ThreatMultiplier", read: func(c *core.SpellConfig) string { return nonZero(c.ThreatMultiplier, floatText) }},
+	{name: "BonusCoefficient", read: func(c *core.SpellConfig) string { return nonZero(c.BonusCoefficient, floatText) }},
+	{name: "MinRange", read: func(c *core.SpellConfig) string { return nonZero(c.MinRange, floatText) }},
+	{name: "MaxRange", read: func(c *core.SpellConfig) string { return nonZero(c.MaxRange, floatText) }},
+	{name: "MissileSpeed", read: func(c *core.SpellConfig) string { return nonZero(c.MissileSpeed, floatText) }},
+	{name: "ClassFlags", read: func(c *core.SpellConfig) string { return classFlagsPhrase(c.ClassFlags) }},
+}
+
+func attribute(stages []core.SpellConfig, labels []string) []configRow {
+	final := &stages[len(stages)-1]
+	var rows []configRow
+
+	for _, field := range configFields {
+		if field.bits != nil {
+			value := field.bits(final)
+			if value == 0 {
+				continue
+			}
+			var from []string
+			for i := range stages {
+				var previous uint64
+				if i > 0 {
+					previous = field.bits(&stages[i-1])
+				}
+				added := field.bits(&stages[i]) &^ previous & value
+				if added != 0 && !slices.Contains(from, labels[i]) {
+					from = append(from, labels[i])
+				}
+			}
+			rows = append(rows, configRow{field.name, strings.Join(setBits(value, field.bitName), " | "), strings.Join(from, ", ")})
+			continue
+		}
+
+		value := field.read(final)
+		if value == "" {
+			continue
+		}
+		var from []string
+		previous := ""
+		for i := range stages {
+			current := field.read(&stages[i])
+			if current != previous && current != "" {
+				from = append(from, labels[i])
+			}
+			previous = current
+		}
+		rows = append(rows, configRow{field.name, value, strings.Join(from, ", ")})
+	}
+	return rows
+}
+
+const configFootnote = "Assignments to the config after the call are not folded in."
+
+func configMarkdown(result *configResult) string {
+	var md strings.Builder
+	fmt.Fprintf(&md, "`SpellConfig` of %s\n\n", title(result.spell))
+	if result.pick != "" {
+		fmt.Fprintf(&md, "`%s`\n\n", result.pick)
+	}
+	md.WriteString("---\n| field | value | from |\n|---|---|---|\n")
+	for _, row := range result.rows {
+		fmt.Fprintf(&md, "| **%s** | %s | %s |\n", row.field, codeCell(row.value), cell(row.from))
+	}
+	for _, option := range result.skipped {
+		fmt.Fprintf(&md, "\nunevaluated: `%s` (%s)\n", option.source, option.err)
+	}
+	fmt.Fprintf(&md, "\n%s\n", configFootnote)
+	return md.String()
+}
+
+func writeConfigText(out io.Writer, result *configResult) {
+	fmt.Fprintf(out, "SpellConfig of %s\n", title(result.spell))
+	if result.pick != "" {
+		fmt.Fprintf(out, "%s\n", result.pick)
+	}
+	fmt.Fprintln(out)
+	fieldWidth, valueWidth := 0, 0
+	for _, row := range result.rows {
+		fieldWidth = max(fieldWidth, len(row.field))
+		valueWidth = max(valueWidth, len(row.value))
+	}
+	for _, row := range result.rows {
+		fmt.Fprintf(out, "%-*s  %-*s  %s\n", fieldWidth, row.field, valueWidth, row.value, row.from)
+	}
+	for _, option := range result.skipped {
+		fmt.Fprintf(out, "\nunevaluated: %s (%s)\n", option.source, option.err)
+	}
+	fmt.Fprintf(out, "\n%s\n", configFootnote)
+}

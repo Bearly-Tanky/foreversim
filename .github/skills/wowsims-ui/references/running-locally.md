@@ -1,0 +1,82 @@
+# Running the sim locally
+
+**Source of truth:** `vite.config.mts`, `vite.build-workers.mts`, `tools/vite/spec_pages.mts`, and
+the `devserver` / `rundevserver` / `devmode` / `host` targets in the makefile. Read the target before
+copying a command out of here:
+
+```
+/usr/bin/grep -n "^devserver:\|^rundevserver:\|^devmode:\|^host:" -A6 makefile
+```
+
+## The normal path
+
+`npm start` is `cross-env WATCH=1 make devmode`: it builds the Go dev server, starts
+`vite serve --host` and `vite.build-workers.mts` alongside it, and reloads the Go binary through
+`air`. Use it unless you need something the sections below describe.
+
+## Two things a plain `vite` dev server cannot do
+
+**It cannot run sims.** The worker's backend fetch fails on localhost. Sims need the Go host.
+
+**It half-renders spec pages with ZERO console errors unless the worker bundles exist first.**
+`ui/sim/workers/worker_pool.ts` resolves the worker at `/forever/sim_worker.js`, and the dev server has
+middleware that serves `/forever/**` out of `dist/forever/`. With no bundle there the probe simply hangs:
+`waitForInit()` never resolves → `loadSettings` never runs → defaults are never applied → the page
+looks structurally fine and is empty of settings. Build them first:
+
+```
+npx tsx vite.build-workers.mts     # → dist/forever/{local,net,sim}_worker.js (+ highs.wasm)
+```
+
+A fresh worktree also needs the gitignored generated files before anything type-checks or builds —
+see the last section of `verification.md`.
+
+Copying per-spec `ui/**/index.html` from a built checkout is **not** a step and has not been for a
+while: `tools/vite/spec_pages.mts` serves every spec URL itself from `ui/index_template.html`
+through `transformIndexHtml`, and 301s the bare `/forever/<class>/<spec>` to the trailing-slash form the
+way the production static host does. Only an _unknown_ spec URL falls through to vite's SPA
+fallback, which serves the landing page — so "I got the landing page" means the URL is not in
+`discoverSpecPages()`, i.e. there is no `ui/specs/<class>/<spec>/spec.ts(x)`.
+
+## Running REAL sims
+
+The Go host serves `dist/forever` from disk and answers the worker's sim requests natively — stats,
+Simulate, reference swap and timeline tooltips all work.
+
+```
+make binary_dist/dist.go          # stub package so ./sim/web compiles — no built checkout needed
+make wasm                         # dist/forever/lib.wasm.gz (needs Go)
+npx tsx vite.build-workers.mts    # dist/forever/*_worker.js
+npx vite build                    # dist/forever bundle + the 17 per-spec index.html
+cp -r assets dist/forever/assets      # `make` does this; a plain `vite build` does not
+make devserver                    # go build -o wowsimforever ./sim/web
+./wowsimforever --usefs=true --launch=false --host=":3333"
+```
+
+Then `http://localhost:3333/forever/<class>/<spec>/`. `make rundevserver` runs the last two steps for
+you, and `make dist/forever/.dirstamp` replaces the middle three (it also copies the assets).
+
+Without `dist/forever/assets` the page half-renders with JSON parse errors from the DB fetch — that
+error text is the signature of a missing asset copy, not of a broken database.
+
+Do not `rm -rf dist`. `vite build` restores the bundles only; the database and assets come from
+other tooling, and you will have broken the worktree. Copy `dist` to a scratch directory and serve
+that on its own port if you need an isolated measurement.
+
+## What to look at once it is up
+
+A spec page that came up correctly has its settings pickers populated and its sidebar stats filled
+in. An empty settings tab is the worker-probe hang above, not a rendering bug. Get the expected
+shape by serving a known-good build of the parent branch on a second port and comparing the same
+URL, rather than trusting a remembered element count — those numbers rot faster than anything else
+in a document like this.
+
+There is no _committed_ browser or perf harness. `tools/browser-perf/` (timings) is **untracked**:
+it exists wherever its owner made it and nowhere else — not in a fresh clone, not in CI, and not
+necessarily in the worktree you are in. It is not in this clone's `.git/info/exclude` today (only
+`tools/state-snapshots/` is), and that file is never committed anyway: it lives in the shared common
+git dir, so a rule in it applies to every worktree of this clone and travels with none of them.
+
+So: check before you rely on it (`/usr/bin/ls tools/browser-perf/`), and do not tell anyone else a
+path is there. If it is not present and you need APL-edit timings, drive the page
+with Playwright yourself and record the protocol in the PR.

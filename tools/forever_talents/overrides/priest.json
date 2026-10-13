@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "class": "priest",
+  "overrides": [
+    {
+      "talent": "mental-agility",
+      "tree": "discipline",
+      "set": {
+        "description": "Reduces the mana cost of your Smite, Holy Fire, and instant cast spells by {0}%."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/priest/discipline/mental-agility.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "penance",
+      "tree": "discipline",
+      "set": {
+        "description": "Launches a volley of holy light at the target, causing {0} Holy damage to an enemy, or {1} healing to an ally, instantly and every {2} sec for {3} sec."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/priest/discipline/penance.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "renewed-hope",
+      "tree": "discipline",
+      "set": {
+        "description": "Your heals from Flash Heal, Binding Heal, Lesser Heal, Heal, Greater Heal, and Penance gain {0}% increased critical strike chance when cast on targets with Weakened Soul, and reduce the remaining duration of Weakened Soul on their target by {1} sec."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/priest/discipline/renewed-hope.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "divine-fury",
+      "tree": "holy",
+      "set": {
+        "description": "Reduces the casting time of your Smite, Holy Fire, Heal, and Greater Heal spells by {0} sec."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-PROPER); corrected against data/review/priest/holy/divine-fury.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "devouring-contagion",
+      "tree": "shadow-magic",
+      "set": {
+        "description": "Reduces the mana cost of your Devouring Plague by {0}%. Targets that die while Devouring Plague is active spreads it, jumping to a nearby enemy within {1} yards for the remaining duration."
+      },
+      "reason": "audit 2026-09-13: reader error (WORD); corrected against data/review/priest/shadow-magic/devouring-contagion.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "improved-mind-flay",
+      "tree": "shadow-magic",
+      "set": {
+        "description": "Your Mind Flay now deals {0}% more damage, gains {1} yards increased range, but slows the target's movement speed by {2}%."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/priest/shadow-magic/improved-mind-flay.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "improved-mana-burn",
+      "tree": "discipline",
+      "set": {
+        "ranks": [
+          [
+            0.5
+          ],
+          [
+            1
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "renewed-hope",
+      "tree": "discipline",
+      "set": {
+        "ranks": [
+          [
+            2,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            10,
+            5
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "divine-aegis",
+      "tree": "discipline",
+      "set": {
+        "ranks": [
+          [
+            5,
+            12
+          ],
+          [
+            10,
+            12
+          ],
+          [
+            15,
+            12
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "blessed-recovery",
+      "tree": "holy",
+      "set": {
+        "ranks": [
+          [
+            30,
+            8,
+            6
+          ],
+          [
+            30,
+            16,
+            6
+          ],
+          [
+            30,
+            25,
+            6
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "improved-mind-flay",
+      "tree": "shadow magic",
+      "set": {
+        "ranks": [
+          [
+            10,
+            5,
+            35
+          ],
+          [
+            20,
+            10,
+            20
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    }
+  ]
+}

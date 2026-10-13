@@ -1,0 +1,94 @@
+package spelldata
+
+import "github.com/wowsims/forever/sim/core/dbcenums"
+
+// Whether the spell sets bit in Attributes[word]. A word outside the client's 17 reads as unset.
+func (s *Spell) HasAttr(word int, bit uint32) bool {
+	if word < 0 || word >= len(s.Attr) {
+		return false
+	}
+	return s.Attr[word]&bit != 0
+}
+
+func (s *Spell) IsPassive() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_BASE, dbcenums.ATTR_PASSIVE)
+}
+
+func (s *Spell) NotShapeshifted() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_BASE, dbcenums.ATTR_NOT_SHAPESHIFTED)
+}
+
+func (s *Spell) CastableInCasterForm() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_2, dbcenums.ATTR_EX_2_CASTABLE_IN_CASTER_FORM)
+}
+
+func (s *Spell) IsChanneled() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_1, dbcenums.ATTR_EX_1_IS_CHANNELLED|dbcenums.ATTR_EX_1_IS_SELF_CHANNELLED)
+}
+
+// Whether damage taken while casting the spell pushes its cast back.
+func (s *Spell) PushedBack() bool {
+	return s.InterruptFlags&dbcenums.SPELL_INTERRUPT_FLAG_PUSHBACK != 0
+}
+
+func (s *Spell) IsBleed() bool {
+	return s.Mechanic == dbcenums.MECHANIC_BLEED
+}
+
+func (s *Spell) RefundsOnMiss() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_1, dbcenums.ATTR_EX_1_DISCOUNT_POWER_ON_MISS)
+}
+
+func (s *Spell) PeriodicCanCrit() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_8, dbcenums.ATTR_EX_8_PERIODIC_CAN_CRIT)
+}
+
+func (s *Spell) CanProcFromProcs() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_3, dbcenums.ATTR_EX_3_CAN_PROC_FROM_PROCS)
+}
+
+func (s *Spell) ClassSpellsOnly() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_12, dbcenums.ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES)
+}
+
+// Whether the client bars the spell from missing (and from being dodged, parried or blocked).
+func (s *Spell) AlwaysHits() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_3, dbcenums.ATTR_EX_3_ALWAYS_HIT)
+}
+
+// Whether the client bars the spell from critting, which picks the no-crit hit table.
+func (s *Spell) CannotCrit() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_2, dbcenums.ATTR_EX_2_CANT_CRIT)
+}
+
+// Whether the spell's hits count as a proc, which is what a listener that cannot proc from procs
+// skips. The client states the negative, so this answers it as the sim's SpellFlagProc reads.
+func (s *Spell) IsAProc() bool {
+	return !s.HasAttr(dbcenums.ATTR_INDEX_EX_3, dbcenums.ATTR_EX_3_NOT_A_PROC)
+}
+
+// Whether the client flags the spell No Threat: nothing it does, mana it restores included, puts the
+// caster on a threat table.
+func (s *Spell) NoThreat() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_1, dbcenums.ATTR_EX_1_NO_THREAT)
+}
+
+func (s *Spell) SuppressesWeaponProcs() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_4, dbcenums.ATTR_EX_4_SUPPRESS_WEAPON_PROCS)
+}
+
+// Whether the spell's aura hears hits the way a weapon proc does, which means skipping the hits of
+// a spell flagged Suppress Weapon Procs. The flag sits on the listener; SuppressesWeaponProcs above
+// sits on the spell whose hits are skipped.
+func (s *Spell) IsWeaponProcAura() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_6, dbcenums.ATTR_EX_6_AURA_IS_WEAPON_PROC)
+}
+
+// The share of the cost a miss refunds, for RageCostOptions.Refund: 80% where the client flags
+// Discount Power On Miss, nothing otherwise.
+func (s *Spell) MissRefund() float64 {
+	if s.RefundsOnMiss() {
+		return 0.8
+	}
+	return 0
+}

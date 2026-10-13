@@ -1,0 +1,141 @@
+package database
+
+// Runs the raw enchant query on a client-shaped fixture holding only the columns it reads, so it
+// needs no client database.
+
+import (
+	"database/sql"
+	"path/filepath"
+	"testing"
+
+	"github.com/wowsims/forever/tools/database/dbc"
+)
+
+const rawEnchantSchema = `
+CREATE TABLE Spell (ID INTEGER PRIMARY KEY, NameSubtext_lang TEXT);
+CREATE TABLE SpellName (ID INTEGER PRIMARY KEY, Name_lang TEXT);
+CREATE TABLE SpellEffect (ID INTEGER PRIMARY KEY, SpellID INTEGER, Effect INTEGER, EffectMiscValue_0 INTEGER);
+CREATE TABLE SpellItemEnchantment (
+	ID INTEGER PRIMARY KEY, Name_lang TEXT, Flags INTEGER, RequiredSkillID INTEGER, RequiredSkillRank INTEGER,
+	Effect TEXT, EffectPointsMin TEXT, EffectArg TEXT,
+	Effect_0 INTEGER GENERATED ALWAYS AS (json_extract(Effect, '$[0]')),
+	Effect_1 INTEGER GENERATED ALWAYS AS (json_extract(Effect, '$[1]')),
+	Effect_2 INTEGER GENERATED ALWAYS AS (json_extract(Effect, '$[2]')),
+	EffectArg_0 INTEGER GENERATED ALWAYS AS (json_extract(EffectArg, '$[0]')),
+	EffectArg_1 INTEGER GENERATED ALWAYS AS (json_extract(EffectArg, '$[1]')),
+	EffectArg_2 INTEGER GENERATED ALWAYS AS (json_extract(EffectArg, '$[2]'))
+);
+CREATE TABLE ItemEffect (ID INTEGER PRIMARY KEY, SpellID INTEGER);
+CREATE TABLE ItemXItemEffect (ID INTEGER PRIMARY KEY, ItemID INTEGER, ItemEffectID INTEGER);
+CREATE TABLE SpellEquippedItems (ID INTEGER PRIMARY KEY, SpellID INTEGER, EquippedItemClass INTEGER, EquippedItemInvTypes INTEGER, EquippedItemSubclass INTEGER);
+CREATE TABLE SkillLineAbility (ID INTEGER PRIMARY KEY, Spell INTEGER, ClassMask INTEGER, SkillLine INTEGER);
+CREATE TABLE Item (ID INTEGER PRIMARY KEY, IconFileDataID INTEGER);
+CREATE TABLE ItemSparse (ID INTEGER PRIMARY KEY, Display_lang TEXT, OverallQualityID INTEGER);
+`
+
+// Scourge shoulder enchant 2717 (grant 29467, a profession ability) and its re-issue 7884 (grant
+// 1219512, on an item without an ItemSparse row) share a name. Enchant 8203 is granted by a bracer
+// and a boots recipe under two names; each is taught by two items, and the boots' lower item has no
+// ItemSparse row.
+const rawEnchantFixture = `
+INSERT INTO SpellItemEnchantment (ID, Name_lang, Flags, RequiredSkillID, RequiredSkillRank, Effect, EffectPointsMin, EffectArg) VALUES
+	(2717, 'Attack Power +26', 0, 0, 0, '[5,0,0]', '[26,0,0]', '[38,0,0]'),
+	(7884, 'Attack Power +26', 0, 0, 0, '[5,0,0]', '[26,0,0]', '[38,0,0]'),
+	(8203, 'Spirit +$k1', 0, 0, 0, '[5,0,0]', '[3,0,0]', '[6,0,0]');
+INSERT INTO Spell (ID, NameSubtext_lang) VALUES (29467, ''), (1219512, ''), (1248001, ''), (1248002, '');
+INSERT INTO SpellName (ID, Name_lang) VALUES
+	(29467, 'Might of the Scourge'), (1219512, 'Might of the Scourge'),
+	(1248001, 'Enchant Bracer - Lesser Spirit'), (1248002, 'Enchant Boots - Lesser Spirit');
+INSERT INTO SpellEffect (SpellID, Effect, EffectMiscValue_0) VALUES
+	(29467, 53, 2717), (1219512, 53, 7884), (1248001, 53, 8203), (1248002, 53, 8203);
+INSERT INTO SkillLineAbility (Spell, ClassMask, SkillLine) VALUES (29467, 0, 0);
+INSERT INTO ItemEffect (ID, SpellID) VALUES (1, 1219512), (2, 1248001), (3, 1248001), (4, 1248002), (5, 1248002);
+INSERT INTO ItemXItemEffect (ItemID, ItemEffectID) VALUES (236326, 1), (273601, 2), (249500, 3), (249501, 4), (249499, 5);
+INSERT INTO Item (ID, IconFileDataID) VALUES (236326, 10), (273601, 463531), (249500, 134327), (249501, 134327), (249499, 134327);
+INSERT INTO ItemSparse (ID, Display_lang, OverallQualityID) VALUES (273601, 'Enchant Bracer - Lesser Spirit', 1), (249500, 'Formula', 2), (249501, 'Formula', 2);
+`
+
+func loadRawEnchantFixture(t *testing.T) []dbc.Enchant {
+	t.Helper()
+	db, err := sql.Open("sqlite", filepath.Join(t.TempDir(), "client.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { db.Close() })
+	if _, err := db.Exec(rawEnchantSchema + rawEnchantFixture); err != nil {
+		t.Fatalf("building the fixture: %v", err)
+	}
+	enchants, err := LoadAndWriteRawEnchants(&DBHelper{db: db}, t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	return enchants
+}
+
+type rawEnchantKey struct {
+	id   int
+	name string
+}
+
+func rawEnchantsByKey(enchants []dbc.Enchant) map[rawEnchantKey]dbc.Enchant {
+	byKey := map[rawEnchantKey]dbc.Enchant{}
+	for _, enchant := range enchants {
+		byKey[rawEnchantKey{enchant.EffectId, enchant.Name}] = enchant
+	}
+	return byKey
+}
+
+// One row per enchant and recipe name: enchants sharing a name stay apart, and an enchant granted
+// under two names keeps both.
+func TestRawEnchantsKeepOneRowPerEnchantAndName(t *testing.T) {
+	enchants := loadRawEnchantFixture(t)
+	byKey := rawEnchantsByKey(enchants)
+
+	for _, key := range []rawEnchantKey{
+		{2717, "Might of the Scourge"},
+		{7884, "Might of the Scourge"},
+		{8203, "Enchant Bracer - Lesser Spirit"},
+		{8203, "Enchant Boots - Lesser Spirit"},
+	} {
+		if _, ok := byKey[key]; !ok {
+			t.Errorf("no row for enchant %d %q", key.id, key.name)
+		}
+	}
+	if len(enchants) != 4 {
+		t.Errorf("%d rows, want 4: %+v", len(enchants), enchants)
+	}
+}
+
+// A grant taught by several items names the lowest item id the client ships, or the lowest item id
+// where it ships none, and the icon and quality are that item's.
+func TestRawEnchantNamesItsLowestItem(t *testing.T) {
+	byKey := rawEnchantsByKey(loadRawEnchantFixture(t))
+
+	for key, want := range map[rawEnchantKey]struct{ item, icon, quality int }{
+		{8203, "Enchant Bracer - Lesser Spirit"}: {249500, 134327, 2},
+		{8203, "Enchant Boots - Lesser Spirit"}:  {249501, 134327, 2},
+		{7884, "Might of the Scourge"}:           {236326, 10, 1},
+	} {
+		got := byKey[key]
+		if got.ItemId != want.item || got.FDID != want.icon || int(got.Quality) != want.quality {
+			t.Errorf("enchant %d %q: item %d, icon %d, quality %d; want item %d, icon %d, quality %d",
+				key.id, key.name, got.ItemId, got.FDID, got.Quality, want.item, want.icon, want.quality)
+		}
+	}
+}
+
+// A grant is live when a profession teaches it or any item using it has an ItemSparse row.
+func TestRawEnchantIsLiveWhenTaughtOrOnAShippedItem(t *testing.T) {
+	byKey := rawEnchantsByKey(loadRawEnchantFixture(t))
+
+	for key, want := range map[rawEnchantKey]bool{
+		{2717, "Might of the Scourge"}:           true,
+		{7884, "Might of the Scourge"}:           false,
+		{8203, "Enchant Bracer - Lesser Spirit"}: true,
+		{8203, "Enchant Boots - Lesser Spirit"}:  true,
+	} {
+		if got := byKey[key].IsLive; got != want {
+			t.Errorf("enchant %d %q reads live %v, want %v", key.id, key.name, got, want)
+		}
+	}
+}

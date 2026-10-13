@@ -1,0 +1,89 @@
+import { PseudoStat, Stat } from '@generated/proto/common';
+import i18n from '@i18n/config';
+import { UnitStat } from '@sim/proto/stats';
+
+import type { ExporterDefinition } from './types';
+
+const STAT_NAMES: Record<Stat, string> = {
+	[Stat.StatStrength]: 'Strength',
+	[Stat.StatAgility]: 'Agility',
+	[Stat.StatStamina]: 'Stamina',
+	[Stat.StatIntellect]: 'Intellect',
+	[Stat.StatSpirit]: 'Spirit',
+	[Stat.StatMP5]: 'Mp5',
+	[Stat.StatAttackPower]: 'Ap',
+	[Stat.StatExpertiseRating]: 'ExpertiseRating',
+	[Stat.StatMana]: 'Mana',
+	[Stat.StatArmor]: 'Armor',
+	[Stat.StatRangedAttackPower]: 'Ap',
+	[Stat.StatDodgeRating]: 'DodgeRating',
+	[Stat.StatParryRating]: 'ParryRating',
+	[Stat.StatHealth]: 'Health',
+	[Stat.StatBonusArmor]: 'Armor2',
+	[Stat.StatHealingPower]: '',
+	[Stat.StatSpellDamage]: 'SpellDamage',
+	[Stat.StatArcaneDamage]: '',
+	[Stat.StatFireDamage]: '',
+	[Stat.StatFrostDamage]: '',
+	[Stat.StatHolyDamage]: '',
+	[Stat.StatNatureDamage]: '',
+	[Stat.StatShadowDamage]: '',
+	[Stat.StatPhysicalDamage]: '',
+	[Stat.StatSpellHitRating]: '',
+	[Stat.StatSpellCritRating]: '',
+	[Stat.StatSpellHasteRating]: '',
+	[Stat.StatSpellPiercing]: '',
+	[Stat.StatFeralAttackPower]: '',
+	[Stat.StatMeleeHitRating]: '',
+	[Stat.StatMeleeCritRating]: '',
+	[Stat.StatMeleeHasteRating]: '',
+	[Stat.StatArmorPenetration]: '',
+	[Stat.StatDefenseRating]: '',
+	[Stat.StatBlockRating]: '',
+	[Stat.StatBlockValue]: '',
+	[Stat.StatArcaneResistance]: '',
+	[Stat.StatFireResistance]: '',
+	[Stat.StatFrostResistance]: '',
+	[Stat.StatNatureResistance]: '',
+	[Stat.StatShadowResistance]: '',
+};
+
+const PSEUDO_STAT_NAMES: Partial<Record<PseudoStat, string>> = {
+	[PseudoStat.PseudoStatMainHandDps]: 'MeleeDps',
+	[PseudoStat.PseudoStatRangedDps]: 'RangedDps',
+};
+
+const getName = (stat: UnitStat): string => (stat.isStat() ? STAT_NAMES[stat.getStat()] : (PSEUDO_STAT_NAMES[stat.getPseudoStat()] ?? ''));
+
+export const PAWN_EP_EXPORTER: ExporterDefinition = {
+	title: i18n.t('export.pawn_ep.title'),
+	allowDownload: true,
+	getData: host => {
+		const player = host.player;
+		const epValues = player.getEpWeights();
+		const allUnitStats = UnitStat.getAll();
+
+		const namesToWeights: Record<string, number> = {};
+		allUnitStats.forEach(stat => {
+			const statName = getName(stat);
+			const weight = epValues.getUnitStat(stat);
+			if (weight == 0 || statName == '') {
+				return;
+			}
+
+			if (namesToWeights[statName]) {
+				namesToWeights[statName] += weight;
+			} else {
+				namesToWeights[statName] = weight;
+			}
+		});
+
+		return (
+			`( Pawn: v1: "${player.getPlayerSpec().friendlyName} Forever Sim Weights": Class=${player.getPlayerClass().friendlyName},` +
+			Object.keys(namesToWeights)
+				.map(statName => `${statName}=${namesToWeights[statName].toFixed(3)}`)
+				.join(',') +
+			' )'
+		);
+	},
+};

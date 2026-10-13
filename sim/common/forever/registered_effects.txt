@@ -1,0 +1,196 @@
+# The items and enchants sim/common registers an effect for, written by
+# TestRegisteredEffects in sim/common. Regenerate with
+#   UPDATE_REGISTERED_EFFECTS=1 GOARCH=amd64 go test --tags=with_db ./sim/common/ -run TestRegisteredEffects -count=1
+
+# items
+833 Lifestone
+871 Flurry Axe
+942 Freezing Band
+1131 Totem of Infliction
+1168 Skullflame Shield
+1204 The Green Tower
+1447 Ring of Saviors
+1979 Wall of the Dead
+2802 Blazing Emblem
+2824 Hurricane
+4262 Gem-studded Leather Belt
+4264 Barbaric Belt
+4696 Lapidis Tankard of Tidesippe
+5443 Gold-plated Buckler
+6469 Venomstrike
+6472 Stinging Viper
+6622 Sword of Zeal
+6898 Orb of Soran'ruk
+6907 Tortoise Armor
+6972 Fire Hardened Hauberk
+7133 Brutal Hauberk
+7284 Red Whelp Gloves
+7507 Arcane Orb
+7508 Ley Orb
+7515 Celestial Orb
+7747 Vile Protector
+7939 Truesilver Breastplate
+8348 Helm of Fire
+8367 Dragonscale Breastplate
+9397 Energy Cloak
+9449 Manual Crowd Pummeler
+9458 Thermaplugg's Central Core
+9509 Petrolspill Leggings
+10543 Goblin Construction Helmet
+10721 Gnomish Harm Prevention Belt
+10760 Swine Fists
+10761 Coldrage Dagger
+10847 Dragon's Call
+11302 Uther's Strength
+11669 Naglering
+11684 Ironfoe
+11744 Bloodfist
+11809 Flame Wrath
+11810 Force of Will
+11811 Smoking Heart of the Mountain
+11815 Hand of Justice
+11819 Second Wind
+11832 Burst of Knowledge
+11861 Girdle of Reprisal
+11905 Linken's Boomerang
+12532 Spire of the Stoneshaper
+12631 Fiery Plate Gauntlets
+12632 Storm Gauntlets
+12794 Masterwork Stormhammer
+12798 Annihilator
+12805 Orb of Fire
+13143 Mark of the Dragon Lord
+13164 Heart of the Scale
+13171 Smokey's Lighter
+13204 Bashguuder
+13246 Argent Avenger
+13286 Rivenspike
+13361 Skullforge Reaver
+13401 The Cruel Hand of Timmy
+13505 Runeblade of Baron Rivendare
+13937 Headmaster's Charge
+13952 Iceblade Hacker
+13955 Stoneform Shoulders
+13959 Omokk's Girth Restrainer
+13966 Mark of Tyranny
+13982 Warblade of Caer Darrow
+13984 Darrowspike
+14152 Robe of the Archmage
+14487 Bonechill Hammer
+14554 Cloudkeeper Legplates
+14555 Alcor's Sunrazor
+14557 The Lion Horn of Stormwind
+14576 Ebon Hilt of Marduk
+15107 Orb of Noh'Orahil
+15108 Orb of Dar'Orahil
+15866 Veildust Medicine Bag
+15867 Prismcharm
+15873 Ragged John's Neverending Cup
+16768 Furbolg Medicine Pouch
+17066 Drillborer Disk
+17074 Shadowstrike
+17076 Bonereaver's Edge
+17111 Blazefury Medallion
+17182 Sulfuras, Hand of Ragnaros
+17759 Mark of Resolution
+18047 Flame Walkers
+18168 Force Reactive Disk
+18326 Razor Gauntlets
+18340 Eidolon Talisman
+18351 Magically Sealed Bracers
+18371 Mindtap Talisman
+18383 Force Imbued Gauntlets
+18815 Essence of the Pure Flame
+18820 Talisman of Ephemeral Power
+18825 Grand Marshal's Aegis
+18826 High Warlord's Shield Wall
+19019 Thunderfury, Blessed Blade of the Windseeker
+19024 Arena Grand Master
+19099 Glacial Blade
+19100 Electrified Dagger
+19287 Darkmoon Card: Heroism
+19288 Darkmoon Card: Blue Dragon
+19289 Darkmoon Card: Maelstrom
+19324 The Lobotomizer
+19339 Mind Quickening Gem
+19343 Scrolls of Blinding Light
+19344 Natural Alignment Crystal
+19345 Aegis of Preservation
+19952 Gri'lek's Charm of Valor
+20071 Talisman of Arathor
+20072 Defiler's Talisman
+20525 Earthen Sigil
+20636 Hibernation Crystal
+21115 Defiler's Talisman
+21116 Defiler's Talisman
+21117 Talisman of Arathor
+21118 Talisman of Arathor
+21119 Talisman of Arathor
+21120 Defiler's Talisman
+21180 Earthstrike
+21190 Wrath of Cenarius
+21473 Eye of Moam
+21670 Badge of the Swarmguard
+21891 Shard of the Fallen Star
+22061 Beastmaster's Boots
+22191 Obsidian Mail Tunic
+22268 Draconic Infused Emblem
+22321 Heart of Wyrmthalak
+22678 Talisman of Ascendance
+22954 Kiss of the Spider
+23027 Warmth of Forgiveness
+23041 Slayer's Crest
+23042 Loatheb's Reflection
+23046 The Restrained Essence of Sapphiron
+23047 Eye of the Dead
+23206 Mark of the Champion
+23207 Mark of the Champion
+23558 The Burrower's Shell
+23570 Jom Gabbar
+219345 Infernal Lasso
+226881 Beastmaster's Treads
+234562 High Warlord's Shield Wall
+234588 Grand Marshal's Aegis
+249469 Frozen Heart of the Mountain
+249470 Molten Heart of the Mountain
+267369 Wolfsbane
+270226 Golden Banana
+272439 Serenity Field
+272591 Premier High Warlord's Shield Wall
+272838 Premier Grand Marshal's Aegis
+272999 Barbaric Crossbow
+273003 Searing Dagger
+273046 Guardian's Dualblade
+273137 Skum's Bucket
+273840 Cursed Murloc Eye
+274159 Thorncursed Grips
+274290 Painwalker Buckler
+274759 Everlook Pathcarver
+276631 Coldflame Saber
+279876 Plaguefang
+282778 Mark of the Red Flight
+285275 Satchel of Copper Bombs
+285276 Satchel of Bronze Bombs
+285277 Satchel of Iron Bombs
+285278 Satchel of Dark Iron Bombs
+286541 Bael'dun Tankard
+
+# enchants
+30 Crude Scope
+32 Standard Scope
+33 Accurate Scope
+36 Enchant: Fiery Blaze
+44 Enchant Chest - Minor Absorption
+63 Enchant Chest - Lesser Absorption
+663 Deadly Scope
+664 Sniper Scope
+803 Enchant Weapon - Fiery Weapon
+1898 Enchant Weapon - Lifestealing
+1900 Enchant Weapon - Crusader
+2613 Enchant Gloves - Threat
+2621 Enchant Cloak - Subtlety
+7941 Enchant 2H Weapon - Grand Arcanist
+7942 Enchant Weapon - Grand Sorcerer
+8216 Enchant Weapon - Insight
+8220 Enchant Chest - Absorption
+8721 Enchant Weapon - Recovery

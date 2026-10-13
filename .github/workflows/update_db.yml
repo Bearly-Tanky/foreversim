@@ -1,0 +1,191 @@
+name: Update DB
+
+# Regenerates everything derived from the client data without a WoW install:
+# db2tool reads the current wow_classic_beta build off Blizzard's CDN, overlays
+# the latest hotfix cache (raidbots' mirror of the client's DBCache.bin), and
+# every generator runs as it would after a local `make db` — the database
+# assets, the .proto talent enums, the auto-generated Go and TypeScript, the
+# spell data tables and the base stats. Whatever changed lands in a pull
+# request; nothing changed means no pull request.
+on:
+    workflow_dispatch:
+    # Fully automatic (Elliot, 2026-09-26): new builds and hotfixes land every day with no one watching.
+    schedule:
+        - cron: '0 6 * * *'
+
+env:
+    PRODUCT: wow_classic_beta
+    DBCACHE_URL: https://storage.googleapis.com/raidbots-static/wow/classic_beta/enUS/DBCache.bin
+
+jobs:
+    update-db:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: write
+            pull-requests: write
+        outputs:
+            pull-request-operation: ${{ steps.pr.outputs.pull-request-operation }}
+        steps:
+            - name: Checkout 🛎️
+              uses: actions/checkout@v5
+
+            - name: Install Go
+              uses: actions/setup-go@v6
+              with:
+                  go-version: 1.25.x
+
+            - name: Install Protoc
+              uses: arduino/setup-protoc@v3
+              with:
+                  version: 3.x
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Install Protoc Go plugin
+              run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+            - name: Install Node
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install npm dependencies
+              run: npm ci
+
+            # The version service names the build the CDN currently serves. Its
+            # build config hash keys the download cache below, so a re-run for
+            # the same build (new hotfixes only) fetches nothing from the CDN.
+            - name: Resolve the current beta build 🔎
+              id: build
+              run: |
+                  row=$(curl -fsS "https://us.version.battle.net/$PRODUCT/versions" | awk -F'|' '$1 == "us"')
+                  config=$(echo "$row" | cut -d'|' -f2)
+                  version=$(echo "$row" | cut -d'|' -f6)
+                  test -n "$config" && test -n "$version"
+                  echo "Current $PRODUCT build: $version (build config $config)"
+                  echo "config=$config" >> "$GITHUB_OUTPUT"
+                  echo "version=$version" >> "$GITHUB_OUTPUT"
+
+            - name: Cache CDN downloads and definitions 📦
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      tools/db2tool/cdncache
+                      tools/db2tool/DBDCache
+                      tools/db2tool/listfile.csv
+                      tools/db2tool/TACTKeys.txt
+                  key: db2tool-${{ env.PRODUCT }}-${{ steps.build.outputs.config }}
+
+            - name: Download the latest hotfix cache ⚡
+              run: |
+                  mkdir -p tools/db2tool/caches
+                  curl -fsSL -o tools/db2tool/caches/DBCache.bin "$DBCACHE_URL"
+
+            # gen_db imports the Go protos, so they are generated from the
+            # committed .proto files first; `make proto` runs again further
+            # down, once gen_db has rewritten the talent enums in them.
+            - name: Bootstrap the Go protos and the dist stub 🧬
+              run: make sim/core/proto/api.pb.go binary_dist/dist.go
+
+            # db2tool warns (and carries on) when the hotfix cache is for another
+            # build than the CDN serves, which happens around a build push; the
+            # pull request says which it was.
+            - name: Extract client data and regenerate the database 🔧
+              id: db
+              run: |
+                  set -o pipefail
+                  make db DB2TOOL_FLAGS="--cdn --dbcache tools/db2tool/caches/DBCache.bin" 2>&1 | tee "$RUNNER_TEMP/db.log"
+                  if grep -q 'none of the given --dbcache files hold hotfixes' "$RUNNER_TEMP/db.log"; then
+                      echo "hotfixes=NOT applied: the downloaded DBCache.bin is for a different build" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "hotfixes=$(grep -m1 'Loaded hotfixes' "$RUNNER_TEMP/db.log" | sed 's/.*for build/applied, DBCache.bin for build/')" >> "$GITHUB_OUTPUT"
+                  fi
+
+            # In dependency order: the base stats and spell tables read
+            # wowsims.db; the protos pick up the rewritten .proto files; the TS
+            # constants are derived from the regenerated Go, so they go last and
+            # call gen_db directly (on a fresh checkout `make go-to-ts` would
+            # consider its outputs up to date).
+            - name: Regenerate the derived Go, protos and TypeScript 📐
+              run: |
+                  make basestats
+                  go run ./tools/database/gen_spelldata
+                  make proto
+                  go run ./tools/database/gen_db -gen=go-to-ts
+
+            - name: Check the regenerated code builds 🧪
+              run: |
+                  go build ./...
+                  go test ./tools/database/
+                  npm run type-check
+
+            # New client numbers move the sim's golden results. Re-bless them here so the full test run
+            # below checks the sim still runs, and the PR diff shows how far every number moved.
+            - name: Re-bless the golden results 📊
+              run: |
+                  go test --tags=with_db ./sim/... > "$RUNNER_TEMP/golden.log" 2>&1 || true
+                  make update-tests
+                  git status --short -- '*.results' | wc -l | xargs echo "golden files changed:"
+
+            - name: Set date
+              id: date
+              run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+            - name: Create Pull Request 🚀
+              id: pr
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  branch: update_db
+                  delete-branch: true
+                  commit-message: '[DB] Update to ${{ steps.build.outputs.version }} with hotfixes as of ${{ steps.date.outputs.date }}'
+                  title: '[DB] Update to ${{ steps.build.outputs.version }} with hotfixes as of ${{ steps.date.outputs.date }}'
+                  body: |
+                      Client data and everything generated from it, regenerated from the `${{ env.PRODUCT }}` build on Blizzard's CDN.
+
+                      - Build: ${{ steps.build.outputs.version }}
+                      - Hotfixes: ${{ steps.db.outputs.hotfixes }} (from ${{ env.DBCACHE_URL }})
+                      - Ran `make db --cdn`, `make basestats`, `gen_spelldata`, `make proto` and `go-to-ts`; the Go builds, the generator tests pass and the UI type-checks
+
+    # The pull request checks do not run for a pull request the workflow token
+    # opened, so run the same test suite against the branch here.
+    test:
+        needs: update-db
+        if: needs.update-db.outputs.pull-request-operation == 'created' || needs.update-db.outputs.pull-request-operation == 'updated'
+        uses: ./.github/workflows/run_tests.yml
+        with:
+            ref: update_db
+
+    # Green: merge, then deploy (a GITHUB_TOKEN merge does not fire the push-triggered deploy).
+    merge:
+        needs: test
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            actions: write
+        env:
+            GH_TOKEN: ${{ github.token }}
+            GH_REPO: ${{ github.repository }}
+        steps:
+            - run: |
+                  gh pr merge update_db --squash --delete-branch
+                  gh workflow run deploy.yml --ref master
+
+    # Red anywhere: one open issue says so, so it gets looked at instead of failing quietly every day.
+    red:
+        needs: [update-db, test, merge]
+        if: failure()
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+        env:
+            GH_TOKEN: ${{ github.token }}
+            GH_REPO: ${{ github.repository }}
+        steps:
+            - run: |
+                  run="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  gh label create update-db --color d93f0b --description "Automatic client data update failed" 2> /dev/null || true
+                  n=$(gh issue list --label update-db --state open --json number --jq '.[0].number')
+                  if [ -n "$n" ]; then gh issue comment "$n" --body "Failed again: $run"
+                  else gh issue create --label update-db --title "Automatic client data update failed" --body "The daily Update DB run failed: $run"; fi

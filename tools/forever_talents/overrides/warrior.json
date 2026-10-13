@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "class": "warrior",
+  "overrides": [
+    {
+      "talent": "death-wish",
+      "tree": "fury",
+      "set": {
+        "description": "When activated, increases your Physical damage done by {0}% and makes you immune to Fear effects, but increases all damage you take by {1}%. Lasts {2} sec."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/warrior/fury/death-wish.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "enrage",
+      "tree": "fury",
+      "set": {
+        "description": "Gives you a {0}% chance to deal 2% increased Physical damage for 12 sec after being the victim of any damaging attack."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/warrior/fury/enrage.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "shield-slam",
+      "tree": "protection",
+      "set": {
+        "description": "Slam the target with your shield, causing {0} to {1} damage, increased by your Block Value, and has a {2}% chance of dispelling {3} magic effect on the target. Causes a very high amount of threat."
+      },
+      "reason": "audit 2026-09-13: reader error (CAP-I); corrected against data/review/warrior/protection/shield-slam.png",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "last-stand",
+      "tree": "protection",
+      "set": {
+        "requires": [
+          {
+            "talent": "improved-bloodrage",
+            "rank": 2
+          }
+        ],
+        "source": {
+          "note": "prerequisite from tree arrow (stage 7): Improved Bloodrage at rank 2 = its max rank (Classic rule; rank-0 tooltips do not list talent prerequisites); added by hand, data audit 2026-09-13"
+        }
+      },
+      "reason": "audit 2026-09-13 decision 5: a genuine arrow the detector missed (strong arrowhead, ridge coverage 0.08 because the stroke lies on a hard art edge). 28-warrior-22600-median.png shows stroke and arrowhead from Improved Bloodrage (r1c0) to Last Stand (r2c0).",
+      "by": "data-audit",
+      "at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "talent": "bloodthrill",
+      "tree": "arms",
+      "set": {
+        "ranks": [
+          [
+            2,
+            1,
+            6
+          ],
+          [
+            4,
+            1,
+            6
+          ],
+          [
+            6,
+            1,
+            6
+          ],
+          [
+            8,
+            1,
+            6
+          ],
+          [
+            10,
+            1,
+            6
+          ]
+        ]
+      },
+      "reason": "per rank proc chance corroborated as 2/4/6/8/10% by the Forever write-ups published after BlizzCon; only rank 1 was shown on camera",
+      "by": "data-audit",
+      "at": "2026-09-14T00:00:00Z"
+    },
+    {
+      "talent": "dual-wield-specialization",
+      "tree": "fury",
+      "set": {
+        "ranks": [
+          [
+            5,
+            20,
+            2
+          ],
+          [
+            10,
+            40,
+            4
+          ],
+          [
+            15,
+            60,
+            6
+          ],
+          [
+            20,
+            80,
+            8
+          ],
+          [
+            25,
+            100,
+            10
+          ]
+        ]
+      },
+      "reason": "off-hand damage corroborated as 5/10/15/20/25% by the Forever write-ups published after BlizzCon; Rage generation and hit chance still follow the same slope and are unconfirmed",
+      "by": "data-audit",
+      "at": "2026-09-14T00:00:00Z"
+    },
+    {
+      "talent": "weaponmaster",
+      "tree": "arms",
+      "set": {
+        "ranks": [
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            2,
+            6,
+            2
+          ],
+          [
+            3,
+            9,
+            3
+          ],
+          [
+            4,
+            12,
+            4
+          ],
+          [
+            5,
+            15,
+            5
+          ]
+        ]
+      },
+      "reason": "the demo only showed rank 1, so every rank displayed rank 1\u2019s value while the sim scaled with points; per-rank values taken from the community talent calculator, which matches the scaling the sim already applies",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "unbridled-wrath",
+      "tree": "fury",
+      "set": {
+        "ranks": [
+          [
+            12,
+            1,
+            2
+          ],
+          [
+            24,
+            1,
+            2
+          ],
+          [
+            36,
+            1,
+            2
+          ],
+          [
+            48,
+            1,
+            2
+          ],
+          [
+            60,
+            1,
+            2
+          ]
+        ]
+      },
+      "reason": "audit 2026-09-15: ranks 2-5 were copies of rank 1, so the picker promised nothing for four of the five points while sim/warrior/talents.go has always read the 12% per point. No source beyond the rank 1 tooltip; the table now shows the scaling the sim applies and the assumption stays on the beta checklist.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "enrage",
+      "tree": "fury",
+      "set": {
+        "ranks": [
+          [
+            30
+          ],
+          [
+            60
+          ],
+          [
+            90
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ]
+      },
+      "reason": "audit 2026-09-15: 30 x rank put ranks 4 and 5 at 120% and 150%, which no chance can be. The prior is also drawn from the wrong half of Classic's Enrage, where the 5/10/15/20/25 scale is the damage and the chance is a flat 20% at every rank, so Classic gives no slope for the chance Forever put the ranks on. Only rank 1's 30% was observed; the table now reads the capped 30% per point the sim applies and the assumption stays on the beta checklist.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    },
+    {
+      "talent": "improved-shield-wall",
+      "tree": "protection",
+      "set": {
+        "ranks": [
+          [
+            5.5
+          ],
+          [
+            11
+          ]
+        ]
+      },
+      "reason": "audit 2026-09-15: rank 2 was a copy of rank 1, so the picker promised the same 5.5 min for the second point while sim/warrior/shield_wall.go has always taken another 5.5 min off the cooldown. No source beyond the rank 1 tooltip; the table now shows the scaling the sim applies and the assumption stays on the beta checklist.",
+      "by": "data-audit",
+      "at": "2026-09-15T00:00:00Z"
+    }
+  ]
+}
