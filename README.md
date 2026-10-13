@@ -1,30 +1,42 @@
 # WoW Forever Simulator
 
-Welcome to the WoW Forever simulator! If you have questions or are thinking about contributing, [join our discord](https://discord.gg/jJMPr9JWwx) to chat!
+A local simulator for World of Warcraft: Forever. Pick a class, race, talents and gear, and it
+simulates fights to show your DPS (and threat and damage taken for tanks), compare items, and work
+out stat weights.
 
-The primary goal of this project is to provide a framework that makes it easy to build a DPS sim for any class/spec, with a polished UI and accurate results. Each community will have ownership / responsibility over their portion of the sim, to ensure accuracy and that their community is represented.
+Unofficial and unaffiliated with Blizzard. Forever is still in beta, so every number is provisional.
 
-This project is licensed with MIT license. We request that anyone using this software in their own project to make sure there is a user visible link back to the original project.
+## Running it
 
-[Live sims can be found here.](https://wowsims.com/forever)
+Needs Go 1.25 or newer, Node 22 or newer, and `protoc` with `protoc-gen-go`
+(see [docs/installation.md](docs/installation.md)). Node 22 from Homebrew isn't on the PATH by
+default, so first run:
 
-[Support our devs via Patreon.](https://www.patreon.com/wowsims)
+```sh
+export PATH="/home/linuxbrew/.linuxbrew/opt/node@22/bin:$HOME/go/bin:$PATH"
+```
 
-## Downloading Sim
+Then:
 
-Links for latest Sim build:
+```sh
+npm ci                              # once, installs the JavaScript dependencies
+make                                # builds the sim into dist/
+npx http-server dist -p 8080        # serves it; open http://localhost:8080/forever/
+```
 
-- [Windows Sim](https://github.com/wowsims/forever/releases/latest/download/wowsimforever-windows.exe.zip)
-- [MacOS Sim](https://github.com/wowsims/forever/releases/latest/download/wowsimforever-amd64-darwin.zip)
-- [Linux Sim](https://github.com/wowsims/forever/releases/latest/download/wowsimforever-amd64-linux.zip)
+## Developing
 
-Then unzip the downloaded file, then open the unzipped file to open the sim in your browser!
+```sh
+go test --tags=with_db ./sim/...    # all sim tests
+make update-tests                   # accept new expected results after an intentional change
+make db DB2TOOL_FLAGS="--cdn"       # refresh game data from Blizzard's CDN (a few hundred MB download)
+```
 
-Alternatively, you can choose from a specific relase on the [Releases](https://github.com/wowsims/forever/releases) page and click the suitable link under "Assets"
+[docs/commands.md](docs/commands.md) lists the other commands. [docs/forever_rules.md](docs/forever_rules.md)
+and [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) explain where the Forever numbers come from.
 
-## Documentation
+## Credits
 
-- [Installation Guide](docs/installation.md)
-- [Development Commands](docs/commands.md)
-- [Adding a New Sim](docs/adding_sim.md)
-- [Internationalization](docs/i18n_guide.md)
+Built on [ElliotWood/Forever](https://github.com/ElliotWood/Forever) (imported at commit `859556a`),
+which is based on [wowsims](https://github.com/wowsims). Both are MIT licensed; see [LICENSE](LICENSE).
+This project is developed separately from them.

@@ -23,7 +23,6 @@ vi.mock('@features/results/components/SimResultsPanel', () => ({ SimResultsPanel
 vi.mock('@features/character-stats', () => ({ CharacterStats: () => <div /> }));
 vi.mock('./header/SimTitleDropdown', () => ({ SimTitleDropdown: () => <div /> }));
 vi.mock('./header/SimToolbar', () => ({ SimToolbar: () => <div /> }));
-vi.mock('@ui-kit/SocialLink', () => ({ SocialLink: () => <a /> }));
 vi.mock('@ui-kit/Toast', () => ({ ToastArea: () => <div data-testid="sim-toast-portal" />, toastManager: {} }));
 vi.mock('@sim/hooks/useDisplayMetrics', () => ({ useDisplayMetrics: () => ({}) }));
 vi.mock('@sim/hooks/useShowExperimental', () => ({ useShowExperimental: () => false }));

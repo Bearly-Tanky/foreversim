@@ -11,7 +11,6 @@ import { OpenSelectorModalContext, useSelectorModalState } from '@features/gear/
 import { BulkGearImporterDialog } from '@features/import-export';
 import { ItemSpec } from '@generated/proto/common';
 import i18n from '@i18n/config';
-import { REPO_RELEASES_URL } from '@sim/constants/other';
 import { useSimHost } from '@sim/context/SimHostContext';
 import { useSimReady } from '@sim/hooks/useSimReady';
 import { Button } from '@ui-kit/Button';
@@ -50,16 +49,6 @@ export const BulkTabBody = () => {
 							<p className="mb-0">
 								<LocaleHtml html={i18n.t('bulk_tab.description')} />
 							</p>
-							<div>
-								{ready && host.sim.isNative === false && (
-									<p className="mb-0">
-										<a href={REPO_RELEASES_URL} target="_blank" rel="noopener noreferrer">
-											<Icon name="gauge-high" className="mr-1" />
-											{i18n.t('bulk_tab.download_native')}
-										</a>
-									</p>
-								)}
-							</div>
 							<div className="flex grid-flow-col gap-3" data-testid="bulk-gear-actions">
 								<Button variant="secondary" onClick={() => setImportOpen(true)}>
 									<Icon name="download" style="base" className="mr-1" /> {i18n.t('bulk_tab.actions.import_bags')}

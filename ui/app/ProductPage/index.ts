@@ -1,2 +1,2 @@
 export { PageSection, ProductPage } from './ProductPage';
-export { SITE_BASE, SITE_REPO_URL } from './site';
+export { SITE_BASE } from './site';

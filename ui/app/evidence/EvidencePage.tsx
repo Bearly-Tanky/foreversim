@@ -12,7 +12,7 @@ import { Icon } from '@ui-kit/Icon';
 import clsx from 'clsx';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { ProductPage, SITE_BASE, SITE_REPO_URL } from '../ProductPage';
+import { ProductPage } from '../ProductPage';
 
 type Tier = 'measured' | 'forever' | 'classic' | 'assumed';
 
@@ -220,13 +220,7 @@ export const EvidencePage = () => {
 			<div className="flex flex-col gap-4 text-gray-300">
 				<section className="rounded-sm border border-brand/35 bg-brand/6 px-6 py-4" id="most-wanted">
 					<h2 className="m-0 text-xl text-white">Most wanted</h2>
-					<p className="m-0 mt-2 max-w-208">
-						Worst first. Each of these can be closed by one person with the game open.{' '}
-						<a className="font-semibold text-brand" href={`${SITE_BASE}scrub/`}>
-							Send a file or a screenshot
-						</a>{' '}
-						&mdash; no account, no form.
-					</p>
+					<p className="m-0 mt-2 max-w-208">Worst first. Each of these can be settled by checking it in game.</p>
 					<ol className="m-0 mt-4 list-none divide-y divide-white/10 p-0">
 						{NEEDS.map((need, i) => (
 							<li key={need.title} className="py-4 first:pt-0 last:pb-0">
@@ -297,11 +291,7 @@ export const EvidencePage = () => {
 
 				<p className="m-0 mt-4 text-sm text-gray-400">
 					Every spell that deals damage in a build the arena ranks has to be listed here; each spec&apos;s <code>TestArena</code> fails otherwise. The
-					entries themselves live in{' '}
-					<a href={`${SITE_REPO_URL}/tree/master/ui/sim/spells`} target="_blank" rel="noreferrer">
-						ui/sim/spells
-					</a>
-					. If you can move a row up a tier, <a href={`${SITE_BASE}scrub/`}>send the beta&apos;s own numbers</a>.
+					entries themselves live in <code>ui/sim/spells</code>.
 				</p>
 			</div>
 		</ProductPage>

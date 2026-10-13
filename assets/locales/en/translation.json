@@ -293,7 +293,7 @@
 		},
 		"crash_modal": {
 			"title": "Extra Crash Information",
-			"header": "Please append the following complete link to the issue you just created. This will simplify debugging the issue."
+			"header": "Copy these details to report or debug the crash."
 		},
 		"gear_planner": {
 			"title": "Gear planning only.",
@@ -311,7 +311,7 @@
 		},
 		"crash_report": {
 			"confirm_title": "Simulation Failure:",
-			"confirm_message": "Press Ok to file crash report",
+			"confirm_message": "Press OK to see the crash details",
 			"report_title": "Crash Report"
 		}
 	},

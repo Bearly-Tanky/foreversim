@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 
 export const BASE_PATH = path.resolve(__dirname, 'ui');
 // Every ui/<page>/index.html besides the landing page and the spec pages.
-export const PRODUCT_PAGES = ['arena', 'bis', 'changelog', 'dps_rankings', 'evidence', 'scrub', 'stat_weights'];
+export const PRODUCT_PAGES = ['arena', 'bis', 'changelog', 'dps_rankings', 'evidence', 'stat_weights'];
 export const OUT_DIR = path.join(__dirname, 'dist', 'forever');
 
 // The ui/ path aliases. Mirrored by `compilerOptions.paths` in tsconfig.json and by the

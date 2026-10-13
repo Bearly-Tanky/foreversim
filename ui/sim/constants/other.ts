@@ -35,14 +35,6 @@ export const BUFFS_RENUMBER_API_VERSION = 18;
 
 // Github pages serves our site under the /forever directory
 export const REPO_NAME = 'forever';
-export const REPO_URL = 'https://github.com/ElliotWood/Forever';
-export const REPO_RELEASES_URL = `${REPO_URL}/releases`;
-export const REPO_NEW_ISSUE_URL = `${REPO_URL}/issues/new`;
-export const REPO_CHOOSE_NEW_ISSUE_URL = `${REPO_NEW_ISSUE_URL}/choose`;
-
-export const SOCIALS = [{ key: 'github', href: REPO_URL, className: 'ui-social-link', icon: 'github', tooltip: 'info.github' }] as const;
-
-export type Social = (typeof SOCIALS)[number];
 
 // Root-relative path of the individual sim page for the given spec. Resolve it
 // against the page origin at the point of use (see SimTitleDropdown) — this

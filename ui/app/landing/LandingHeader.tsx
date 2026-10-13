@@ -1,5 +1,4 @@
 import i18n from '@i18n/config';
-import { REPO_URL } from '@sim/constants/other';
 import { Icon } from '@ui-kit/Icon';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -51,16 +50,6 @@ export const LandingHeader = () => {
 						)}>
 						<div className="flex flex-col max-md:relative max-md:items-start md:flex-row" data-testid="navbar-nav">
 							{toggler('times')}
-							<a
-								href={REPO_URL}
-								target="_blank"
-								rel="noreferrer"
-								className="ui-landing-nav-link flex items-center px-0 py-4 text-sm whitespace-nowrap md:px-2">
-								<p className="m-0">
-									<Icon name="github" style="brands" size="2x" />
-									&nbsp;
-								</p>
-							</a>
 							<LandingLanguageMenu />
 						</div>
 					</div>

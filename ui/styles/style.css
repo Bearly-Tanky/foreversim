@@ -39,7 +39,6 @@
 @import '../ui-kit/ContentBlock/ContentBlock.css';
 @import '../ui-kit/SavedDataPanel/SavedDataPanel.css';
 @import '../ui-kit/SidebarActionButton/SidebarActionButton.css';
-@import '../ui-kit/SocialLink/SocialLink.css';
 
 @import '../features/results/components/MetricsTable/MetricsTable.css';
 @import '../features/character-stats/components/CharacterStats/CharacterStats.css';

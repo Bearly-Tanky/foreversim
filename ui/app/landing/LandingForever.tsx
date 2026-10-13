@@ -2,10 +2,10 @@ import { Icon, type IconName } from '@ui-kit/Icon';
 import { SimLinkContent } from '@ui-kit/SimLinkContent';
 import type { ReactNode } from 'react';
 
-import { SITE_BASE, SITE_REPO_URL } from '../ProductPage/site';
+import { SITE_BASE } from '../ProductPage/site';
 
-// What the Forever landing page says above the class menus: what this sim is, who it owes, how
-// to help, and the links to its product pages. Hand-written English, as it was before the port.
+// What the Forever landing page says above the class menus: what this sim is, where its numbers
+// come from, and the links to its product pages.
 
 const PRODUCT_LINKS: Array<{ href: string; title: string; status: string }> = [
 	{ href: 'bis/', title: 'Best in Slot', status: 'Launch - Alpha' },
@@ -39,28 +39,11 @@ export const LandingForever = () => (
 			trees, races and ruleset through every spec.
 		</p>
 		<p className="m-0 opacity-80">
-			<strong>Unaffiliated with any official or community sim project.</strong> One person writes it, every bug here is mine, and every number is
-			provisional &mdash; useful for catching the sim doing something obviously wrong, not as a statement about Forever.
+			<strong>Unaffiliated with Blizzard or any other sim project.</strong> Every number is provisional, so treat results as estimates for comparing
+			gear and talents, not as statements about Forever.
 		</p>
-		<div className="flex flex-col gap-3 border border-brand bg-black/50 p-4" data-testid="wowsims-acknowledgement">
-			<p className="m-0">
-				<strong>Out of respect for WoWSims and the work they do, I have temporarily removed some features from this site</strong> &mdash; the build
-				arena and the damage comparison. From the WoWSims Forever team:
-			</p>
-			<blockquote className="m-0 border-l-4 border-brand pl-4 italic opacity-90">
-				&ldquo;We have decided to temporarily private the WoWSims Forever GitHub repo due to a number of AI-assisted tools publishing misleading results
-				and tier lists using incomplete/unfinished sims. We believe that WoWSims should be a tool used to help inform the playerbase, and that means we
-				have a responsibility to protect the integrity of the sims and the contributions of our developers and community. Once our code and data are far
-				enough along to be able to provide more accurate and reliable results, we will make the repo public again.&rdquo;
-				<footer className="mt-2 not-italic opacity-75">&mdash; Lucenia, WoWSims Forever, 26 September 2026</footer>
-			</blockquote>
-		</div>
 		<p className="m-0 opacity-80" data-testid="licence-credit">
-			Built on open-source simulator code, used under its{' '}
-			<a href={`${SITE_REPO_URL}/blob/master/LICENSE`} target="_blank" rel="noreferrer">
-				MIT licence
-			</a>
-			.
+			Built on open-source simulator code, used under its MIT licence (the LICENSE file in the project).
 		</p>
 		<p className="m-0 text-sm opacity-60" data-testid="trademark-notice">
 			World of Warcraft and Warcraft are trademarks or registered trademarks of Blizzard Entertainment, Inc., in the U.S. and/or other countries. Game
@@ -71,49 +54,13 @@ export const LandingForever = () => (
 				Where every number came from
 			</Cta>
 			<Cta href="evidence/#most-wanted" icon="hand-holding-heart" quiet>
-				How you can help
+				What still needs checking
 			</Cta>
 		</p>
-		<div className="flex flex-col gap-3 border border-brand bg-black/50 p-4">
-			<h2 className="m-0 text-xl text-brand">Playing the beta? Two files here are worth more than anything I can datamine.</h2>
-			<p className="m-0">
-				This sim reads Blizzard&apos;s data tables, which say what an ability is <em>meant</em> to do. Your client holds two files that say things the
-				tables cannot, and between them they close the two largest gaps on this page.
-			</p>
-			<ul className="m-0 flex flex-col gap-2 pl-5">
-				<li>
-					<strong>
-						<code>DBCache.bin</code> &mdash; what Blizzard changed after the build shipped.
-					</strong>{' '}
-					Hotfixes never reach a datamining site, so a value here can be stale the moment it is tuned and there is no way to tell from the outside.
-					Carries no personal data; send it as it is.
-				</li>
-				<li>
-					<strong>
-						<code>DamageMeter.bin</code> &mdash; what the server actually paid out.
-					</strong>{' '}
-					Forever blocks addons from reading damage, so the client&apos;s own meter and its combat log are the only measurements there are. Twelve
-					abilities have been confirmed this way so far. It does carry character names, so it gets scrubbed in your browser first.{' '}
-					<strong>Getting one out is fiddly:</strong> open the meter, fight things, log out to character select, then copy the file before logging
-					back in &mdash; logging in deletes it.
-				</li>
-			</ul>
-			<p className="m-0 flex flex-wrap gap-3">
-				<Cta href="scrub/#hotfix-drop" icon="upload">
-					Send DBCache.bin
-				</Cta>
-				<Cta href="scrub/#meter-drop" icon="upload">
-					Send DamageMeter.bin
-				</Cta>
-			</p>
-			<p className="m-0 text-sm opacity-75">
-				Drag, drop, done. No account and no form. The damage meter file has its character names taken out in your browser before anything is sent.
-			</p>
-		</div>
 		<Panel summary="Where the numbers come from">
 			<p className="m-0">
-				The numbers come from the beta client&apos;s own data tables rather than BlizzCon tooltips, read against Classic Era and diffed spell by spell,
-				and a daily database update brings in each new client build from wago.tools. Talent values come from the client&apos;s rank curves, coefficients
+				The numbers come from the beta client&apos;s own data tables rather than BlizzCon tooltips, read against Classic Era and diffed spell by spell.
+				Running <code>make db</code> refreshes them from a newer client build. Talent values come from the client&apos;s rank curves, coefficients
 				from <code>SpellEffect.EffectBonusCoefficient</code>, and each rank&apos;s damage is scaled to level 60 by the client&apos;s own per-level
 				points.
 			</p>
@@ -124,8 +71,8 @@ export const LandingForever = () => (
 					confirmed unchanged from Classic.
 				</li>
 				<li>
-					<strong>Hotfixes, which the static data does not carry.</strong> The live client&apos;s own hotfix cache is read instead, and the daily
-					database update applies it.
+					<strong>Hotfixes, which the static data does not carry.</strong> They come from a client&apos;s own hotfix cache (<code>DBCache.bin</code>),
+					which <code>make db</code> applies when given one.
 				</li>
 				<li>
 					<strong>Wording, not just values.</strong> A rank curve says what a talent&apos;s numbers are, not what they apply to, which is how Improved

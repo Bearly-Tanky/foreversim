@@ -17,7 +17,7 @@ import clsx from 'clsx';
 import pako from 'pako';
 import { type ReactNode, useMemo, useState } from 'react';
 
-import { ProductPage, SITE_BASE, SITE_REPO_URL } from '../ProductPage';
+import { ProductPage, SITE_BASE } from '../ProductPage';
 import { RestsCell } from '../RestsCell';
 import results from './results.json';
 
@@ -344,13 +344,7 @@ const Leaderboard = () => {
 
 const SimSource = () => {
 	const commit = data.commit ? data.commit.slice(0, 7) : 'unknown';
-	const commitLink = data.commit ? (
-		<a className="text-brand hover:underline" href={`${SITE_REPO_URL}/commit/${data.commit}`} target="_blank" rel="noreferrer">
-			<code>{commit}</code>
-		</a>
-	) : (
-		<code>{commit}</code>
-	);
+	const commitLink = <code>{commit}</code>;
 	return (
 		<>
 			Computed from sim {commitLink} on {data.generated.slice(0, 10)}

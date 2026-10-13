@@ -3,7 +3,6 @@ import { StatWeightsAction } from '@features/stat-weights/components/StatWeights
 import { SidebarDisabledContext } from '@ui-kit/SidebarActionButton';
 
 import type { SimHostObject } from './individual_sim_ui';
-import { NoticeNativeSim } from './NoticeNativeSim';
 import { SidebarActions } from './SidebarActions';
 
 export interface SimSidebarActionsProps {
@@ -17,6 +16,5 @@ export const SimSidebarActions = ({ host }: SimSidebarActionsProps) => (
 		{!host.simDisabled && <SimulateAction />}
 		<SidebarActions registry={host.sidebar} />
 		<StatWeightsAction />
-		<NoticeNativeSim container={host.simActionsContainer} />
 	</SidebarDisabledContext>
 );
