@@ -159,8 +159,9 @@ func TestFlurryAxeAndElectrifiedDagger(t *testing.T) {
 			Rotation:      core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "dps_reck").Rotation,
 		}, DefaultOptions)
 		raid := core.SinglePlayerRaidProto(player, &proto.PartyBuffs{}, &proto.RaidBuffs{}, &proto.Debuffs{})
+		// Several iterations, so a single resisted bolt can't fail the test when an unrelated change shifts the rolls.
 		result := core.RunRaidSim(&proto.RaidSimRequest{Raid: raid, Encounter: core.MakeSingleTargetEncounter(0),
-			SimOptions: &proto.SimOptions{Iterations: 1, RandomSeed: 101, Debug: true}})
+			SimOptions: &proto.SimOptions{Iterations: 10, RandomSeed: 101, Debug: true}})
 		if result.Error != nil {
 			t.Fatal(result.Error.Message)
 		}

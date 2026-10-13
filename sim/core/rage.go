@@ -10,10 +10,13 @@ const ThreatPerRageGained = 5
 
 // TODO: Ingame test needed at higher levels
 const DamageTakenRageFactor = 10
-// A critical auto attack generates 75% more rage. Server side, so no client table carries it:
-// Blizzard put it back with the beta build of 2026-10-01 for warriors and druids (WoW: Forever
-// Podcast episode 2, "it won't be double rage on crits, it's 75% increase").
-const CritRageMultiplier = 1.75
+
+// A critical auto attack generates 100% more rage. Server side, so no client table carries it.
+// Blizzard re-added the crit bonus at 75% in the 2026-10-01 beta build (WoW: Forever Podcast
+// episode 2), then raised it the next day: "Additional Rage generated from landing Critical
+// Strikes increased to 100% increased Rage (was 75%)."
+// https://eu.forums.blizzard.com/en/wow/t/warrior-updates-in-todays-beta-build/633050
+const CritRageMultiplier = 2.0
 
 const (
 	BaseRageHitFactor     = 3.46
