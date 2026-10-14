@@ -12,6 +12,7 @@ cd "$repo"
 
 test -f dist/forever/index.html || { echo "dist/forever is missing: run make first" >&2; exit 1; }
 
+python3 testground/tools/gen_specs.py
 emb=testground/server/embedded
 rm -rf "$emb/sim" "$emb/web" "$emb/listfile.csv"
 cp -r dist/forever "$emb/sim"

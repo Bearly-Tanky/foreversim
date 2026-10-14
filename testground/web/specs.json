@@ -1,0 +1,97 @@
+[
+	{
+		"path": "druid/balance",
+		"key": "__forever_balance_druid",
+		"name": "Balance Druid"
+	},
+	{
+		"path": "druid/feralbear",
+		"key": "__forever_feral_bear_druid",
+		"name": "Feral Bear Druid"
+	},
+	{
+		"path": "druid/feralcat",
+		"key": "__forever_feral_cat_druid",
+		"name": "Feral Cat Druid"
+	},
+	{
+		"path": "druid/restoration",
+		"key": "__forever_restoration_druid",
+		"name": "Restoration Druid"
+	},
+	{
+		"path": "hunter/dps",
+		"key": "__forever_hunter_hunter",
+		"name": "Hunter"
+	},
+	{
+		"path": "mage/dps",
+		"key": "__forever_mage_mage",
+		"name": "Mage"
+	},
+	{
+		"path": "paladin/holy",
+		"key": "__forever_holy_paladin",
+		"name": "Holy Paladin"
+	},
+	{
+		"path": "paladin/protection",
+		"key": "__forever_protection_paladin",
+		"name": "Protection Paladin"
+	},
+	{
+		"path": "paladin/retribution",
+		"key": "__forever_retribution_paladin",
+		"name": "Retribution Paladin"
+	},
+	{
+		"path": "priest/dps",
+		"key": "__forever_shadow_priest",
+		"name": "Shadow Priest"
+	},
+	{
+		"path": "priest/healer",
+		"key": "__forever_healer_priest",
+		"name": "Healer Priest"
+	},
+	{
+		"path": "priest/smite",
+		"key": "__forever_shadow_priest_smite",
+		"name": "Smite Priest"
+	},
+	{
+		"path": "rogue/dps",
+		"key": "__forever_rogue_rogue",
+		"name": "Rogue"
+	},
+	{
+		"path": "shaman/elemental",
+		"key": "__forever_elemental_shaman",
+		"name": "Elemental Shaman"
+	},
+	{
+		"path": "shaman/enhancement",
+		"key": "__forever_enhancement_shaman",
+		"name": "Enhancement Shaman"
+	},
+	{
+		"path": "shaman/restoration",
+		"key": "__forever_restoration_shaman",
+		"name": "Restoration Shaman"
+	},
+	{
+		"path": "warlock/dps",
+		"key": "__forever_warlock_warlock",
+		"name": "Warlock"
+	},
+	{
+		"path": "warrior/dps",
+		"key": "__forever_dps_warrior_warrior",
+		"name": "DPS Warrior"
+	},
+	{
+		"path": "warrior/protection",
+		"key": "__forever_protection_warrior",
+		"name": "Protection Warrior"
+	}
+]

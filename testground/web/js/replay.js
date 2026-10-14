@@ -14,19 +14,14 @@ const DUMMY_MODEL = 125259; // creature/object/woodendummy.m2
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-/** The sim page for a saved-settings key: "__forever_dps_warrior_warrior__..." → "warrior/dps". */
-export async function specPageFor(key, specs) {
-	const letters = s => s.toLowerCase().replace(/[^a-z]/g, '');
-	const name = letters(key.replace(/^__forever_|__currentSettings__$/g, ''));
-	const matches = specs.filter(path => {
-		const [cls, spec] = path.split('/');
-		return name.endsWith(letters(cls)) && name.slice(0, -letters(cls).length).includes(letters(spec));
-	});
-	// The longest spec name wins ("feralbear" over "feral").
-	if (matches.length) return matches.sort((a, b) => b.length - a.length)[0];
-	// A class with one spec saves under the class name alone ("mage_mage").
-	const ofClass = specs.filter(path => name.endsWith(letters(path.split('/')[0])));
-	return ofClass.length === 1 ? ofClass[0] : null;
+let pages;
+/** The sim's pages and the storage keys they save under (specs.json, made by tools/gen_specs.py). */
+export const simPages = () => (pages ??= fetch('/specs.json').then(r => (r.ok ? r.json() : [])).catch(() => []));
+
+/** The sim page a saved character belongs to: "__forever_shadow_priest__currentSettings__" → "priest/dps". */
+export async function specPageFor(key) {
+	const page = (await simPages()).find(p => `${p.key}__currentSettings__` === key);
+	return page?.path ?? null;
 }
 
 /**
@@ -46,6 +41,8 @@ export async function captureSimRequest(specPath, onStatus) {
 		for (const deadline = Date.now() + 120000; Date.now() < deadline; await sleep(250)) {
 			button = win.document.querySelector('[data-testid="simple-simulate"]');
 			if (button && !button.disabled) break;
+			// Healer specs are planned in the sim but not simulated yet: there is nothing to run.
+			if (/can be planned but not simulated/i.test(win.document.body?.textContent ?? '')) throw new Error('the sim cannot simulate this spec yet (it only plans its gear), so it cannot fight here');
 		}
 		if (!button || button.disabled) throw new Error('the sim page did not get ready');
 		const captured = new Promise((resolve, reject) => {
@@ -203,7 +200,7 @@ export class Replay {
 		this.panel.style.cssText = 'display:flex;flex-direction:column;gap:10px';
 		this.simSelect = this.panel.querySelector('#replay-sim');
 		this.simSelect.addEventListener('focus', () => this.renderSims());
-		this.simSelect.addEventListener('change', () => (this.chosenKey = this.simSelect.value));
+		this.simSelect.addEventListener('change', () => this.pickSim(this.simSelect.value));
 		this.panel.querySelector('#replay-run').addEventListener('click', () => this.run());
 		for (const b of this.panel.querySelectorAll('[data-speed]')) b.addEventListener('click', () => this.setSpeed(Number(b.dataset.speed)));
 		this.panel.querySelector('#replay-distance').addEventListener('change', () => this.placeActors());
@@ -217,6 +214,18 @@ export class Replay {
 		for (const sim of sims) this.simSelect.append(new Option(sim.label, sim.key));
 		if (this.chosenKey && sims.some(s => s.key === this.chosenKey)) this.simSelect.value = this.chosenKey;
 		else this.chosenKey = this.simSelect.value || null;
+	}
+
+	/** Dresses the character as the picked sim character right away. */
+	async pickSim(key) {
+		this.chosenKey = key;
+		const sim = this.env.savedSims().find(s => s.key === key);
+		if (!sim) return;
+		this.env.status.textContent = `Dressing ${sim.label}…`;
+		await this.env.applySim(sim.settings);
+		this.character = await this.env.getCharacter();
+		if (this.active) await this.setupScene();
+		this.env.status.textContent = `${sim.label}: ready.`;
 	}
 
 	setSpeed(speed) {
@@ -307,8 +316,7 @@ export class Replay {
 		button.disabled = true;
 		this.playing = false;
 		try {
-			const specs = await fetch('/api/specs').then(r => r.json());
-			const spec = await specPageFor(sim.key, specs);
+			const spec = await specPageFor(sim.key);
 			if (!spec) throw new Error(`no sim page for ${sim.label}`);
 			const say = text => (this.env.status.textContent = text);
 			say('Dressing the character…');
@@ -514,6 +522,8 @@ export class Replay {
 
 	floatNumber(event) {
 		if (event.pet && event.amount === 0) return;
+		// A spell that lands a damage-over-time effect "hits" for 0; only its ticks have numbers.
+		if (event.amount === 0 && ['Hit', 'Crit', 'Glance', 'Block'].includes(event.outcome)) return;
 		const el = document.createElement('div');
 		el.className = 'floater';
 		const crit = event.outcome === 'Crit' || event.outcome === 'CritBlock';

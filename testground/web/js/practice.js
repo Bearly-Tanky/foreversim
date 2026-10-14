@@ -130,7 +130,7 @@ export class Practice extends Replay {
 		this.panel.style.cssText = 'display:flex;flex-direction:column;gap:10px;min-height:0';
 		this.simSelect = this.panel.querySelector('#practice-sim');
 		this.simSelect.addEventListener('focus', () => this.renderSims());
-		this.simSelect.addEventListener('change', () => (this.chosenKey = this.simSelect.value));
+		this.simSelect.addEventListener('change', () => !this.live && this.pickSim(this.simSelect.value));
 		this.panel.querySelector('#practice-start').addEventListener('click', () => this.start());
 		this.distance = 2.1;
 	}
@@ -300,8 +300,7 @@ export class Practice extends Replay {
 		this.overlay.querySelector('.summary')?.remove();
 		const say = text => (this.env.status.textContent = text);
 		try {
-			const specs = await fetch('/api/specs').then(r => r.json());
-			const spec = await specPageFor(sim.key, specs);
+			const spec = await specPageFor(sim.key);
 			if (!spec) throw new Error(`no sim page for ${sim.label}`);
 			say('Dressing the character…');
 			await this.env.applySim(sim.settings);

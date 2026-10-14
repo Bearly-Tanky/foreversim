@@ -6,7 +6,7 @@ import { Character, RACES, SLOTS } from './character.js';
 import { itemDisplay, searchItems, simItemList } from './game.js';
 import { ANIM, loadModel } from './model.js';
 import { Practice } from './practice.js';
-import { Replay } from './replay.js';
+import { Replay, simPages } from './replay.js';
 
 const $ = id => document.getElementById(id);
 const main = document.querySelector('main');
@@ -342,11 +342,15 @@ function savedSims() {
 	return out;
 }
 
-/** "__forever_dps_warrior_warrior__currentSettings__" for a human → "DPS Warrior · Human". */
+// The sim's page names by storage key, for labels ("Shadow Priest · Human").
+let pageNames = new Map();
+simPages().then(pages => {
+	pageNames = new Map(pages.map(p => [`${p.key}__currentSettings__`, p.name]));
+	renderSimPicker();
+});
+
 function simLabel(key, settings) {
-	const words = key.replace(/^__forever_|__currentSettings__$/g, '').split('_').filter(Boolean);
-	const unique = words.filter((w, i) => words.indexOf(w) === i);
-	const name = unique.map(w => (w === 'dps' ? 'DPS' : w[0].toUpperCase() + w.slice(1))).join(' ');
+	const name = pageNames.get(key) ?? key.replace(/^__forever_|__currentSettings__$/g, '').replace(/_+/g, ' ');
 	const race = RACES.find(r => r.sim === settings.player.race)?.name;
 	return race ? `${name} · ${race}` : name;
 }
