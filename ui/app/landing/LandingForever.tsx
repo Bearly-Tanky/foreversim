@@ -39,8 +39,8 @@ export const LandingForever = () => (
 			trees, races and ruleset through every spec.
 		</p>
 		<p className="m-0 opacity-80">
-			<strong>Unaffiliated with Blizzard or any other sim project.</strong> Every number is provisional, so treat results as estimates for comparing
-			gear and talents, not as statements about Forever.
+			<strong>Unaffiliated with Blizzard or any other sim project.</strong> Every number is provisional, so treat results as estimates for comparing gear
+			and talents, not as statements about Forever.
 		</p>
 		<p className="m-0 opacity-80" data-testid="licence-credit">
 			Built on open-source simulator code, used under its MIT licence (the LICENSE file in the project).
@@ -60,9 +60,8 @@ export const LandingForever = () => (
 		<Panel summary="Where the numbers come from">
 			<p className="m-0">
 				The numbers come from the beta client&apos;s own data tables rather than BlizzCon tooltips, read against Classic Era and diffed spell by spell.
-				Running <code>make db</code> refreshes them from a newer client build. Talent values come from the client&apos;s rank curves, coefficients
-				from <code>SpellEffect.EffectBonusCoefficient</code>, and each rank&apos;s damage is scaled to level 60 by the client&apos;s own per-level
-				points.
+				Running <code>make db</code> refreshes them from a newer client build. Talent values come from the client&apos;s rank curves, coefficients from{' '}
+				<code>SpellEffect.EffectBonusCoefficient</code>, and each rank&apos;s damage is scaled to level 60 by the client&apos;s own per-level points.
 			</p>
 			<p className="m-0">Most of it is settled from data, a little of it has been seen happen, and it is worth being plain about which is which:</p>
 			<ul className="m-0 flex flex-col gap-2 pl-5">

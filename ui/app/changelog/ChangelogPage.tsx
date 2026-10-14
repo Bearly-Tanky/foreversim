@@ -42,9 +42,8 @@ export const ChangelogPage = () => (
 				<strong className="text-brand">Sources.</strong> Forever is not out. Until the beta, what was modelled here was read from Blizzard&apos;s
 				BlizzCon 2026 announcements and panel, Wowhead&apos;s Forever guides, the community talent calculators rebuilt from the demo&apos;s tooltips,
 				and reports from people who played the demo. Since 17 September the numbers come from the beta client&apos;s own data, refreshed with{' '}
-				<code>make db</code>. Each entry below links the source it came from; what the client still does not settle is
-				listed, with what would settle it, on the <a href={`${SITE_BASE}evidence/`}>evidence page</a>. The beta is still changing; expect numbers to
-				move.
+				<code>make db</code>. Each entry below links the source it came from; what the client still does not settle is listed, with what would settle
+				it, on the <a href={`${SITE_BASE}evidence/`}>evidence page</a>. The beta is still changing; expect numbers to move.
 			</p>
 			<p className="m-0">
 				<strong className="text-brand">Where to read more.</strong> The one-line rules are collected in <code>docs/forever_rules.md</code>, written for

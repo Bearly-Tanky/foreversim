@@ -12,6 +12,8 @@ import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
 import { SimApp } from './SimApp';
+import { SimpleApp } from './simple/SimpleApp';
+import { readViewMode } from './view_mode';
 
 const modules = import.meta.glob<{ default: SpecDefinition<any> }>('../specs/*/*/spec.{ts,tsx}');
 
@@ -56,8 +58,6 @@ void (async () => {
 	if (!rootElem) throw new Error('No #root element on the page; ui/index_template.html should provide it.');
 
 	createRoot(rootElem).render(
-		<StrictMode>
-			<SimApp player={player} def={def} />
-		</StrictMode>,
+		<StrictMode>{readViewMode() === 'advanced' ? <SimApp player={player} def={def} /> : <SimpleApp player={player} def={def} />}</StrictMode>,
 	);
 })();

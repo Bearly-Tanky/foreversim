@@ -1,6 +1,7 @@
 import i18n from '@i18n/config';
 import type { ReactNode } from 'react';
 
+import { switchViewMode } from '../../view_mode';
 import { ToolbarItem } from './ToolbarItem';
 
 export interface SimToolbarProps {
@@ -23,6 +24,10 @@ export const SimToolbar = ({ knownIssues, onOpenSettings }: SimToolbarProps) => 
 					</ul>
 				}>
 				{i18n.t('info.known_issues')}
+			</ToolbarItem>
+
+			<ToolbarItem testId="simple-view" icon="arrow-left" tooltip="Back to the simple view" onClick={() => switchViewMode('simple')}>
+				Simple view
 			</ToolbarItem>
 
 			<ToolbarItem testId="sim-options" icon="cog" tooltip={i18n.t('info.sim_options')} onClick={onOpenSettings} />
