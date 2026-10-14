@@ -1,0 +1,73 @@
+# Builds the Forever Sim program (the sim with the 3D testground) for Windows and Linux and
+# publishes it as a GitHub release, which the program's update button installs.
+#
+# Run it from the Actions tab ("Release" → "Run workflow"), giving the version and what is new;
+# or push a tag like v1.2.0.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version, e.g. 1.2.0 (higher than the last one)"
+        required: true
+      notes:
+        description: "What's new (shown next to the update button)"
+        required: false
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install protoc-gen-go
+        run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+      - name: Version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then v="${GITHUB_REF_NAME#v}"; else v="${INPUT_VERSION#v}"; fi
+          echo "$v" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "Version must look like 1.2.0, got '$v'"; exit 1; }
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Build the sim
+        run: |
+          npm ci
+          make
+
+      - name: Build the program
+        run: bash testground/build.sh "$VERSION"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          args=(--title "Forever Sim $VERSION" --target "$GITHUB_SHA")
+          if [ -n "$NOTES" ]; then args+=(--notes "$NOTES"); else args+=(--generate-notes); fi
+          gh release create "v$VERSION" release/ForeverSim-windows.zip release/ForeverSim-linux.tar.gz \
+            release/ForeverSim-windows-amd64.exe release/ForeverSim-linux-amd64 release/SHA256SUMS "${args[@]}"

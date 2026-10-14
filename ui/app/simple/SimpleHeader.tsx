@@ -7,6 +7,7 @@ import { Button } from '@ui-kit/Button';
 import { Icon } from '@ui-kit/Icon';
 import { Popover } from '@ui-kit/Popover';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 import { SITE_BASE } from '../ProductPage/site';
 import { switchViewMode } from '../view_mode';
@@ -57,20 +58,44 @@ const SpecSwitcher = ({ current }: { current: PlayerSpec<any> }) => (
 	</Popover>
 );
 
-export const SimpleHeader = ({ spec }: { spec: PlayerSpec<any> }) => (
-	<header className="sticky top-0 z-header border-b border-surface-border bg-background/90 backdrop-blur-sm">
-		<div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
-			<a href={SITE_BASE} className="flex shrink-0 items-center gap-2 text-white no-underline" aria-label="Forever Sim home">
-				<img src={`${SITE_BASE}assets/img/WoW-Simulator-Icon.png`} alt="" className="size-8" />
-				<span className="text-lg font-bold max-sm:hidden">Forever Sim</span>
-			</a>
-			<SpecSwitcher current={spec} />
-			<div className="ml-auto">
-				<Button variant="outline-light" size="sm" onClick={() => switchViewMode('advanced')}>
-					<Icon name="screwdriver-wrench" className="mr-1.5" />
-					Advanced view
-				</Button>
+/**
+ * True when the page is served by the Forever Sim program (the sim with the 3D testground), which
+ * answers /api/info; on the website that request fails and nothing extra shows.
+ */
+const useInDesktopApp = (): boolean => {
+	const [inApp, setInApp] = useState(false);
+	useEffect(() => {
+		fetch('/api/info')
+			.then(r => (r.ok ? r.json() : null))
+			.then(info => setInApp(info?.app === 'ForeverSim'))
+			.catch(() => setInApp(false));
+	}, []);
+	return inApp;
+};
+
+export const SimpleHeader = ({ spec }: { spec: PlayerSpec<any> }) => {
+	const inApp = useInDesktopApp();
+	return (
+		<header className="sticky top-0 z-header border-b border-surface-border bg-background/90 backdrop-blur-sm">
+			<div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4">
+				<a href={SITE_BASE} className="flex shrink-0 items-center gap-2 text-white no-underline" aria-label="Forever Sim home">
+					<img src={`${SITE_BASE}assets/img/WoW-Simulator-Icon.png`} alt="" className="size-8" />
+					<span className="text-lg font-bold max-sm:hidden">Forever Sim</span>
+				</a>
+				<SpecSwitcher current={spec} />
+				<div className="ml-auto flex gap-2">
+					{inApp && (
+						<Button variant="outline-light" size="sm" onClick={() => (window.location.href = '/#mode=practice')} data-testid="simple-testground">
+							<Icon name="play" className="mr-1.5" />
+							3D Testground
+						</Button>
+					)}
+					<Button variant="outline-light" size="sm" onClick={() => switchViewMode('advanced')}>
+						<Icon name="screwdriver-wrench" className="mr-1.5" />
+						Advanced view
+					</Button>
+				</div>
 			</div>
-		</div>
-	</header>
-);
+		</header>
+	);
+};

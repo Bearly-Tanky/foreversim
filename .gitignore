@@ -60,3 +60,10 @@ tools/db2tool/cdncache/
 tools/database/*.db
 
 __pycache__/
+
+# Forever Sim program (testground/): what it extracts from a WoW install, what the release build
+# copies in to embed, and the built program. No game file is ever committed.
+testground/cache/
+testground/server/embedded/*
+!testground/server/embedded/README.txt
+/release/
