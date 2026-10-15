@@ -1,0 +1,8 @@
+## Interface: 16001
+## Title: Forever Sim
+## Notes: Saves your character's gear, talents and professions for the Forever Sim program.
+## Author: Forever Sim
+## Version: 1.0.0
+## SavedVariables: ForeverSimDB
+
+ForeverSim.lua

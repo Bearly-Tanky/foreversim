@@ -28,6 +28,7 @@ func init() {
 	liveStartHandler = liveStart
 	liveTickHandler = liveTick
 	liveSummaryHandler = liveSummary
+	logReferenceHandler = logReference
 }
 
 // liveSummary compares the fight just played with the sim's own rotation in the same fight.
@@ -125,6 +126,44 @@ type referenceResult struct {
 	Duration float64                 `json:"duration"`
 	Actions  map[string]*actionTotal `json:"actions"`
 	Error    string                  `json:"error,omitempty"`
+}
+
+// runReference runs the sim's own rotation in the request's fight, 1000 times.
+func runReference(request *proto.RaidSimRequest) *referenceResult {
+	request.SimOptions = &proto.SimOptions{Iterations: 1000, RandomSeed: 7}
+	result := core.RunRaidSim(request)
+	if result.Error != nil {
+		return &referenceResult{Error: result.Error.Message}
+	}
+	p := result.RaidMetrics.Parties[0].Players[0]
+	return &referenceResult{Dps: p.Dps.Avg, Actions: actionTotals(p, 1000), Duration: request.Encounter.Duration}
+}
+
+// logReference: POST /api/logs/reference?duration=S&health=real|above|below, body: the sim page's
+// request → the sim's rotation in a fight as long as the logged one.
+func logReference(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	request := &proto.RaidSimRequest{}
+	if err := goproto.Unmarshal(body, request); err != nil {
+		http.Error(w, "request: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	seconds, _ := strconv.ParseFloat(r.URL.Query().Get("duration"), 64)
+	if seconds < 5 {
+		seconds = 5
+	}
+	request.Encounter.Duration = seconds
+	request.Encounter.DurationVariation = 0
+	health := r.URL.Query().Get("health")
+	if health == "" {
+		health = "real"
+	}
+	setTargetHealth(request.Encounter, health)
+	writeJSON(w, runReference(request))
 }
 
 // actionTotals averages an engine result's per-ability casts and damage over its fights,
@@ -242,16 +281,7 @@ func liveStart(w http.ResponseWriter, r *http.Request) {
 	session.length = length
 	session.health = health
 	session.reference = make(chan *referenceResult, 1)
-	go func() {
-		reference.SimOptions = &proto.SimOptions{Iterations: 1000, RandomSeed: 7}
-		result := core.RunRaidSim(reference)
-		if result.Error != nil {
-			session.reference <- &referenceResult{Error: result.Error.Message}
-			return
-		}
-		p := result.RaidMetrics.Parties[0].Players[0]
-		session.reference <- &referenceResult{Dps: p.Dps.Avg, Actions: actionTotals(p, 1000), Duration: reference.Encounter.Duration}
-	}()
+	go func() { session.reference <- runReference(reference) }()
 	session.id = strconv.FormatInt(time.Now().UnixNano(), 36)
 	liveMu.Lock()
 	liveSessions[session.id] = session

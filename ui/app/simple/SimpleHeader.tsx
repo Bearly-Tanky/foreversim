@@ -7,8 +7,8 @@ import { Button } from '@ui-kit/Button';
 import { Icon } from '@ui-kit/Icon';
 import { Popover } from '@ui-kit/Popover';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
 
+import { useInDesktopApp } from '../desktop_app';
 import { SITE_BASE } from '../ProductPage/site';
 import { switchViewMode } from '../view_mode';
 
@@ -57,21 +57,6 @@ const SpecSwitcher = ({ current }: { current: PlayerSpec<any> }) => (
 		</div>
 	</Popover>
 );
-
-/**
- * True when the page is served by the Forever Sim program (the sim with the 3D testground), which
- * answers /api/info; on the website that request fails and nothing extra shows.
- */
-const useInDesktopApp = (): boolean => {
-	const [inApp, setInApp] = useState(false);
-	useEffect(() => {
-		fetch('/api/info')
-			.then(r => (r.ok ? r.json() : null))
-			.then(info => setInApp(info?.app === 'ForeverSim'))
-			.catch(() => setInApp(false));
-	}, []);
-	return inApp;
-};
 
 export const SimpleHeader = ({ spec }: { spec: PlayerSpec<any> }) => {
 	const inApp = useInDesktopApp();

@@ -33,6 +33,15 @@ Bottles and Steam prefixes on Linux) or asks on first start.
   follow camera; each tick sends distance (from the dummy's edge), moving, behind and facing to the
   engine, which moves with `Unit.MoveTo`; moving cancels casts, attacks need the target in the
   front 180°, behind turns off the target's parry and block.
+- **Logs**: the game's own combat logs (`/combatlog` → `<game folder>/Logs/WoWCombatLog*.txt`),
+  read by `server/combatlog.go` into boss encounters and other stretches of combat. A player's fight
+  replays in 3D and compares with the sim's rotation in a fight as long (`/api/logs/*`). The line
+  layout follows the log's COMBAT_LOG_VERSION (20+ adds absorb, base amount and off-hand fields).
+- **Import from the game** (in the sim, inside the program): the ForeverSim addon
+  (`server/addon/`, installed by the program into the game's AddOns) saves each character's gear,
+  trait-tree talents (by definition ID, so any client language works), race, class and professions;
+  `/api/game/characters` reads its SavedVariables. `tools/addon_test.lua` runs the addon against a
+  mock of the game's API (luajit).
 - **Character**: race, sex, looks and gear (or "Load a character from the sim"), any animation.
 - **Replay**: opens the sim page in a hidden frame, presses Simulate, catches the request it sends
   its worker and reruns it as one fight with the combat log on (`/api/replay-request`), then plays

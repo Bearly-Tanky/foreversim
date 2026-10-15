@@ -7,6 +7,7 @@ import { ANIM, loadTexture } from './model.js';
 import { angleDiff, Mover } from './movement.js';
 import { actionInfo, captureSimRequest, iconUrl, names, parseAction, parseLog, Replay, specPageFor } from './replay.js';
 import { Sounds } from './sound.js';
+import { actionOf, infoOf, renderComparison } from './summary.js';
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='];
 const BAR_SIZE = 24; // Two rows: 1–= and Shift+1–=.
@@ -21,15 +22,6 @@ const DUMMY_REACH = 1.0;
 const GROUND_TEXTURE = 186899; // tileset/barrens/barrensbasedirt.blp
 const SCHOOL_COLOR = { 2: 0xffe680, 4: 0xff7a1a, 8: 0x6dff4a, 16: 0x6cc8ff, 32: 0xa050ff, 64: 0xff7cf0 };
 
-/** "{SpellID: 23894, Tag: 1}" → the action shape the log parser makes, so names and icons are shared. */
-const actionOf = key => parseAction(key.replace(/^pet:/, '').replace(/^\{|\}$/g, ''));
-
-/** Resolves a name and icon (data URL) for an action, cached. */
-async function infoOf(action) {
-	const info = await (names.get(action.key) ?? actionInfo(action));
-	info.iconUrl ??= await iconUrl(info.icon);
-	return info;
-}
 
 /** Sets an element's text or style only when it changed, so the HUD does not churn the page. */
 function setText(el, text) {
@@ -623,65 +615,8 @@ export class Practice extends Replay {
 		}
 	}
 
-	async renderSummary(box, { you, reference }) {
-		if (reference.error) throw new Error(reference.error);
-		// The sim's numbers for a fight as long as yours.
-		const scale = you.duration / (reference.duration || you.duration);
-		const keys = new Set([...Object.keys(you.actions), ...Object.keys(reference.actions)]);
-		const rows = [];
-		for (const key of keys) {
-			const mine = you.actions[key] ?? { casts: 0, damage: 0 };
-			const theirs = reference.actions[key] ?? { casts: 0, damage: 0 };
-			if (mine.damage <= 0 && theirs.damage <= 0 && mine.casts < 1 && theirs.casts * scale < 0.5) continue;
-			const info = await infoOf(actionOf(key));
-			const pet = key.startsWith('pet:');
-			// The engine keeps a spell's hits with each hand apart; they are one ability here.
-			const merged = rows.find(r => r.pet === pet && cleanName(r.info.name) === cleanName(info.name));
-			if (merged) {
-				merged.you.casts += mine.casts;
-				merged.you.damage += mine.damage;
-				merged.sim.casts += theirs.casts * scale;
-				merged.sim.damage += theirs.damage * scale;
-				if (this.abilities.some(a => a.key === key)) merged.key = key;
-				continue;
-			}
-			rows.push({ key, info, pet, you: { casts: mine.casts, damage: mine.damage }, sim: { casts: theirs.casts * scale, damage: theirs.damage * scale } });
-		}
-		rows.sort((a, b) => b.sim.damage - a.sim.damage || b.you.damage - a.you.damage);
-		const youTotal = rows.reduce((s, r) => s + r.you.damage, 0) || 1;
-		const simTotal = rows.reduce((s, r) => s + r.sim.damage, 0) || 1;
-		const ratio = you.dps / (reference.dps || 1);
-		const verdict = ratio >= 1.02 ? 'You beat the sim!' : ratio >= 0.95 ? 'Very close to the sim.' : ratio >= 0.85 ? 'Not far off.' : 'Room to improve.';
-
-		// The biggest gaps in how often things were used (only abilities you press).
-		const pressable = new Set(this.abilities.map(a => a.key));
-		const gap = r => pressable.has(r.key) && Math.abs(r.you.casts - r.sim.casts) >= Math.max(2, r.sim.casts * 0.2);
-		const tips = rows
-			.filter(gap)
-			.sort((a, b) => Math.abs(b.you.casts - b.sim.casts) - Math.abs(a.you.casts - a.sim.casts))
-			.slice(0, 3)
-			.map(r => `${r.you.casts < r.sim.casts ? 'Use more' : 'Use less'} <b>${cleanName(r.info.name)}</b>: you ${fmt(r.you.casts)} times, the sim ${fmt(r.sim.casts)}`);
-
-		box.innerHTML = `
-			<h3>${verdict}</h3>
-			<div class="summary-dps"><div><small>You</small><b>${fmt(you.dps)}</b><small>DPS</small></div><div class="vs" data-better="${ratio >= 1}">${ratio >= 1 ? '+' : '−'}${fmt(Math.abs(ratio - 1) * 100, 1)}%</div><div><small>The sim's rotation</small><b>${fmt(reference.dps)}</b><small>DPS</small></div></div>
-			${tips.length ? `<ul class="summary-tips">${tips.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
-			<div class="summary-table"><table><thead><tr><th>Ability</th><th>Your casts</th><th>Sim casts</th><th>Your damage</th><th>Sim damage</th></tr></thead><tbody></tbody></table></div>
-			<p class="hint">The sim's numbers are the average of 1,000 fights with your gear, talents and buffs${Math.abs(scale - 1) > 0.01 ? `, scaled to your ${fmtTime(you.duration)}` : ''}.</p>
-			<div class="row"><button id="summary-again">Fight again</button><button id="summary-close">Close</button></div>`;
-		const body = box.querySelector('tbody');
-		for (const r of rows.slice(0, 14)) {
-			const tr = document.createElement('tr');
-			tr.innerHTML = `<td><span class="icon"></span><span></span></td><td>${fmt(r.you.casts)}</td><td>${fmt(r.sim.casts, r.sim.casts < 10 ? 1 : 0)}</td><td>${Math.round((r.you.damage / youTotal) * 100)}%</td><td>${Math.round((r.sim.damage / simTotal) * 100)}%</td>`;
-			tr.querySelector('td span:last-child').textContent = cleanName(r.info.name) + (r.pet ? ' (pet)' : '');
-			const icon = tr.querySelector('.icon');
-			if (r.info.iconUrl === 'melee') icon.textContent = '⚔';
-			else if (r.info.iconUrl) icon.style.backgroundImage = `url(${r.info.iconUrl})`;
-			if (gap(r)) tr.dataset.gap = r.you.casts < r.sim.casts ? 'less' : 'more';
-			body.append(tr);
-		}
-		box.querySelector('#summary-again').addEventListener('click', () => this.start());
-		box.querySelector('#summary-close').addEventListener('click', () => box.remove());
+	renderSummary(box, data) {
+		return renderComparison(box, data, { pressable: new Set(this.abilities.map(a => a.key)), again: () => this.start() });
 	}
 
 	// --- HUD ---

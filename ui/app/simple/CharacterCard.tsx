@@ -13,9 +13,11 @@ import { QUALITY_TEXT } from '@ui-kit/utils/colors';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 
+import { useInDesktopApp } from '../desktop_app';
 import { Card, Field } from './Card';
 import { gearPresetIndex, talentPresetIndex, talentSummary } from './character_model';
 import { Select } from './controls';
+import { GameImportDialog } from './GameImportDialog';
 import { ItemPickerDialog } from './ItemPickerDialog';
 import { TalentsDialog } from './TalentsDialog';
 
@@ -41,6 +43,21 @@ const RIGHT_SLOTS = [
 const WEAPON_SLOTS = [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotRanged];
 
 const CUSTOM = -1;
+
+/** In the Forever Sim program: load the character the game's addon saved. */
+const ImportFromGame = () => {
+	const inApp = useInDesktopApp();
+	const [open, setOpen] = useState(false);
+	if (!inApp) return null;
+	return (
+		<>
+			<Button size="sm" variant="outline-light" onClick={() => setOpen(true)} data-testid="simple-import-game">
+				Import from the game
+			</Button>
+			<GameImportDialog open={open} onOpenChange={setOpen} />
+		</>
+	);
+};
 
 const RaceField = () => {
 	const player = usePlayer();
@@ -163,7 +180,7 @@ const GearSection = () => {
 };
 
 export const CharacterCard = () => (
-	<Card title="Your character" testId="simple-character">
+	<Card title="Your character" testId="simple-character" actions={<ImportFromGame />}>
 		<div className="flex flex-col gap-5">
 			<div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
 				<RaceField />

@@ -31,11 +31,11 @@ var (
 )
 
 type release struct {
-	Tag     string `json:"tag_name"`
-	Name    string `json:"name"`
-	Notes   string `json:"body"`
-	URL     string `json:"html_url"`
-	Assets  []struct {
+	Tag    string `json:"tag_name"`
+	Name   string `json:"name"`
+	Notes  string `json:"body"`
+	URL    string `json:"html_url"`
+	Assets []struct {
 		Name string `json:"name"`
 		URL  string `json:"browser_download_url"`
 	} `json:"assets"`

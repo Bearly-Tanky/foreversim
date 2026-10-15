@@ -329,7 +329,6 @@ type soundFile struct {
 	path string
 }
 
-
 func (s *server) file(w http.ResponseWriter, r *http.Request) {
 	fdid, err := strconv.ParseUint(r.PathValue("fdid"), 10, 32)
 	if err != nil {

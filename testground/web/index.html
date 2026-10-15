@@ -395,7 +395,7 @@
 			}
 			.tabs {
 				display: grid;
-				grid-template-columns: repeat(4, minmax(0, 1fr));
+				grid-template-columns: repeat(5, minmax(0, 1fr));
 			}
 			.tabs button {
 				padding: 6px 2px;
@@ -404,7 +404,16 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
+			.logs-fights {
+				flex: 0 1 auto;
+				max-height: 40vh;
+			}
+			#logs-panel select {
+				min-width: 0;
+				flex: 1;
+			}
 			#practice-panel,
+			#logs-panel,
 			#replay-panel {
 				flex: 1;
 				min-height: 0;
@@ -1012,6 +1021,7 @@
 				<button data-mode="practice">Practice</button>
 				<button data-mode="character">Gear</button>
 				<button data-mode="replay">Replay</button>
+				<button data-mode="logs">Logs</button>
 				<button data-mode="items">Items</button>
 			</nav>
 
@@ -1034,6 +1044,10 @@
 
 			<section id="mode-practice" hidden>
 				<div id="practice-panel"></div>
+			</section>
+
+			<section id="mode-logs" hidden>
+				<div id="logs-panel"></div>
 			</section>
 
 			<section id="mode-replay" hidden>

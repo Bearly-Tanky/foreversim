@@ -280,7 +280,7 @@ export class Replay {
 
 	placeActors() {
 		if (!this.character) return;
-		const choice = this.panel.querySelector('#replay-distance').value;
+		const choice = this.panel.querySelector('#replay-distance')?.value ?? 'auto';
 		const ranged = choice === 'ranged' || (choice === 'auto' && (this.isCaster() || this.events.some(e => e.action?.otherId === 4)));
 		this.distance = ranged ? 9 : 2.1;
 		this.character.root.position.set(0, 0, 0);
@@ -327,11 +327,7 @@ export class Replay {
 			say('Simulating one fight…');
 			const fight = await runFight(request);
 			this.fight = fight;
-			this.events = parseLog(fight.logs, fight.name);
-			this.duration = fight.duration || Math.max(...this.events.map(e => e.time), 1);
-			await this.prepare();
-			await this.setupScene();
-			this.restart();
+			await this.playEvents(parseLog(fight.logs, fight.name), fight.duration);
 			say(`${sim.label}: ${fmt(fight.dps, 1)} DPS in this fight (seed ${fight.seed})`);
 		} catch (error) {
 			this.env.status.textContent = `Replay: ${error.message}`;
@@ -339,6 +335,15 @@ export class Replay {
 		} finally {
 			button.disabled = false;
 		}
+	}
+
+	/** Plays a list of events (the log parser's shape) as a fight of `duration` seconds. */
+	async playEvents(events, duration) {
+		this.events = events;
+		this.duration = duration || Math.max(...events.map(e => e.time), 1);
+		await this.prepare();
+		await this.setupScene();
+		this.restart();
 	}
 
 	/** Works out the weapon style and preloads names and icons. */

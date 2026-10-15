@@ -5,6 +5,7 @@ import { ensureReady, renderVersion } from './app.js';
 import { Character, RACES, SLOTS } from './character.js';
 import { itemDisplay, searchItems, simItemList } from './game.js';
 import { ANIM, loadModel } from './model.js';
+import { Logs } from './logs.js';
 import { Practice } from './practice.js';
 import { Replay, simPages } from './replay.js';
 
@@ -95,17 +96,19 @@ function frame(object, { distance = 2.4 } = {}) {
 
 // --- Modes ---
 
-const modes = { character: $('mode-character'), items: $('mode-items'), replay: $('mode-replay'), practice: $('mode-practice') };
+const modes = { character: $('mode-character'), items: $('mode-items'), replay: $('mode-replay'), practice: $('mode-practice'), logs: $('mode-logs') };
 let mode = null;
 function setMode(name) {
 	if (mode === 'replay' && name !== 'replay') replay.close();
 	if (mode === 'practice' && name !== 'practice') practice.close();
+	if (mode === 'logs' && name !== 'logs') logs.close();
 	mode = name;
 	for (const [key, panel] of Object.entries(modes)) panel.hidden = key !== name;
 	for (const tab of document.querySelectorAll('[data-mode]')) tab.toggleAttribute('data-active', tab.dataset.mode === name);
 	if (name === 'character') showCharacter();
 	if (name === 'replay') replay.open();
 	if (name === 'practice') practice.open();
+	if (name === 'logs') logs.open();
 }
 for (const tab of document.querySelectorAll('[data-mode]')) tab.addEventListener('click', () => setMode(tab.dataset.mode));
 
@@ -372,13 +375,17 @@ for (const select of document.querySelectorAll('.sim-pick')) {
 	});
 }
 
-function applySim(settings) {
+function applySim(settings, { sex } = {}) {
 	const player = settings.player;
 	const race = RACES.find(r => r.sim === player.race);
 	if (race && race.id !== state.race) {
 		state.race = race.id;
 		state.choices = null;
 		raceSelect.value = race.id;
+	}
+	if (sex !== undefined && sex !== state.sex) {
+		state.sex = sex;
+		state.choices = null;
 	}
 	state.gear = {};
 	(player.equipment.items ?? []).forEach((item, i) => {
@@ -396,6 +403,8 @@ const replay = new Replay({ scene, camera, controls, show, getCharacter, savedSi
 window.tgReplay = replay;
 const practice = new Practice({ scene, camera, controls, grid, show, getCharacter, savedSims, applySim, status, title, tickers });
 window.tgPractice = practice;
+const logs = new Logs({ scene, camera, controls, show, getCharacter, savedSims, applySim, status, title, tickers });
+window.tgLogs = logs;
 
 // --- Start ---
 

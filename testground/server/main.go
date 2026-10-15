@@ -29,7 +29,7 @@ import (
 )
 
 // Set by replay.go and live.go (built with -tags=with_db, which every build uses).
-var replayHandler, replayRequestHandler, liveStartHandler, liveTickHandler, liveSummaryHandler http.HandlerFunc
+var replayHandler, replayRequestHandler, liveStartHandler, liveTickHandler, liveSummaryHandler, logReferenceHandler http.HandlerFunc
 
 type config struct {
 	WowDir  string `json:"wowDir"`
@@ -201,6 +201,12 @@ func (a *app) routes() http.Handler {
 	mux.HandleFunc("POST /api/setup", a.handleSetup)
 	mux.HandleFunc("GET /api/update", handleUpdateInfo)
 	mux.HandleFunc("POST /api/update", a.handleUpdate)
+	mux.HandleFunc("GET /api/game/characters", a.handleGameCharacters)
+	mux.HandleFunc("POST /api/game/addon", a.handleInstallAddon)
+	mux.HandleFunc("GET /api/logs", a.handleLogs)
+	mux.HandleFunc("GET /api/logs/fights", a.handleLogFights)
+	mux.HandleFunc("GET /api/logs/events", a.handleLogEvents)
+	mux.HandleFunc("POST /api/logs/reference", logReferenceHandler)
 
 	// Game files: only once the install is open.
 	withGame := func(h func(*server, http.ResponseWriter, *http.Request)) http.HandlerFunc {
